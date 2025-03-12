@@ -11,15 +11,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 find_package(SFML COMPONENTS Graphics Window CONFIG REQUIRED)
 
-add_subdirectory(src/core)
-add_subdirectory(src/game)
-add_subdirectory(src/utils)
+add_subdirectory(SpaceInvaders/Source/Core)
+add_subdirectory(SpaceInvaders/Source/Screens)
+add_subdirectory(SpaceInvaders/Source/SpaceInvaders)
+add_subdirectory(SpaceInvaders/Source/Utils)
 
 # Executable
-add_executable(main src/main.cpp)
-target_link_libraries(main PRIVATE
-        core
-        game
-        utils
+add_executable(Main SpaceInvaders/Source/Main.cpp)
+target_link_libraries(Main PRIVATE
+        Core
+        Screens
+        SpaceInvaders
+        Utils
         SFML::Graphics
         SFML::Window)

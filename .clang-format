@@ -1,12 +1,15 @@
 # Generated from CLion C/C++ Code Style settings
 ---
 Language: Cpp
-BasedOnStyle: LLVM
+BasedOnStyle: Microsoft
 AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
-AlignOperands: false
-AlignTrailingComments: false
+AlignEscapedNewlines: Left
+AlignOperands: true
+AlignTrailingComments: true
+AllowShortFunctionsOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: Yes
 BraceWrapping: 
   AfterCaseLabel: true
@@ -26,30 +29,39 @@ BraceWrapping:
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakBeforeBraces: Custom
-BreakConstructorInitializers: AfterColon
+BreakConstructorInitializers: BeforeColon
 BreakConstructorInitializersBeforeComma: false
 ColumnLimit: 120
+CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
-IncludeCategories: 
-  - Regex: '^<.*'
+IncludeCategories:
+  - Regex: '^"([^/]+)\.generated\.h"$'  # Generated headers come first
+    Priority: 0
+  - Regex: '^"([^/]+)\.h"$'             # Then matching headers
     Priority: 1
-  - Regex: '^".*'
+  - Regex: '^"([^/]+)'                  # Then other project headers
     Priority: 2
-  - Regex: '.*'
+  - Regex: '^<([^/]+)>'                 # Then system headers
     Priority: 3
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseBlocks: true
 IndentWidth: 4
 InsertNewlineAtEOF: true
+FixNamespaceComments: true
 MacroBlockBegin: ''
 MacroBlockEnd: ''
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
 PointerAlignment: Left
+SpaceAfterCStyleCast: false
+SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
 SpacesInAngles: false
 SpacesInConditionalStatement: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
+SpacesInSquareBrackets: false
 TabWidth: 4
+UseTab: Never
+UseCRLF: false
 ...
