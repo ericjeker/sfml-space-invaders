@@ -15,7 +15,7 @@ GameScreen::GameScreen(SpaceInvaders& game)
 
 GameScreen::~GameScreen() = default;
 
-void GameScreen::Activate() const
+void GameScreen::Activate()
 {
     Configuration configuration = _Game.GetConfiguration();
 
@@ -29,7 +29,7 @@ void GameScreen::Activate() const
     _Game.GetResourceManager().SetResource<sf::CircleShape>("circle", circle);
 }
 
-void GameScreen::Shutdown() const
+void GameScreen::Shutdown()
 {
     _Game.GetResourceManager().UnloadResource("circle");
 }

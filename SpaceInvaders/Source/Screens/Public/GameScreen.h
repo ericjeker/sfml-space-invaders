@@ -17,8 +17,8 @@ class GameScreen
 public:
     explicit GameScreen(SpaceInvaders& game);
     ~GameScreen();
-    void Activate() const;
-    void Shutdown() const;
+    void Activate();
+    void Shutdown();
     /**
      * Updates the game screen state.
      * @param {TimeTicker} timeTicker - The time information
