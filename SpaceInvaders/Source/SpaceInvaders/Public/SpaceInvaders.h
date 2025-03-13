@@ -4,13 +4,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <Configuration.h>
-#include <SFML/Graphics.hpp>
-
-#include "Logger.h"
-#include "TimeTicker.h"
+#include "Configuration.h"
 #include "GameScreen.h"
 #include "GameState.h"
+#include "Logger.h"
+#include "ResourceManager.h"
+#include "TimeTicker.h"
+
+#include <SFML/Graphics.hpp>
 
 class SpaceInvaders
 {
@@ -19,13 +20,15 @@ public:
     ~SpaceInvaders();
     void Run();
     sf::RenderWindow& GetWindow() const;
-    GameState& GetState();
     const Configuration& GetConfiguration() const;
+    ResourceManager& GetResourceManager();
+    GameState& GetState();
 
 private:
-    sf::RenderWindow& _Window;
     const Configuration& _Configuration;
-    Logger _Logger;
+    const Logger _Logger;
+    sf::RenderWindow& _Window;
+    ResourceManager _ResourceManager;
     GameScreen _GameScreen;
     GameState _GameState;
 
@@ -34,7 +37,7 @@ private:
     void Render() const;
     // Events
     void HandleEvents();
-    void OnClose(const sf::Event::Closed&) const;
+    void OnClose(const sf::Event::Closed&);
     void OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const;
     void OnMouseMove(const sf::Event::KeyPressed& keyPressed) const;
 };

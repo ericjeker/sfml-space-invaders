@@ -7,8 +7,12 @@
 #include "TimeTicker.h"
 
 SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration)
-    : _Window(window), _Configuration(configuration), _Logger("SpaceInvaders", configuration.LogLevel), _GameScreen(*this)
+    : _Configuration(configuration), _Logger("SpaceInvaders", configuration.LogLevel), _Window(window),
+      _GameScreen(*this)
 {
+    /** TODO: Initialize global resources */
+    /** Activate GameScreen */
+    _GameScreen.Activate();
 }
 
 SpaceInvaders::~SpaceInvaders() = default;
@@ -54,6 +58,11 @@ const Configuration& SpaceInvaders::GetConfiguration() const
     return _Configuration;
 }
 
+ResourceManager& SpaceInvaders::GetResourceManager()
+{
+    return _ResourceManager;
+}
+
 void SpaceInvaders::HandleEvents()
 {
     _Window.handleEvents(
@@ -69,8 +78,11 @@ void SpaceInvaders::HandleEvents()
     _GameState.MousePos = sf::Mouse::getPosition(_Window);
 }
 
-void SpaceInvaders::OnClose(const sf::Event::Closed&) const
+void SpaceInvaders::OnClose(const sf::Event::Closed&)
 {
+    /** We shut down the screen to unload the resources */
+    _GameScreen.Shutdown();
+    _ResourceManager.ClearResources();
     _Window.close();
 }
 
