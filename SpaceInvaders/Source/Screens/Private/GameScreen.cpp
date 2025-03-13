@@ -24,6 +24,7 @@ void GameScreen::Activate() const
     circle->setFillColor(sf::Color::Red);
     circle->setOutlineColor(sf::Color::Blue);
     circle->setOutlineThickness(5.f);
+    circle->setOrigin({circle->getRadius(), circle->getRadius()});
     circle->setPosition({configuration.WindowSize.x / 2.0f, configuration.WindowSize.y / 2.0f});
     _Game.GetResourceManager().SetResource<sf::CircleShape>("circle", circle);
 }
