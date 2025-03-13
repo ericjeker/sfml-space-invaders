@@ -17,6 +17,8 @@ class GameScreen
 public:
     explicit GameScreen(SpaceInvaders& game);
     ~GameScreen();
+    void Activate();
+    void Shutdown();
     /**
      * Updates the game screen state.
      * @param {TimeTicker} timeTicker - The time information
@@ -25,8 +27,8 @@ public:
     void Render() const;
 
 private:
-    SpaceInvaders& _Game;
     Logger _Logger;
+    SpaceInvaders& _Game;
 
 private:
     sf::CircleShape _Circle;

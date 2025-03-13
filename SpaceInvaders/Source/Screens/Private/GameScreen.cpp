@@ -9,13 +9,30 @@
 #include <SFML/System/Vector2.hpp>
 
 GameScreen::GameScreen(SpaceInvaders& game)
-    : _Game(game), _Logger("GameScreen", game.GetConfiguration().LogLevel), _Circle(100.f)
+    : _Logger("GameScreen", game.GetConfiguration().LogLevel), _Game(game), _Circle(100.f)
 {
-    _Circle.setFillColor(sf::Color::Red);
-    _Circle.setPosition(sf::Vector2f(100.f, 100.f));
 }
 
 GameScreen::~GameScreen() = default;
+
+void GameScreen::Activate()
+{
+    Configuration configuration = _Game.GetConfiguration();
+
+    /** Load resources when the Screen is activated */
+    const auto circle = new sf::CircleShape(100.f);
+    circle->setFillColor(sf::Color::Red);
+    circle->setOutlineColor(sf::Color::Blue);
+    circle->setOutlineThickness(5.f);
+    circle->setOrigin({circle->getRadius(), circle->getRadius()});
+    circle->setPosition({configuration.WindowSize.x / 2.0f, configuration.WindowSize.y / 2.0f});
+    _Game.GetResourceManager().SetResource<sf::CircleShape>("circle", circle);
+}
+
+void GameScreen::Shutdown()
+{
+    _Game.GetResourceManager().UnloadResource("circle");
+}
 
 void GameScreen::Update(const TimeTicker& timeTicker)
 {
@@ -23,11 +40,11 @@ void GameScreen::Update(const TimeTicker& timeTicker)
     {
         return;
     }
-
-    _Game.GetState().Score++;
 }
 
 void GameScreen::Render() const
 {
-    _Game.GetWindow().draw(_Circle);
+    /** Draw resources */
+    const sf::CircleShape& circle = _Game.GetResourceManager().GetResource<sf::CircleShape>("circle");
+    _Game.GetWindow().draw(circle);
 }
