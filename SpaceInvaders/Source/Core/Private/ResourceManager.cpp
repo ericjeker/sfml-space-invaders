@@ -15,9 +15,13 @@ void ResourceManager::UnloadResource(const std::string& name)
 {
     if (const auto it = _Resources.find(name); it != _Resources.end())
     {
-        std::visit([](auto&& resource)
+        std::visit([](auto& resource)
         {
-            delete resource;
+            if (resource != nullptr)
+            {
+                delete resource;
+                resource = nullptr;
+            }
         }, it->second);
 
         _Resources.erase(name);
