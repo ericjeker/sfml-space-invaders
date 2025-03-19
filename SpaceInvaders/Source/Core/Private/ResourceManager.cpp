@@ -2,7 +2,7 @@
 
 #include "ResourceManager.h"
 
-#include <stdexcept>
+#include <ranges>
 
 ResourceManager::ResourceManager()
 {
@@ -34,9 +34,9 @@ void ResourceManager::ClearResources()
     std::vector<std::string> resourceKeys;
     resourceKeys.reserve(_Resources.size());
 
-    for (const auto& pair : _Resources)
+    for (const auto& key : _Resources | std::views::keys)
     {
-        resourceKeys.push_back(pair.first);
+        resourceKeys.push_back(key);
     }
 
     /** Now unload each resource using the copied keys */

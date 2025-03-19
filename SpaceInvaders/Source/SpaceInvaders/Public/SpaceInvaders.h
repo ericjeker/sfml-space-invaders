@@ -35,11 +35,12 @@ private:
 private:
     void Update(const TimeTicker& timeTicker);
     void Render() const;
+    void Shutdown();
     // Events
     void HandleEvents();
     void OnClose(const sf::Event::Closed&);
-    void OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const;
-    void OnMouseMove(const sf::Event::KeyPressed& keyPressed) const;
+    void OnKeyPressed(const sf::Event::KeyPressed& keyPressed);
+    void OnMouseMove(const sf::Event::KeyPressed& keyPressed);
 };
 
 #endif

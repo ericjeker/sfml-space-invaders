@@ -80,21 +80,24 @@ void SpaceInvaders::HandleEvents()
 
 void SpaceInvaders::OnClose(const sf::Event::Closed&)
 {
-    /** We shut down the screen to unload the resources */
-    _GameScreen.Shutdown();
-    _ResourceManager.ClearResources();
-    _Window.close();
+    Shutdown();
 }
 
-void SpaceInvaders::OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const
+void SpaceInvaders::OnKeyPressed(const sf::Event::KeyPressed& keyPressed)
 {
     if (keyPressed.scancode == sf::Keyboard::Scancode::Escape)
-        _Window.close();
+    {
+        Shutdown();
+    }
 }
 
 void SpaceInvaders::Update(const TimeTicker& timeTicker)
 {
-    _GameScreen.Update(timeTicker);
+    /** Ensure the window is not closed */
+    if (_Window.isOpen())
+    {
+        _GameScreen.Update(timeTicker);
+    }
 }
 
 void SpaceInvaders::Render() const
@@ -102,4 +105,12 @@ void SpaceInvaders::Render() const
     _Window.clear();
     _GameScreen.Render();
     _Window.display();
+}
+
+void SpaceInvaders::Shutdown()
+{
+    /** We shut down the screen to unload the resources */
+    _GameScreen.Shutdown();
+    _ResourceManager.ClearResources();
+    _Window.close();
 }

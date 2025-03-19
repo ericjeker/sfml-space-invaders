@@ -9,7 +9,7 @@
 #include <SFML/System/Vector2.hpp>
 
 GameScreen::GameScreen(SpaceInvaders& game)
-    : _Logger("GameScreen", game.GetConfiguration().LogLevel), _Game(game), _Circle(100.f)
+    : _Logger("GameScreen", game.GetConfiguration().LogLevel), _Game(game)
 {
 }
 

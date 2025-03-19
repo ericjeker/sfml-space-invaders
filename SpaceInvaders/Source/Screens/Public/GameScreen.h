@@ -29,9 +29,6 @@ public:
 private:
     Logger _Logger;
     SpaceInvaders& _Game;
-
-private:
-    sf::CircleShape _Circle;
 };
 
 #endif
