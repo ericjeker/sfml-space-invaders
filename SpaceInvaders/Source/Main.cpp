@@ -10,7 +10,7 @@ int main()
     Configuration configuration;
 
     /** Initialize the window. */
-    auto window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "SFML Project", sf::Style::Close);
+    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "SFML Project", sf::Style::Close);
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
 

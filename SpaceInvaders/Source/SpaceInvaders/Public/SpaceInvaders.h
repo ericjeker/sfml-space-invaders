@@ -5,10 +5,10 @@
 #define GAME_H
 
 #include "Configuration.h"
-#include "GameScreen.h"
 #include "GameState.h"
 #include "Logger.h"
 #include "ResourceManager.h"
+#include "ScreenManager.h"
 #include "TimeTicker.h"
 
 #include <SFML/Graphics.hpp>
@@ -17,7 +17,7 @@ class SpaceInvaders
 {
 public:
     explicit SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
-    ~SpaceInvaders();
+    ~SpaceInvaders() = default;
     void Run();
     sf::RenderWindow& GetWindow() const;
     const Configuration& GetConfiguration() const;
@@ -25,15 +25,15 @@ public:
     GameState& GetState();
 
 private:
-    const Configuration& _Configuration;
-    const Logger _Logger;
-    sf::RenderWindow& _Window;
-    ResourceManager _ResourceManager;
-    GameScreen _GameScreen;
-    GameState _GameState;
+    const Configuration& _configuration;
+    const Logger _logger;
+    sf::RenderWindow& _window;
+    ResourceManager _resourceManager;
+    ScreenManager _screenManager;
+    GameState _gameState;
 
 private:
-    void Update(const TimeTicker& timeTicker);
+    void Update(const TimeTicker& timeTicker) const;
     void Render() const;
     // Events
     void HandleEvents();

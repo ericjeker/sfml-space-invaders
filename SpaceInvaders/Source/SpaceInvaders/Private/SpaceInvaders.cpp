@@ -1,30 +1,31 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
+#include "SpaceInvaders.h"
+
+#include <TitleScreen.h>
+
 #include <SFML/Graphics.hpp>
 
-#include "SpaceInvaders.h"
-#include "Logger.h"
-#include "TimeTicker.h"
-
 SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration)
-    : _Configuration(configuration), _Logger("SpaceInvaders", configuration.LogLevel), _Window(window),
-      _GameScreen(*this)
+    : _screenManager(configuration), _configuration(configuration), _logger("SpaceInvaders", configuration.LogLevel),
+      _window(window)
 {
-    /** TODO: Initialize global resources */
-    /** Activate GameScreen */
-    _GameScreen.Activate();
-}
+    _logger.Debug("Game initialized");
 
-SpaceInvaders::~SpaceInvaders() = default;
+    /** Initialize Game Screens */
+    _screenManager.AddScreen<TitleScreen>(*this);
+    _screenManager.SetCurrentScreen<TitleScreen>();
+    _screenManager.Activate();
+}
 
 void SpaceInvaders::Run()
 {
-    _Logger.Info("Game started");
+    _logger.Debug("Game started");
 
     sf::Clock clock;
     TimeTicker timeTicker;
 
-    while (_Window.isOpen())
+    while (_window.isOpen())
     {
         const sf::Time frameTime = clock.restart();
         timeTicker.Accumulator += frameTime;
@@ -45,61 +46,57 @@ void SpaceInvaders::Run()
 
 sf::RenderWindow& SpaceInvaders::GetWindow() const
 {
-    return _Window;
+    return _window;
 }
 
 GameState& SpaceInvaders::GetState()
 {
-    return _GameState;
+    return _gameState;
 }
 
 const Configuration& SpaceInvaders::GetConfiguration() const
 {
-    return _Configuration;
+    return _configuration;
 }
 
 ResourceManager& SpaceInvaders::GetResourceManager()
 {
-    return _ResourceManager;
+    return _resourceManager;
 }
 
+/**
+ * TODO: delegate to each screen
+ */
 void SpaceInvaders::HandleEvents()
 {
-    _Window.handleEvents(
-        [this](const sf::Event::Closed& event)
-        {
-            this->OnClose(event);
-        },
-        [this](const sf::Event::KeyPressed& event)
-        {
-            this->OnKeyPressed(event);
-        });
+    _window.handleEvents([this](const sf::Event::Closed& event) { this->OnClose(event); },
+                         [this](const sf::Event::KeyPressed& event) { this->OnKeyPressed(event); });
 
-    _GameState.MousePos = sf::Mouse::getPosition(_Window);
+    _gameState.MousePos = sf::Mouse::getPosition(_window);
 }
 
 void SpaceInvaders::OnClose(const sf::Event::Closed&)
 {
     /** We shut down the screen to unload the resources */
-    _GameScreen.Shutdown();
-    _ResourceManager.ClearResources();
-    _Window.close();
+    _screenManager.CleanUp();
+    _resourceManager.CleanUp();
+    _window.close();
 }
 
 void SpaceInvaders::OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const
 {
     if (keyPressed.scancode == sf::Keyboard::Scancode::Escape)
-        _Window.close();
+        _window.close();
 }
 
-void SpaceInvaders::Update(const TimeTicker& timeTicker)
+void SpaceInvaders::Update(const TimeTicker& timeTicker) const
 {
-    _GameScreen.Update(timeTicker);
+    _screenManager.Update(timeTicker);
 }
 
 void SpaceInvaders::Render() const
 {
-    _Window.clear();
-    _GameScreen.Render();
-    _Window.display();
+    _window.clear();
+    _screenManager.Render();
+    _window.display();
 }
