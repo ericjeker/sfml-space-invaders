@@ -6,17 +6,22 @@
 
 #include <Logger.h>
 #include <Screen.h>
+#include <SFML/Window/Event.hpp>
 
-class TitleScreen : public Screen {
+class TitleScreen final : public Screen {
 public:
-    TitleScreen(SpaceInvaders& game);
+    explicit TitleScreen(SpaceInvaders& game);
 
     void Update(const TimeTicker& timeTicker) override;
     void Render() const override;
     void Activate() override;
     void Shutdown() override;
+    void HandleEvents() override;
 
 private:
+    void OnClose(const sf::Event::Closed&);
+    void OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const;
+
     const Logger _logger;
 };
 

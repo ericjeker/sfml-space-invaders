@@ -1,7 +1,8 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
+#include "GameScreen.h"
+
 #include <Configuration.h>
-#include <GameScreen.h>
 #include <SpaceInvaders.h>
 #include <TimeTicker.h>
 
@@ -9,7 +10,7 @@
 #include <SFML/System/Vector2.hpp>
 
 GameScreen::GameScreen(SpaceInvaders& game)
-    : Screen(game), _logger("GameScreen", game.GetConfiguration().LogLevel), _Circle(100.f)
+    : Screen(game), _logger("GameScreen", game.GetConfiguration().LogLevel), _circle(100.f)
 {
 }
 
@@ -45,4 +46,9 @@ void GameScreen::Render() const
     /** Draw resources */
     const sf::CircleShape& circle = GetGame().GetResourceManager().GetResource<sf::CircleShape>("circle");
     GetGame().GetWindow().draw(circle);
+}
+
+void GameScreen::HandleEvents()
+{
+
 }

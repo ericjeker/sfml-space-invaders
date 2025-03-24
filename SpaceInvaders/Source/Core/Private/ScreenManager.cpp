@@ -35,6 +35,13 @@ void ScreenManager::Render() const
     }
 }
 
+void ScreenManager::HandleEvents()
+{
+    if (_currentScreen != nullptr)
+    {
+        _currentScreen->HandleEvents();
+    }
+}
 
 void ScreenManager::Activate() const
 {

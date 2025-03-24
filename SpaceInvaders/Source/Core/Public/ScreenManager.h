@@ -14,7 +14,7 @@
 
 class ScreenManager {
 public:
-    ScreenManager(const Configuration& configuration);
+    explicit ScreenManager(const Configuration& configuration);
     ~ScreenManager() = default;
 
     template <typename T, typename... Args>
@@ -58,6 +58,7 @@ public:
     void Shutdown() const;
     void Update(const TimeTicker& timeTicker) const;
     void Render() const;
+    void HandleEvents();
 
 private:
     const Logger _logger;

@@ -23,6 +23,7 @@ public:
     const Configuration& GetConfiguration() const;
     ResourceManager& GetResourceManager();
     GameState& GetState();
+    void Exit();
 
 private:
     const Configuration& _configuration;
@@ -37,9 +38,6 @@ private:
     void Render() const;
     // Events
     void HandleEvents();
-    void OnClose(const sf::Event::Closed&);
-    void OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const;
-    void OnMouseMove(const sf::Event::KeyPressed& keyPressed) const;
 };
 
 #endif

@@ -13,13 +13,15 @@
 /** Forward declarations */
 class SpaceInvaders;
 
-class GameScreen : public Screen
+class GameScreen final : public Screen
 {
 public:
-    GameScreen(SpaceInvaders& game);
+    explicit GameScreen(SpaceInvaders& game);
     ~GameScreen() override = default;
+
     void Activate() override;
     void Shutdown() override;
+    void HandleEvents() override;
     /**
      * Updates the game screen state.
      * @param {TimeTicker} timeTicker - The time information
@@ -31,7 +33,7 @@ private:
     Logger _logger;
 
 private:
-    sf::CircleShape _Circle;
+    sf::CircleShape _circle;
 };
 
 #endif
