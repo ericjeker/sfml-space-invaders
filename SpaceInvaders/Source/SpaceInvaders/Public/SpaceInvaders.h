@@ -38,6 +38,7 @@ private:
     void Render() const;
     // Events
     void HandleEvents();
+    void OnClose(const sf::Event::Closed&);
 };
 
 #endif

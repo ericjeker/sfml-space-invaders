@@ -24,7 +24,9 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 
     // TODO: Load saved settings
 
-    // TODO: Initialize global resources
+    // Initialize global resources
+    auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
+    GetResourceManager().SetResource<sf::Font>("Global::Font", font);
 
     // TODO: Initialize physics world
 
@@ -93,7 +95,14 @@ ResourceManager& SpaceInvaders::GetResourceManager()
 
 void SpaceInvaders::HandleEvents()
 {
+    GetWindow().handleEvents([this](const sf::Event::Closed& event) { this->OnClose(event); });
     _screenManager.HandleEvents();
+}
+
+void SpaceInvaders::OnClose(const sf::Event::Closed&)
+{
+    // We shut down the screen to unload the resources
+    Exit();
 }
 
 void SpaceInvaders::Update(const TimeTicker& timeTicker) const
