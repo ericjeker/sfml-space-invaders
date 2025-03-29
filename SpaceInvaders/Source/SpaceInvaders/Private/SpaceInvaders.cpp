@@ -27,6 +27,8 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
     // Initialize global resources
     auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
     GetResourceManager().SetResource<sf::Font>("Global::Font", font);
+    auto clickDot = std::make_shared<sf::CircleShape>(2.f);
+    GetResourceManager().SetResource<sf::CircleShape>("Global::ClickDot", clickDot);
 
     // TODO: Initialize physics world
 
@@ -57,7 +59,10 @@ void SpaceInvaders::Run()
         timeTicker.accumulator += frameTime;
         timeTicker.elapsedTime += frameTime;
 
-        HandleEvents();
+        while (const std::optional<sf::Event> event = _window.pollEvent())
+        {
+            HandleEvents(event);
+        }
 
         while (timeTicker.accumulator >= timeTicker.timeStep)
         {
@@ -93,15 +98,45 @@ ResourceManager& SpaceInvaders::GetResourceManager()
     return _resourceManager;
 }
 
-void SpaceInvaders::HandleEvents()
+ScreenManager& SpaceInvaders::GetScreenManager()
 {
-    GetWindow().handleEvents([this](const sf::Event::Closed& event) { this->OnClose(event); });
-    _screenManager.HandleEvents();
+    return _screenManager;
 }
 
-void SpaceInvaders::OnClose(const sf::Event::Closed&)
+void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
 {
-    // We shut down the screen to unload the resources
+    // We first let the current screen handle the event
+    _screenManager.HandleEvents(event);
+
+    if (event->is<sf::Event::Closed>())
+    {
+        OnClose();
+    }
+    else if (event->is<sf::Event::FocusLost>())
+    {
+        OnFocusLost();
+    }
+    else if (event->is<sf::Event::FocusGained>())
+    {
+        OnFocusGained();
+    }
+}
+
+void SpaceInvaders::OnFocusLost()
+{
+    _logger.Debug("Focus lost");
+    _gameState.isPaused = true;
+}
+
+void SpaceInvaders::OnFocusGained()
+{
+    _logger.Debug("Focus gained");
+    _gameState.isPaused = false;
+}
+
+void SpaceInvaders::OnClose()
+{
+    _logger.Debug("Shutting down SpaceInvaders");
     Exit();
 }
 

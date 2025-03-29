@@ -11,6 +11,7 @@
 #include <TimeTicker.h>
 #include <typeindex>
 #include <unordered_map>
+#include <SFML/Window/Event.hpp>
 
 class ScreenManager {
 public:
@@ -49,7 +50,15 @@ public:
             throw std::runtime_error("Screen does not exist");
         }
 
+        // Shutting down the current screen if it exists
+        if (_currentScreen != nullptr)
+        {
+            _currentScreen->Shutdown();
+        }
+
+        // Activating the new screen
         _currentScreen = _screens[typeIndex].get();
+        _currentScreen->Activate();
     }
 
     void CleanUp();
@@ -58,7 +67,7 @@ public:
     void Shutdown() const;
     void Update(const TimeTicker& timeTicker) const;
     void Render() const;
-    void HandleEvents();
+    void HandleEvents(const std::optional<sf::Event>& event) const;
 
 private:
     const Logger _logger;

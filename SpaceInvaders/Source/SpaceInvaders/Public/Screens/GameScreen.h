@@ -21,7 +21,8 @@ public:
 
     void Activate() override;
     void Shutdown() override;
-    void HandleEvents() override;
+    void HandleEvents(const std::optional<sf::Event>& event) override;
+
     /**
      * Updates the game screen state.
      * @param {TimeTicker} timeTicker - The time information
@@ -31,9 +32,6 @@ public:
 
 private:
     Logger _logger;
-
-private:
-    sf::CircleShape _circle;
 };
 
 #endif

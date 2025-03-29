@@ -35,11 +35,11 @@ void ScreenManager::Render() const
     }
 }
 
-void ScreenManager::HandleEvents()
+void ScreenManager::HandleEvents(const std::optional<sf::Event>& event) const
 {
     if (_currentScreen != nullptr)
     {
-        _currentScreen->HandleEvents();
+        _currentScreen->HandleEvents(event);
     }
 }
 

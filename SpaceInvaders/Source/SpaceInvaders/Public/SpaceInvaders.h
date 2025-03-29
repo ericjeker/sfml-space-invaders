@@ -22,13 +22,18 @@ public:
     sf::RenderWindow& GetWindow() const;
     const Configuration& GetConfiguration() const;
     ResourceManager& GetResourceManager();
+    ScreenManager& GetScreenManager();
     GameState& GetState();
     void Exit();
 
 private:
     const Configuration& _configuration;
     const Logger _logger;
+
+    // SFML Window
     sf::RenderWindow& _window;
+
+    // Managers and Services
     ResourceManager _resourceManager;
     ScreenManager _screenManager;
     GameState _gameState;
@@ -37,8 +42,11 @@ private:
     void Update(const TimeTicker& timeTicker) const;
     void Render() const;
     // Events
-    void HandleEvents();
-    void OnClose(const sf::Event::Closed&);
+    void HandleEvents(const std::optional<sf::Event>& event);
+
+    void OnClose();
+    void OnFocusLost();
+    void OnFocusGained();
 };
 
 #endif

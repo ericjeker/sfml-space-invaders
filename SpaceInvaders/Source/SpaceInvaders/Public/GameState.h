@@ -9,9 +9,9 @@
 struct GameState
 {
 public:
-    sf::Vector2i MousePos = sf::Vector2i(-1, -1);
-    bool IsPaused = false;
-    float Score = 0;
+    sf::Vector2f mousePos = sf::Vector2f(-1.f, -1.f);
+    bool isPaused = false;
+    float score = 0;
 };
 
 

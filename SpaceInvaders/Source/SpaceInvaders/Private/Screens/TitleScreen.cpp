@@ -2,6 +2,7 @@
 
 #include "TitleScreen.h"
 
+#include <GameScreen.h>
 #include <SpaceInvaders.h>
 
 TitleScreen::TitleScreen(SpaceInvaders& game) : Screen(game), _logger("TitleScreen", game.GetConfiguration().LogLevel)
@@ -45,9 +46,9 @@ void TitleScreen::Activate()
     exitButton->setPosition({centerX, centerY + 100.f});
 
     ResourceManager& resourceManager = GetGame().GetResourceManager();
-    resourceManager.SetResource("title", std::shared_ptr<sf::Text>(title));
-    resourceManager.SetResource("playButton", std::shared_ptr<sf::Text>(playButton));
-    resourceManager.SetResource("exitButton", std::shared_ptr<sf::Text>(exitButton));
+    resourceManager.SetResource("TitleScreen::Title", std::shared_ptr<sf::Text>(title));
+    resourceManager.SetResource("TitleScreen::PlayButton", std::shared_ptr<sf::Text>(playButton));
+    resourceManager.SetResource("TitleScreen::ExitButton", std::shared_ptr<sf::Text>(exitButton));
 }
 
 void TitleScreen::Update(const TimeTicker& timeTicker) {}
@@ -56,30 +57,34 @@ void TitleScreen::Render() const
 {
     sf::RenderWindow& window = GetGame().GetWindow();
     ResourceManager& resourceManager = GetGame().GetResourceManager();
-    window.draw(*resourceManager.GetResource<sf::Text>("title"));
-    window.draw(*resourceManager.GetResource<sf::Text>("playButton"));
-    window.draw(*resourceManager.GetResource<sf::Text>("exitButton"));
+    window.draw(*resourceManager.GetResource<sf::Text>("TitleScreen::Title"));
+    window.draw(*resourceManager.GetResource<sf::Text>("TitleScreen::PlayButton"));
+    window.draw(*resourceManager.GetResource<sf::Text>("TitleScreen::ExitButton"));
 }
 
 void TitleScreen::Shutdown()
 {
     _logger.Debug("Shutting down TitleScreen");
     ResourceManager& resourceManager = GetGame().GetResourceManager();
-    resourceManager.UnloadResource("title");
-    resourceManager.UnloadResource("playButton");
-    resourceManager.UnloadResource("exitButton");
+    resourceManager.UnloadResource("TitleScreen::Title");
+    resourceManager.UnloadResource("TitleScreen::PlayButton");
+    resourceManager.UnloadResource("TitleScreen::ExitButton");
 }
 
-void TitleScreen::HandleEvents()
+void TitleScreen::HandleEvents(const std::optional<sf::Event>& event)
 {
-    GetGame().GetWindow().handleEvents([this](const sf::Event::Closed& event) { this->OnClose(event); },
-                                       [this](const sf::Event::KeyPressed& event) { this->OnKeyPressed(event); });
-}
-
-void TitleScreen::OnClose(const sf::Event::Closed&)
-{
-    // We shut down the screen to unload the resources
-    GetGame().Exit();
+    if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+    {
+        OnKeyPressed(*keyPressed);
+    }
+    else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
+    {
+        OnMouseMove(*mouseMoved);
+    }
+    else if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>())
+    {
+        OnMousePressed(*mousePressed);
+    }
 }
 
 void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const
@@ -90,28 +95,29 @@ void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const
     }
 }
 
-// sf::Event event;
-// while (window.waitEvent(event))
-// {
-//     if (event.type == sf::Event::Closed)
-//     {
-//         GetGame().Exit(); // Calls the game exit logic
-//         break;
-//     }
-//
-//     if (event.type == sf::Event::MouseButtonPressed)
-//     {
-//         sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
-//
-//         if (playButton.getGlobalBounds().contains(mousePos))
-//         {
-//             GetGame().GetScreenManager().SetCurrentScreen(GameScreen);
-//             break;
-//         }
-//         else if (exitButton.getGlobalBounds().contains(mousePos))
-//         {
-//             GetGame().Exit();
-//             break;
-//         }
-//     }
-// }
+void TitleScreen::OnMouseMove(const sf::Event::MouseMoved& event) const
+{
+    if (event.position.x && event.position.y)
+    {
+        GetGame().GetState().mousePos.x = event.position.x;
+        GetGame().GetState().mousePos.y = event.position.y;
+    }
+}
+
+void TitleScreen::OnMousePressed(const sf::Event::MouseButtonPressed& event) const
+{
+    _logger.Debug(std::format("OnMousePressed at ({}, {})", event.position.x, event.position.y));
+
+    auto mousePos = event.position;
+    auto exitButton = GetGame().GetResourceManager().GetResource<sf::Text>("TitleScreen::ExitButton");
+    if (exitButton->getGlobalBounds().contains(sf::Vector2<float>(mousePos)))
+    {
+        GetGame().Exit();
+    }
+
+    auto playButton = GetGame().GetResourceManager().GetResource<sf::Text>("TitleScreen::PlayButton");
+    if (playButton->getGlobalBounds().contains(sf::Vector2<float>(mousePos)))
+    {
+        GetGame().GetScreenManager().SetCurrentScreen<GameScreen>();
+    }
+}

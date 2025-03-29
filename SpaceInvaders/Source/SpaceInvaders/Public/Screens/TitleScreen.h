@@ -16,11 +16,12 @@ public:
     void Render() const override;
     void Activate() override;
     void Shutdown() override;
-    void HandleEvents() override;
+    void HandleEvents(const std::optional<sf::Event>& event) override;
 
 private:
-    void OnClose(const sf::Event::Closed&);
-    void OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const;
+    void OnKeyPressed(const sf::Event::KeyPressed& event) const;
+    void OnMouseMove(const sf::Event::MouseMoved& event) const;
+    void OnMousePressed(const sf::Event::MouseButtonPressed& event) const;
 
     const Logger _logger;
 };

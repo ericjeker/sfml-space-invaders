@@ -5,6 +5,7 @@
 #define SCREEN_H
 
 #include <TimeTicker.h>
+#include <SFML/Window/Event.hpp>
 
 class SpaceInvaders;
 class Screen
@@ -17,7 +18,7 @@ public:
     virtual void Render() const = 0;
     virtual void Activate() = 0;
     virtual void Shutdown() = 0;
-    virtual void HandleEvents() = 0;
+    virtual void HandleEvents(const std::optional<sf::Event>& event) = 0;
 
     // TODO: Replace this with a generic Game class
     SpaceInvaders& GetGame() const;
