@@ -5,10 +5,10 @@
 #define GAME_H
 
 #include "Configuration.h"
-#include "GameScreen.h"
 #include "GameState.h"
 #include "Logger.h"
 #include "ResourceManager.h"
+#include "ScreenManager.h"
 #include "TimeTicker.h"
 
 #include <SFML/Graphics.hpp>
@@ -17,29 +17,36 @@ class SpaceInvaders
 {
 public:
     explicit SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
-    ~SpaceInvaders();
+    ~SpaceInvaders() = default;
     void Run();
     sf::RenderWindow& GetWindow() const;
     const Configuration& GetConfiguration() const;
     ResourceManager& GetResourceManager();
+    ScreenManager& GetScreenManager();
     GameState& GetState();
+    void Exit();
 
 private:
-    const Configuration& _Configuration;
-    const Logger _Logger;
-    sf::RenderWindow& _Window;
-    ResourceManager _ResourceManager;
-    GameScreen _GameScreen;
-    GameState _GameState;
+    const Configuration& _configuration;
+    const Logger _logger;
+
+    // SFML Window
+    sf::RenderWindow& _window;
+
+    // Managers and Services
+    ResourceManager _resourceManager;
+    ScreenManager _screenManager;
+    GameState _gameState;
 
 private:
-    void Update(const TimeTicker& timeTicker);
+    void Update(const TimeTicker& timeTicker) const;
     void Render() const;
     // Events
-    void HandleEvents();
-    void OnClose(const sf::Event::Closed&);
-    void OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const;
-    void OnMouseMove(const sf::Event::KeyPressed& keyPressed) const;
+    void HandleEvents(const std::optional<sf::Event>& event);
+
+    void OnClose();
+    void OnFocusLost();
+    void OnFocusGained();
 };
 
 #endif

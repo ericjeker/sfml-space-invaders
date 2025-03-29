@@ -8,10 +8,10 @@
 
 struct TimeTicker
 {
-    sf::Time Delta = sf::Time::Zero;
-    sf::Time Accumulator = sf::Time::Zero;
-    const sf::Time TimeStep = sf::seconds(1.0f / 60.0f);
-    sf::Time ElapsedTime = sf::Time::Zero;
+    sf::Time delta = sf::Time::Zero;
+    sf::Time accumulator = sf::Time::Zero;
+    const sf::Time timeStep = sf::seconds(1.0f / 60.0f);
+    sf::Time elapsedTime = sf::Time::Zero;
 };
 
-#endif //TIMETICKER_H
+#endif
