@@ -55,7 +55,7 @@ public:
 
 private:
     using ResourceVariant =
-        std::variant<std::shared_ptr<sf::Font>, std::shared_ptr<sf::Texture>, std::shared_ptr<sf::Sprite>,
+        std::variant<std::shared_ptr<sf::Font>, std::shared_ptr<sf::Texture>, std::shared_ptr<sf::Shader>, std::shared_ptr<sf::Sprite>,
                      std::shared_ptr<sf::Text>, std::shared_ptr<sf::CircleShape>>;
 
     std::unordered_map<std::string, ResourceVariant> _resources;

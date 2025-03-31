@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "bundles": {
+    "ui": [
+      {
+        "type": "font",
+        "name": "Orbitron",
+        "path": "Fonts/Orbitron/static/Orbitron.ttf"
+      },
+      {
+        "type": "texture",
+        "name": "ClickDot",
+        "path": "Textures/ClickDot.png"
+      },
+      {
+        "type": "audio",
+        "name": "ClickSound",
+        "path": "Sounds/Click.wav"
+      },
+      {
+        "type": "audio",
+        "name": "ElevatorMusic",
+        "path": "Music/ElevatorMusic.ogg"
+      }
+    ]
+  }
+}

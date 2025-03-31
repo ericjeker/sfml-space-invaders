@@ -2,6 +2,8 @@
 
 #include "TitleScreen.h"
 
+#include "GUI/Button.h"
+
 #include <GameScreen.h>
 #include <SpaceInvaders.h>
 

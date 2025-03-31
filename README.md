@@ -5,11 +5,14 @@ Learning C++ with SFML and a SpaceInvaders clone.
 ## Requirements
 
 * CMake
+* vcpkg
 
 ## Dependencies
 
 * SFML
 * EnTT
+* Box2D
+* Dear ImGui
 
 ## C++ Practices
 
@@ -21,14 +24,22 @@ Learning C++ with SFML and a SpaceInvaders clone.
 ## Design Patterns
 
 * Entity-Component-System (ECS) - EnTT implements this pattern, which separates data (components) from behavior (systems)
-* Factory Pattern - For creating game entities
 * Struct as Archetypes
-
-* Finite State Machine - For managing game states (playing, paused) 
+* Finite State Machine - For managing game states (loading, playing, paused)
+* Data-driven approach for loading resources using ResourceLoader and ResourceManager  
 
 ## To Do
 
 - [ ] Set up EnTT and replace the current GameState with a registry
+- [ ] Set up Dear ImGui
+- [ ] Create a manifest system for loading resources
+  - [ ] Create factories for initializing resources by type
+- [ ] Audio and Music managers
+- [ ] How to create a distribution package?
+  - [ ] Include game executable
+  - [ ] Include required DLLs, including dependencies
+  - [ ] Include game assets
+  - [ ] Include configuration files
 
 ### Screens & GUI
 
@@ -65,5 +76,7 @@ Learning C++ with SFML and a SpaceInvaders clone.
 ### Managers
 
 - [x] ScreenManager
+- [x] ResourceManager
+- [ ] ResourceLoader
 - [ ] InputManager
 - [ ] CommandRegistry

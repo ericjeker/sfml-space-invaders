@@ -20,9 +20,9 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 {
     _logger.Debug("Game initialized");
 
-    // TODO: Load saved state
-
     // TODO: Load saved settings
+
+    // TODO: Load saved state
 
     // Initialize global resources
     auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
