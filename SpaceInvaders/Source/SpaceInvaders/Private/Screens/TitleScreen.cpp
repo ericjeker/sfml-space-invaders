@@ -1,8 +1,7 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
 #include "TitleScreen.h"
-
-#include "GUI/Button.h"
+#include "Ball.h"
 
 #include <GameScreen.h>
 #include <SpaceInvaders.h>
@@ -17,10 +16,20 @@ void TitleScreen::Activate()
 
     // Create a window instance from the game to fetch size
     auto& window = GetGame().GetWindow();
+    auto& resourceManager = GetGame().GetResourceManager();
+
     const float centerX = window.getSize().x / 2.f;
     const float centerY = window.getSize().y / 2.f;
 
-    std::shared_ptr<sf::Font> font = GetGame().GetResourceManager().GetResource<sf::Font>("Global::Font");
+    // Get the font from the global resources
+    std::shared_ptr<sf::Font> font = resourceManager.GetResource<sf::Font>("Global::Font");
+
+    // Create the render layers, everything will be rendered on these layers
+    auto backgroundLayer = std::make_shared<sf::RenderTexture>(window.getSize());
+    auto uiLayer = std::make_shared<sf::RenderTexture>(window.getSize());
+
+    resourceManager.SetResource("TitleScreen::BackgroundLayer", backgroundLayer);
+    resourceManager.SetResource("TitleScreen::UILayer", uiLayer);
 
     // Create title text
     auto title = std::make_shared<sf::Text>(*font);
@@ -47,10 +56,9 @@ void TitleScreen::Activate()
     exitButton->setOrigin(exitButton->getGlobalBounds().getCenter());
     exitButton->setPosition({centerX, centerY + 100.f});
 
-    ResourceManager& resourceManager = GetGame().GetResourceManager();
-    resourceManager.SetResource("TitleScreen::Title", std::shared_ptr<sf::Text>(title));
-    resourceManager.SetResource("TitleScreen::PlayButton", std::shared_ptr<sf::Text>(playButton));
-    resourceManager.SetResource("TitleScreen::ExitButton", std::shared_ptr<sf::Text>(exitButton));
+    resourceManager.SetResource("TitleScreen::Title", title);
+    resourceManager.SetResource("TitleScreen::PlayButton", playButton);
+    resourceManager.SetResource("TitleScreen::ExitButton", exitButton);
 }
 
 void TitleScreen::Update(const TimeTicker& timeTicker) {}
@@ -59,15 +67,48 @@ void TitleScreen::Render() const
 {
     sf::RenderWindow& window = GetGame().GetWindow();
     ResourceManager& resourceManager = GetGame().GetResourceManager();
-    window.draw(*resourceManager.GetResource<sf::Text>("TitleScreen::Title"));
-    window.draw(*resourceManager.GetResource<sf::Text>("TitleScreen::PlayButton"));
-    window.draw(*resourceManager.GetResource<sf::Text>("TitleScreen::ExitButton"));
+
+    if (auto backgroundLayer = resourceManager.GetResource<sf::RenderTexture>("TitleScreen::BackgroundLayer"))
+    {
+        backgroundLayer->clear();
+
+        // Draw the background layer to the window
+        sf::Sprite backgroundSprite(backgroundLayer->getTexture());
+
+        // Not very clear to me why the texture coordinates are flipped on the Y axis?
+        backgroundSprite.setScale({1.f, -1.f});
+        backgroundSprite.setPosition({0.f, static_cast<float>(backgroundLayer->getSize().y)});
+
+        window.draw(backgroundSprite);
+    }
+
+    if (auto uiLayer = resourceManager.GetResource<sf::RenderTexture>("TitleScreen::UILayer"))
+    {
+        uiLayer->clear();
+
+        uiLayer->draw(*resourceManager.GetResource<sf::Text>("TitleScreen::Title"));
+        uiLayer->draw(*resourceManager.GetResource<sf::Text>("TitleScreen::PlayButton"));
+        uiLayer->draw(*resourceManager.GetResource<sf::Text>("TitleScreen::ExitButton"));
+
+        // Draw the UI layer to the window
+        sf::Sprite uiSprite(uiLayer->getTexture());
+
+        // Not very clear to me why the texture coordinates are flipped on the Y axis?
+        uiSprite.setScale({1.f, -1.f});
+        uiSprite.setPosition({0.f, static_cast<float>(uiLayer->getSize().y)});
+
+        window.draw(uiSprite);
+    }
 }
 
 void TitleScreen::Shutdown()
 {
     _logger.Debug("Shutting down TitleScreen");
     ResourceManager& resourceManager = GetGame().GetResourceManager();
+
+    // TODO: Loop over the screen resources instead of unloading them one by one
+    resourceManager.UnloadResource("TitleScreen::BackgroundLayer");
+    resourceManager.UnloadResource("TitleScreen::UILayer");
     resourceManager.UnloadResource("TitleScreen::Title");
     resourceManager.UnloadResource("TitleScreen::PlayButton");
     resourceManager.UnloadResource("TitleScreen::ExitButton");
@@ -111,6 +152,8 @@ void TitleScreen::OnMousePressed(const sf::Event::MouseButtonPressed& event) con
     _logger.Debug(std::format("OnMousePressed at ({}, {})", event.position.x, event.position.y));
 
     auto mousePos = event.position;
+
+    // TODO: Loop over the clickable resources instead of doing this manually and call their onClick function
     auto exitButton = GetGame().GetResourceManager().GetResource<sf::Text>("TitleScreen::ExitButton");
     if (exitButton->getGlobalBounds().contains(sf::Vector2<float>(mousePos)))
     {
