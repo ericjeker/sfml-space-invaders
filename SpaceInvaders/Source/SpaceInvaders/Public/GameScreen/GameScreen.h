@@ -4,14 +4,8 @@
 #ifndef GAME_SCREEN_H
 #define GAME_SCREEN_H
 
-#include "Logger.h"
-#include "Screen.h"
-#include "TimeTicker.h"
-
-#include <SFML/Graphics.hpp>
-
-/** Forward declarations */
-class SpaceInvaders;
+#include <Logger.h>
+#include <Screen.h>
 
 class GameScreen final : public Screen
 {

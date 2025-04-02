@@ -5,7 +5,10 @@
 #include <Configuration.h>
 #include <TimeTicker.h>
 
-ScreenManager::ScreenManager(const Configuration& configuration) : _configuration(configuration), _currentScreen(nullptr), _logger("ScreenManager", LogLevel::Info) {}
+ScreenManager::ScreenManager(const Configuration& configuration)
+    : _logger("ScreenManager", LogLevel::Info), _configuration(configuration), _currentScreen(nullptr)
+{
+}
 
 void ScreenManager::CleanUp()
 {

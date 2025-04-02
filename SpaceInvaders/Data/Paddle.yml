@@ -1,0 +1,29 @@
+name: Paddle
+components:
+  TransformComponent:
+    position:
+      x: 100
+      y: 100
+    rotation: 0
+    scale:
+      x: 1
+      y: 1
+  SpriteComponent:
+    texture: Assets/Textures/Paddle.png
+    layer: game
+    origin:
+      x: 0.5
+      y: 0.5
+    scale:
+      x: 1
+      y: 1
+  PhysicsComponent:
+    mass: 1
+    restitution: 0.5
+    friction: 0.1
+  RigidBodyComponent:
+  PlayerControllerComponent:
+    speed: 500
+    acceleration: 1000
+    maxSpeed: 1000
+    maxAcceleration: 1000

@@ -34,13 +34,12 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 
     // TODO: Initialize ECS registry
 
-    // Initialize Game Screens
+    // Initialize Game Screens, all screen receive the game itself in parameter
     _screenManager.AddScreen<TitleScreen>(*this);
     _screenManager.AddScreen<GameScreen>(*this);
 
     // Set and Activate the initial screen
     _screenManager.SetCurrentScreen<TitleScreen>();
-    _screenManager.Activate();
 }
 
 /**
@@ -53,6 +52,7 @@ void SpaceInvaders::Run()
     sf::Clock clock;
     TimeTicker timeTicker;
 
+    // Starting the game loop
     while (_window.isOpen())
     {
         const sf::Time frameTime = clock.restart();
@@ -75,32 +75,12 @@ void SpaceInvaders::Run()
     }
 }
 
-sf::RenderWindow& SpaceInvaders::GetWindow() const
+void SpaceInvaders::Exit()
 {
-    return _window;
-}
-
-/**
- * TODO: This ultimately will be replace by EnTT
- */
-GameState& SpaceInvaders::GetState()
-{
-    return _gameState;
-}
-
-const Configuration& SpaceInvaders::GetConfiguration() const
-{
-    return _configuration;
-}
-
-ResourceManager& SpaceInvaders::GetResourceManager()
-{
-    return _resourceManager;
-}
-
-ScreenManager& SpaceInvaders::GetScreenManager()
-{
-    return _screenManager;
+    // We shut down the screen to unload the resources
+    _screenManager.CleanUp();
+    _resourceManager.CleanUp();
+    _window.close();
 }
 
 void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
@@ -142,20 +122,39 @@ void SpaceInvaders::OnClose()
 
 void SpaceInvaders::Update(const TimeTicker& timeTicker) const
 {
+    // Delegate the update to the current screen
     _screenManager.Update(timeTicker);
 }
 
 void SpaceInvaders::Render() const
 {
+    // Clean-up the window and delegate the rendering to the current screen
     _window.clear();
     _screenManager.Render();
     _window.display();
 }
 
-void SpaceInvaders::Exit()
+sf::RenderWindow& SpaceInvaders::GetWindow() const
 {
-    // We shut down the screen to unload the resources
-    _screenManager.CleanUp();
-    _resourceManager.CleanUp();
-    _window.close();
+    return _window;
+}
+
+GameState& SpaceInvaders::GetState()
+{
+    return _gameState;
+}
+
+const Configuration& SpaceInvaders::GetConfiguration() const
+{
+    return _configuration;
+}
+
+ResourceManager& SpaceInvaders::GetResourceManager()
+{
+    return _resourceManager;
+}
+
+ScreenManager& SpaceInvaders::GetScreenManager()
+{
+    return _screenManager;
 }

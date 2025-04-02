@@ -32,11 +32,6 @@ public:
         }
 
         _screens.emplace(typeIndex, std::make_unique<T>(std::forward<Args>(args)...));
-
-        if (_currentScreen == nullptr)
-        {
-            _currentScreen = _screens[typeIndex].get();
-        }
     }
 
     template <typename T>

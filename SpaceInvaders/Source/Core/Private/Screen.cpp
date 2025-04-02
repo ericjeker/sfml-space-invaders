@@ -8,3 +8,8 @@ SpaceInvaders& Screen::GetGame() const
 {
     return _game;
 }
+
+void Screen::AddEntity(const std::shared_ptr<Entity>& entity)
+{
+    _entities.push_back(entity);
+}

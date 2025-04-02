@@ -18,17 +18,23 @@ class SpaceInvaders
 public:
     explicit SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
     ~SpaceInvaders() = default;
+
+    // Called for starting the game after it's configured and initialized
     void Run();
+    // Exit the game and clean-up the resources
+    void Exit();
+
+    // Getters
+    // TODO: make them const
     sf::RenderWindow& GetWindow() const;
     const Configuration& GetConfiguration() const;
     ResourceManager& GetResourceManager();
     ScreenManager& GetScreenManager();
     GameState& GetState();
-    void Exit();
 
 private:
-    const Configuration& _configuration;
     const Logger _logger;
+    const Configuration& _configuration;
 
     // SFML Window
     sf::RenderWindow& _window;
@@ -38,12 +44,14 @@ private:
     ScreenManager _screenManager;
     GameState _gameState;
 
-private:
+    // Game Loop related
     void Update(const TimeTicker& timeTicker) const;
     void Render() const;
+
     // Events
     void HandleEvents(const std::optional<sf::Event>& event);
 
+    // Global Game Events related to the Window
     void OnClose();
     void OnFocusLost();
     void OnFocusGained();
