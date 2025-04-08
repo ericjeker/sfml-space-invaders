@@ -1,15 +1,22 @@
-add_library(Core
+set(LIBRARIES
         Private/ResourceManager.cpp
-        Private/ScreenManager.cpp
         Private/Screen.cpp
-        Public/Entity.h
-        Public/System.h
-        Private/GUI/Text.cpp
-        Private/Systems/TextRenderer.cpp)
+        Private/ScreenManager.cpp
+        Private/Managers/GUIManager.cpp
+        Private/Systems/ParticleSystem.cpp)
+
+set(HEADERS
+        Public/Containers/GUI/ButtonCollection.h
+        Public/Containers/GUI/TextCollection.h
+        Public/Containers/ParticleCollection.h)
+
+add_library(Core ${LIBRARIES} ${HEADERS})
 
 target_include_directories(Core PUBLIC
         Public
-        Public/GUI
+        Public/Containers
+        Public/Containers/GUI
+        Public/Managers
         Public/Systems)
 
 target_link_libraries(Core PRIVATE

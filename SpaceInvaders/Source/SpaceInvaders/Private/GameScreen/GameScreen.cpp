@@ -70,7 +70,7 @@ void GameScreen::Update(const TimeTicker& timeTicker)
     shader->setUniform("u_time", timeTicker.elapsedTime.asSeconds());
 }
 
-void GameScreen::Render() const
+void GameScreen::Render()
 {
     auto& resourceManager = GetGame().GetResourceManager();
     auto& window = GetGame().GetWindow();

@@ -26,13 +26,11 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 
     // Initialize global resources
     auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
-    GetResourceManager().SetResource<sf::Font>("Global::Font", font);
+    GetResourceManager().SetResource<sf::Font>("DefaultFont", font);
     auto clickDot = std::make_shared<sf::CircleShape>(2.f);
     GetResourceManager().SetResource<sf::CircleShape>("Global::ClickDot", clickDot);
 
-    // TODO: Initialize physics world
-
-    // TODO: Initialize ECS registry
+    // TODO: Initialize physics world and add to game
 
     // Initialize Game Screens, all screen receive the game itself in parameter
     _screenManager.AddScreen<TitleScreen>(*this);

@@ -4,9 +4,10 @@
 
 #include <GameScreen.h>
 #include <SpaceInvaders.h>
-#include <Text.h>
 
-TitleScreen::TitleScreen(SpaceInvaders& game) : Screen(game), _logger("TitleScreen", game.GetConfiguration().LogLevel)
+TitleScreen::TitleScreen(SpaceInvaders& game)
+    : Screen(game), _logger("TitleScreen", game.GetConfiguration().LogLevel),
+      _guiManager(GetGame().GetResourceManager())
 {
 }
 
@@ -14,108 +15,63 @@ void TitleScreen::Activate()
 {
     _logger.Debug("Activating TitleScreen");
 
+    auto& game = GetGame();
     // Create a window instance from the game to fetch size
-    auto& window = GetGame().GetWindow();
-    auto& resourceManager = GetGame().GetResourceManager();
+    const auto& window = game.GetWindow();
 
     const float centerX = window.getSize().x / 2.f;
     const float centerY = window.getSize().y / 2.f;
-
-    // Get the font from the global resources
-    std::shared_ptr<sf::Font> font = resourceManager.GetResource<sf::Font>("Global::Font");
 
     // Create the render layers, everything will be rendered on these layers
     _backgroundLayer = std::make_unique<sf::RenderTexture>(window.getSize());
     _uiLayer = std::make_unique<sf::RenderTexture>(window.getSize());
 
     // Create title text
-    auto titleComponent = std::make_shared<TextComponent>();
-    titleComponent->font = font;
-    titleComponent->text = "Space Invaders";
-    titleComponent->size = 50;
-    titleComponent->color = sf::Color::White;
-    titleComponent->style = sf::Text::Bold;
-    titleComponent->position = {centerX, centerY - 250.f};
+    _guiManager.AddText("Space Invaders", {centerX, centerY - 250.f}, 50, sf::Color::White, sf::Text::Bold);
 
-    AddEntity(std::make_shared<Text>(titleComponent));
-
-    // Create Play button
-    auto playButton = std::make_shared<sf::Text>(*font);
-    playButton->setString("Play");
-    playButton->setCharacterSize(40);
-    playButton->setFillColor(sf::Color::White);
-    playButton->setOrigin(playButton->getGlobalBounds().getCenter());
-    playButton->setPosition({centerX, centerY});
-
-    // Create Exit button
-    auto exitButton = std::make_shared<sf::Text>(*font);
-    exitButton->setString("Exit");
-    exitButton->setCharacterSize(30);
-    exitButton->setFillColor(sf::Color::White);
-    exitButton->setOrigin(exitButton->getGlobalBounds().getCenter());
-    exitButton->setPosition({centerX, centerY + 100.f});
-
-    // TODO: remove that, put everything in a entity vector
-    resourceManager.SetResource("TitleScreen::PlayButton", playButton);
-    resourceManager.SetResource("TitleScreen::ExitButton", exitButton);
-
-    // Add the systems for that screen
-    // AddSystem(std::make_shared<TextRenderer>());
-    // AddSystem(std::make_shared<ButtonRenderer>());
+    // Create Buttons
+    _guiManager.AddButton("Play", {centerX, centerY}, 40);
+    _guiManager.AddButton("Exit", {centerX, centerY + 100.f}, 30);
 }
 
 void TitleScreen::Update(const TimeTicker& timeTicker)
 {
-    for (const std::shared_ptr<Entity>& entity : _entities)
-    {
-        entity->Update(timeTicker, GetGame().GetState());
-    }
+    _particleSystem.Update(timeTicker);
+    _guiManager.Update(timeTicker);
 }
 
-void TitleScreen::Render() const
+void TitleScreen::Render()
 {
     sf::RenderWindow& window = GetGame().GetWindow();
     ResourceManager& resourceManager = GetGame().GetResourceManager();
 
     _backgroundLayer->clear();
-
-    // Draw the background layer to the window
-    sf::Sprite backgroundSprite(_backgroundLayer->getTexture());
-
-    // Not very clear to me why the texture coordinates are flipped on the Y axis?
-    backgroundSprite.setScale({1.f, -1.f});
-    backgroundSprite.setPosition({0.f, static_cast<float>(_backgroundLayer->getSize().y)});
-
-    window.draw(backgroundSprite);
-
     _uiLayer->clear();
 
-    for (const std::shared_ptr<Entity>& entity : _entities)
-    {
-        entity->Render(*_uiLayer);
-    }
+    _particleSystem.Render(*_backgroundLayer);
+    _guiManager.Render(*_uiLayer);
 
-    _uiLayer->draw(*resourceManager.GetResource<sf::Text>("TitleScreen::PlayButton"));
-    _uiLayer->draw(*resourceManager.GetResource<sf::Text>("TitleScreen::ExitButton"));
+    window.draw(CreateRenderSprite(*_backgroundLayer));
+    window.draw(CreateRenderSprite(*_uiLayer));
+}
 
-    // Draw the UI layer to the window
-    sf::Sprite uiSprite(_uiLayer->getTexture());
+sf::Sprite TitleScreen::CreateRenderSprite(const sf::RenderTexture& renderTexture)
+{
+    const sf::Vector2f flippedScale(1.f, -1.f);
+    const float textureHeight = static_cast<float>(renderTexture.getSize().y);
 
-    // Not very clear to me why the texture coordinates are flipped on the Y axis?
-    uiSprite.setScale({1.f, -1.f});
-    uiSprite.setPosition({0.f, static_cast<float>(_uiLayer->getSize().y)});
+    sf::Sprite sprite(renderTexture.getTexture());
+    sprite.setScale(flippedScale);
+    sprite.setPosition({0.f, textureHeight});
 
-    window.draw(uiSprite);
+    return sprite;
 }
 
 void TitleScreen::Shutdown()
 {
     _logger.Debug("Shutting down TitleScreen");
-    ResourceManager& resourceManager = GetGame().GetResourceManager();
 
-    // TODO: Loop over the screen resources instead of unloading them one by one
-    resourceManager.UnloadResource("TitleScreen::PlayButton");
-    resourceManager.UnloadResource("TitleScreen::ExitButton");
+    // TODO: remove entities
 }
 
 void TitleScreen::HandleEvents(const std::optional<sf::Event>& event)
@@ -146,8 +102,10 @@ void TitleScreen::OnMouseMove(const sf::Event::MouseMoved& event) const
 {
     if (event.position.x && event.position.y)
     {
-        GetGame().GetState().mousePos.x = event.position.x;
-        GetGame().GetState().mousePos.y = event.position.y;
+        auto& state = GetGame().GetState();
+        // TODO: replace by MouseComponent
+        state.mousePos.x = event.position.x;
+        state.mousePos.y = event.position.y;
     }
 }
 

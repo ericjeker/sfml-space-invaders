@@ -1,9 +1,10 @@
-file(GLOB_RECURSE PRIVATE_SOURCES CONFIGURE_DEPENDS "Private/*.cpp")
+set(PRIVATE_SOURCES
+        Private/SpaceInvaders.cpp
+        Private/GameScreen/GameScreen.cpp
+        Private/TitleScreen/TitleScreen.cpp)
+
 add_library(SpaceInvaders
-        ${PRIVATE_SOURCES}
-        Public/GameScreen/Entities/Bullet.h
-        Public/GameScreen/Entities/Enemy.h
-)
+        ${PRIVATE_SOURCES})
 
 target_include_directories(SpaceInvaders PUBLIC
         Public

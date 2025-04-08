@@ -22,7 +22,7 @@ public:
      * @param {TimeTicker} timeTicker - The time information
      */
     void Update(const TimeTicker& timeTicker) override;
-    void Render() const override;
+    void Render() override;
 
 private:
     Logger _logger;
