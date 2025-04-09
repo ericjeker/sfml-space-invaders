@@ -14,7 +14,7 @@ class ParticleSystem {
 public:
     ParticleSystem() = default;
     ~ParticleSystem() = default;
-    void Update(const TimeTicker& timeTicker);
+    void Update(const sf::Time& deltaTime);
     void Render(sf::RenderTexture& renderTexture);
 private:
     ParticleCollection _particles;

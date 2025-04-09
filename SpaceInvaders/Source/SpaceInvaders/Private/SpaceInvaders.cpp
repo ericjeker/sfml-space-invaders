@@ -41,34 +41,25 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 }
 
 /**
- * Run the game, we start the Update loop. This will keep running as long as the window is open.
+ * Run the game, we start the Update loop.
+ * This will keep running as long as the window is open.
  */
 void SpaceInvaders::Run()
 {
     _logger.Debug("Game started");
 
     sf::Clock clock;
-    TimeTicker timeTicker;
 
     // Starting the game loop
     while (_window.isOpen())
     {
-        const sf::Time frameTime = clock.restart();
-        timeTicker.accumulator += frameTime;
-        timeTicker.elapsedTime += frameTime;
-
         while (const std::optional<sf::Event> event = _window.pollEvent())
         {
             HandleEvents(event);
         }
 
-        while (timeTicker.accumulator >= timeTicker.timeStep)
-        {
-            timeTicker.delta = timeTicker.accumulator - timeTicker.timeStep;
-            Update(timeTicker);
-            timeTicker.accumulator -= timeTicker.timeStep;
-        }
-
+        sf::Time deltaTime = clock.restart();
+        Update(deltaTime);
         Render();
     }
 }
@@ -111,6 +102,10 @@ void SpaceInvaders::OnFocusGained()
     _logger.Debug("Focus gained");
     _gameState.isPaused = false;
 }
+void SpaceInvaders::OnResize()
+{
+    _logger.Debug("Window resized");
+}
 
 void SpaceInvaders::OnClose()
 {
@@ -118,10 +113,10 @@ void SpaceInvaders::OnClose()
     Exit();
 }
 
-void SpaceInvaders::Update(const TimeTicker& timeTicker) const
+void SpaceInvaders::Update(const sf::Time& deltaTime) const
 {
     // Delegate the update to the current screen
-    _screenManager.Update(timeTicker);
+    _screenManager.Update(deltaTime);
 }
 
 void SpaceInvaders::Render() const
@@ -137,11 +132,6 @@ sf::RenderWindow& SpaceInvaders::GetWindow() const
     return _window;
 }
 
-GameState& SpaceInvaders::GetState()
-{
-    return _gameState;
-}
-
 const Configuration& SpaceInvaders::GetConfiguration() const
 {
     return _configuration;
@@ -155,4 +145,9 @@ ResourceManager& SpaceInvaders::GetResourceManager()
 ScreenManager& SpaceInvaders::GetScreenManager()
 {
     return _screenManager;
+}
+
+GameState& SpaceInvaders::GetState()
+{
+    return _gameState;
 }

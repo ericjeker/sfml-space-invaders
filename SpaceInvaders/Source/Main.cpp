@@ -10,15 +10,15 @@
  */
 int main()
 {
-    // Getting the configuration, a simple struct
+    // Getting the global configuration of the program, a simple struct
     Configuration configuration;
 
-    // Initialize the window.
-    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "SFML Project", sf::Style::Close);
-    window.setFramerateLimit(60);
+    // Initialize the window, make it beautiful
+    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "Space Invaders", sf::Style::Close);
+    window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
-    // Initialize the game client and running it
+    // Initialize the game client and running it, which basically start the program. That's why we are all here today.
     SpaceInvaders spaceInvaders(window, configuration);
     spaceInvaders.Run();
 

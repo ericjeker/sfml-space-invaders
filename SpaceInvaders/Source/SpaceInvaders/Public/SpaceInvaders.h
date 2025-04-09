@@ -24,10 +24,11 @@ public:
     // Exit the game and clean-up the resources
     void Exit();
 
-    // Getters
-    // TODO: make them const
+    // Getters for the basic objects
     sf::RenderWindow& GetWindow() const;
     const Configuration& GetConfiguration() const;
+
+    // Getters for the managers and state services
     ResourceManager& GetResourceManager();
     ScreenManager& GetScreenManager();
     GameState& GetState();
@@ -39,22 +40,23 @@ private:
     // SFML Window
     sf::RenderWindow& _window;
 
-    // Managers and Services
+    // Managers and State Services
     ResourceManager _resourceManager;
     ScreenManager _screenManager;
     GameState _gameState;
 
-    // Game Loop related
-    void Update(const TimeTicker& timeTicker) const;
-    void Render() const;
-
-    // Events
+    // Events handling first
     void HandleEvents(const std::optional<sf::Event>& event);
 
-    // Global Game Events related to the Window
+    // Game Loop related second
+    void Update(const sf::Time& deltaTime) const;
+    void Render() const;
+
+    // Game Events related to the Window
     void OnClose();
     void OnFocusLost();
     void OnFocusGained();
+    void OnResize();
 };
 
 #endif

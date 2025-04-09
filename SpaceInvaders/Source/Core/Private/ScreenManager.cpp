@@ -22,11 +22,11 @@ void ScreenManager::CleanUp()
     _currentScreen = nullptr;
 }
 
-void ScreenManager::Update(const TimeTicker& timeTicker) const
+void ScreenManager::Update(const sf::Time& deltaTime) const
 {
     if (_currentScreen != nullptr)
     {
-        _currentScreen->Update(timeTicker);
+        _currentScreen->Update(deltaTime);
     }
 }
 

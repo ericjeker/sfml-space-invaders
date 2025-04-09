@@ -17,7 +17,7 @@ public:
     explicit TitleScreen(SpaceInvaders& game);
 
     void Activate() override;
-    void Update(const TimeTicker& timeTicker) override;
+    void Update(const sf::Time& deltaTime) override;
     void Render() override;
     void Shutdown() override;
     void HandleEvents(const std::optional<sf::Event>& event) override;

@@ -17,11 +17,7 @@ public:
     void Shutdown() override;
     void HandleEvents(const std::optional<sf::Event>& event) override;
 
-    /**
-     * Updates the game screen state.
-     * @param {TimeTicker} timeTicker - The time information
-     */
-    void Update(const TimeTicker& timeTicker) override;
+    void Update(const sf::Time& deltaTime) override;
     void Render() override;
 
 private:

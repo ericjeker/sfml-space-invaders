@@ -34,10 +34,10 @@ void TitleScreen::Activate()
     _guiManager.AddButton("Exit", {centerX, centerY + 100.f}, 30);
 }
 
-void TitleScreen::Update(const TimeTicker& timeTicker)
+void TitleScreen::Update(const sf::Time& deltaTime)
 {
-    _particleSystem.Update(timeTicker);
-    _guiManager.Update(timeTicker);
+    _particleSystem.Update(deltaTime);
+    _guiManager.Update(deltaTime);
 }
 
 void TitleScreen::Render()

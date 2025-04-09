@@ -60,7 +60,7 @@ public:
 
     void Activate() const;
     void Shutdown() const;
-    void Update(const TimeTicker& timeTicker) const;
+    void Update(const sf::Time& deltaTime) const;
     void Render() const;
     void HandleEvents(const std::optional<sf::Event>& event) const;
 

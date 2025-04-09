@@ -22,9 +22,9 @@ void GUIManager::AddButton(const std::string label, const sf::Vector2f position,
     _buttons.Add(label, position, size, 0);
 }
 
-void GUIManager::Update(const TimeTicker& timeTicker) {}
-void GUIManager::UpdateTexts(TimeTicker& timeTicker) {}
-void GUIManager::UpdateButtons(TimeTicker& timeTicker) {}
+void GUIManager::Update(const sf::Time& deltaTime) {}
+void GUIManager::UpdateTexts(const sf::Time& deltaTime) {}
+void GUIManager::UpdateButtons(const sf::Time& deltaTime) {}
 
 /**
  * @brief Initializes drawable objects for buttons in the GUI.

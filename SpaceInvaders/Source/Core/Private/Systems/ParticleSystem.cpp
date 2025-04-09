@@ -2,5 +2,5 @@
 
 #include "ParticleSystem.h"
 
-void ParticleSystem::Update(const TimeTicker& timeTicker) {}
+void ParticleSystem::Update(const sf::Time& deltaTime) {}
 void ParticleSystem::Render(sf::RenderTexture& renderTexture) {}

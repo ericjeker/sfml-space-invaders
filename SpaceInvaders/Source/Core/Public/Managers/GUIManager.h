@@ -18,17 +18,17 @@ public:
     explicit GUIManager(const ResourceManager& resourceManager);
     ~GUIManager() = default;
 
-    void Update(const TimeTicker& timeTicker);
+    void Update(const sf::Time& deltaTime);
     void Render(sf::RenderTexture& renderTexture);
 
     // Texts
     void AddText(std::string label, sf::Vector2f position, int size, sf::Color color, sf::Text::Style style);
-    void UpdateTexts(TimeTicker& timeTicker);
+    void UpdateTexts(const sf::Time& deltaTime);
     void RenderTexts(sf::RenderTexture& renderTexture);
 
     // Buttons
     void AddButton(std::string label, sf::Vector2f position, int size);
-    void UpdateButtons(TimeTicker& timeTicker);
+    void UpdateButtons(const sf::Time& deltaTime);
     void RenderButtons(sf::RenderTexture& renderTexture);
 
 private:

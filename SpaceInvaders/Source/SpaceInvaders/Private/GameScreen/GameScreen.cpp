@@ -52,7 +52,7 @@ void GameScreen::Shutdown()
     GetGame().GetResourceManager().UnloadResource("GameScreen::Shader");
 }
 
-void GameScreen::Update(const TimeTicker& timeTicker)
+void GameScreen::Update(const sf::Time& deltaTime)
 {
     if (GetGame().GetState().isPaused)
     {
@@ -67,7 +67,7 @@ void GameScreen::Update(const TimeTicker& timeTicker)
     circle->setFillColor(color);
 
     std::shared_ptr<sf::Shader> shader = resourceManager.GetResource<sf::Shader>("GameScreen::Shader");
-    shader->setUniform("u_time", timeTicker.elapsedTime.asSeconds());
+    shader->setUniform("u_time", deltaTime.asSeconds());
 }
 
 void GameScreen::Render()
