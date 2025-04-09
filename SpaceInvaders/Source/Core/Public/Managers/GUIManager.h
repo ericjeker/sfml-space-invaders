@@ -4,13 +4,13 @@
 #ifndef GUIMANAGER_H
 #define GUIMANAGER_H
 
+#include "CommandRegistry.h"
 #include "TextCollection.h"
-#include "Collections/GUI/ButtonCollection.h"
+#include "ButtonCollection.h"
 
 #include <ResourceManager.h>
-#include <TimeTicker.h>
 
-#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Window/Event.hpp>
 
 /**
  * The GUIManager take care of GUI elements and their interaction. Accepting events and checking for hits
@@ -24,25 +24,34 @@
 class GUIManager
 {
 public:
-    explicit GUIManager(const ResourceManager& resourceManager);
+    GUIManager(ResourceManager& resourceManager, CommandRegistry& commandRegistry);
     ~GUIManager() = default;
 
     void Update(const sf::Time& deltaTime);
     void Render(sf::RenderTexture& renderTexture);
 
     // Texts
-    void AddText(std::string label, sf::Vector2f position, int size, sf::Color color, sf::Text::Style style);
+    void AddText(const std::string& label, const sf::Vector2f& position, const int& size, const sf::Color& color, const sf::Text::Style& style);
     void UpdateTexts(const sf::Time& deltaTime);
     void RenderTexts(sf::RenderTexture& renderTexture);
 
     // Buttons
-    void AddButton(std::string label, sf::Vector2f position, int size);
+    void AddButton(const std::string& label, const sf::Vector2f& position, const int& size, const int& commandId);
     void UpdateButtons(const sf::Time& deltaTime);
     void RenderButtons(sf::RenderTexture& renderTexture);
 
+    // Potential future events I will handle
+    void OnMousePressed(const sf::Event::MouseButtonPressed& event);
+    void OnMouseReleased() {};
+    void OnKeyPressed() {};
+    void OnMouseMove() {};
+    void OnMouseWheelMoved() {};
+    void OnWindowResized() {};
+
 private:
     // We need the resource manager to load images and fonts
-    ResourceManager _resourceManager;
+    ResourceManager& _resourceManager;
+    CommandRegistry& _commandRegistry;
 
     // Collection of all the elements displayed on screen (SoA)
     // TODO: I am not sure yet if the GUIManager should hold the state of the elements, maybe not...
@@ -57,13 +66,6 @@ private:
     void InitializeButtonDrawables();
     void InitializeTextDrawables();
 
-    // Potential future events I will handle
-    void OnMousePressed() {};
-    void OnMouseReleased() {};
-    void OnKeyPressed() {};
-    void OnMouseMove() {};
-    void OnMouseWheelMoved() {};
-    void OnWindowResized() {};
 };
 
 #endif

@@ -2,12 +2,15 @@
 
 #include "TitleScreen.h"
 
+#include "Commands/ExitCommand.h"
+#include "Commands/PlayCommand.h"
+
 #include <GameScreen.h>
 #include <SpaceInvaders.h>
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
-    : Screen(game), _logger("TitleScreen", game.GetConfiguration().LogLevel),
-      _guiManager(GetGame().GetResourceManager()), _particleSystem(game.GetConfiguration())
+    : Screen(game), _logger("TitleScreen", game.GetConfiguration().LogLevel), _commandRegistry(game.GetConfiguration()),
+      _guiManager(GetGame().GetResourceManager(), _commandRegistry), _particleSystem(game.GetConfiguration())
 {
 }
 
@@ -26,13 +29,18 @@ void TitleScreen::Activate()
     _backgroundLayer = std::make_unique<sf::RenderTexture>(window.getSize());
     _uiLayer = std::make_unique<sf::RenderTexture>(window.getSize());
 
+    // Initialize the Command Registry
+    _commandRegistry.Register(1, std::make_shared<PlayCommand>(game));
+    _commandRegistry.Register(2, std::make_shared<ExitCommand>(game));
+
     // Create title text
     _guiManager.AddText("Space Invaders", {centerX, centerY - 250.f}, 50, sf::Color::White, sf::Text::Bold);
 
     // Create Buttons
-    _guiManager.AddButton("Play", {centerX, centerY}, 40);
-    _guiManager.AddButton("Exit", {centerX, centerY + 100.f}, 30);
+    _guiManager.AddButton("Play", {centerX, centerY}, 40, 1);
+    _guiManager.AddButton("Exit", {centerX, centerY + 100.f}, 30, 2);
 
+    // Initialize the particle system with 1000 particles
     _particleSystem.Initialize(1000);
 }
 
@@ -110,22 +118,8 @@ void TitleScreen::OnMouseMove(const sf::Event::MouseMoved& event) const
     }
 }
 
-void TitleScreen::OnMousePressed(const sf::Event::MouseButtonPressed& event) const
+void TitleScreen::OnMousePressed(const sf::Event::MouseButtonPressed& event)
 {
     _logger.Debug(std::format("OnMousePressed at ({}, {})", event.position.x, event.position.y));
-
-    auto mousePos = event.position;
-
-    // TODO: Loop over the clickable resources instead of doing this manually and call their onClick function
-    auto exitButton = GetGame().GetResourceManager().GetResource<sf::Text>("TitleScreen::ExitButton");
-    if (exitButton->getGlobalBounds().contains(sf::Vector2<float>(mousePos)))
-    {
-        GetGame().Exit();
-    }
-
-    auto playButton = GetGame().GetResourceManager().GetResource<sf::Text>("TitleScreen::PlayButton");
-    if (playButton->getGlobalBounds().contains(sf::Vector2<float>(mousePos)))
-    {
-        GetGame().GetScreenManager().SetCurrentScreen<GameScreen>();
-    }
+    _guiManager.OnMousePressed(event);
 }

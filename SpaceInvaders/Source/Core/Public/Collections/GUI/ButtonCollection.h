@@ -15,17 +15,17 @@ struct ButtonCollection
     std::vector<int> sizes;
     std::vector<bool> isHovered;
     std::vector<bool> isPressed;
-    std::vector<int> actionIds;
+    std::vector<int> commandIds;
     std::vector<std::string> labels;
 
     // Add a new button
-    void Add(const std::string label, const sf::Vector2f position, const int size, const int actionId)
+    void Add(const std::string label, const sf::Vector2f position, const int size, const int commandId)
     {
         positions.push_back(position);
         sizes.push_back(size);
         isHovered.push_back(false);
         isPressed.push_back(false);
-        actionIds.push_back(actionId);
+        commandIds.push_back(commandId);
         labels.push_back(label);
     }
 
@@ -36,7 +36,7 @@ struct ButtonCollection
         sizes.reserve(count);
         isHovered.reserve(count);
         isPressed.reserve(count);
-        actionIds.reserve(count);
+        commandIds.reserve(count);
         labels.reserve(count);
     }
 
@@ -47,7 +47,7 @@ struct ButtonCollection
         sizes.clear();
         isHovered.clear();
         isPressed.clear();
-        actionIds.clear();
+        commandIds.clear();
         labels.clear();
     }
 

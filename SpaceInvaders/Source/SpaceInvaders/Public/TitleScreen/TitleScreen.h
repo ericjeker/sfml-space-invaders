@@ -4,6 +4,9 @@
 #ifndef TITLESCREEN_H
 #define TITLESCREEN_H
 
+#include "CommandRegistry.h"
+
+
 #include <GUIManager.h>
 #include <Logger.h>
 #include <ParticleSystem.h>
@@ -26,6 +29,7 @@ private:
     const Logger _logger;
 
     // Systems and Managers
+    CommandRegistry _commandRegistry;
     GUIManager _guiManager;
     ParticleSystem _particleSystem;
 
@@ -40,7 +44,7 @@ private:
     // Accepted events
     void OnKeyPressed(const sf::Event::KeyPressed& event) const;
     void OnMouseMove(const sf::Event::MouseMoved& event) const;
-    void OnMousePressed(const sf::Event::MouseButtonPressed& event) const;
+    void OnMousePressed(const sf::Event::MouseButtonPressed& event);
 };
 
 #endif

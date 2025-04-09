@@ -7,7 +7,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Clock.hpp>
 
-ParticleSystem::ParticleSystem(Configuration configuration) : _configuration(configuration), _logger("ParticleSystem", configuration.LogLevel) {}
+ParticleSystem::ParticleSystem(const Configuration& configuration) : _configuration(configuration), _logger("ParticleSystem", LogLevel::Info) {}
 
 void ParticleSystem::Initialize(const size_t n)
 {

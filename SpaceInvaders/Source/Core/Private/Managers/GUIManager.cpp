@@ -3,23 +3,32 @@
 
 #include "Managers/GUIManager.h"
 
+#include "Command.h"
+#include "CommandRegistry.h"
+
 #include <ResourceManager.h>
 #include <TimeTicker.h>
 
-GUIManager::GUIManager(const ResourceManager& resourceManager) : _resourceManager(resourceManager) {};
+GUIManager::GUIManager(ResourceManager& resourceManager, CommandRegistry& commandRegistry)
+    : _resourceManager(resourceManager), _commandRegistry(commandRegistry)
+{
+};
 
-
-void GUIManager::AddText(std::string label, sf::Vector2f position, int size, sf::Color color, sf::Text::Style style)
+void GUIManager::AddText(const std::string& label, const sf::Vector2f& position, const int& size, const sf::Color& color, const sf::Text::Style& style)
 {
     _texts.Add(label, position, size, color, style);
 }
 
-void GUIManager::AddButton(const std::string label, const sf::Vector2f position, const int size)
+void GUIManager::AddButton(const std::string& label, const sf::Vector2f& position, const int& size, const int& commandId)
 {
-    _buttons.Add(label, position, size, 0);
+    _buttons.Add(label, position, size, commandId);
 }
 
-void GUIManager::Update(const sf::Time& deltaTime) {}
+void GUIManager::Update(const sf::Time& deltaTime)
+{
+    UpdateTexts(deltaTime);
+    UpdateButtons(deltaTime);
+}
 void GUIManager::UpdateTexts(const sf::Time& deltaTime) {}
 void GUIManager::UpdateButtons(const sf::Time& deltaTime) {}
 
@@ -51,7 +60,6 @@ void GUIManager::InitializeTextDrawables()
         _textDrawables.push_back(button);
     }
 }
-
 
 void GUIManager::Render(sf::RenderTexture& renderTexture)
 {
@@ -94,5 +102,23 @@ void GUIManager::RenderTexts(sf::RenderTexture& renderTexture)
         text->setPosition(_texts.positions[i]);
 
         renderTexture.draw(*text);
+    }
+}
+
+void GUIManager::OnMousePressed(const sf::Event::MouseButtonPressed& event)
+{
+    const sf::Vector2i mousePosition = event.position;
+
+    // For each interactable elements we'll check if the mouse is inside the bounds of the element
+    for (int i = 0; i < _buttons.Size(); ++i)
+    {
+        auto& button = _buttonDrawables[i];
+        if (!button->getGlobalBounds().contains(sf::Vector2<float>(mousePosition)))
+        {
+            continue;
+        }
+
+        // Call the button's assigned action
+        _commandRegistry.Execute(_buttons.commandIds[i]);
     }
 }

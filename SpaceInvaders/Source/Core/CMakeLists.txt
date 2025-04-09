@@ -3,13 +3,16 @@ set(LIBRARIES
         Private/Screen.cpp
         Private/ScreenManager.cpp
         Private/Managers/GUIManager.cpp
-        Private/Systems/ParticleSystem.cpp)
+        Private/Systems/ParticleSystem.cpp
+        Private/CommandRegistry.cpp
+        Public/CommandRegistry.h)
 
 set(HEADERS
         # Collections are SoA, data-only structures, for holding states
         Public/Collections/ParticleCollection.h
         Public/Collections/GUI/ButtonCollection.h
-        Public/Collections/GUI/TextCollection.h)
+        Public/Collections/GUI/TextCollection.h
+        Public/Command.h)
 
 add_library(Core ${LIBRARIES} ${HEADERS})
 

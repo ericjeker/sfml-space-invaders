@@ -14,7 +14,7 @@
 
 class ParticleSystem {
 public:
-    explicit ParticleSystem(Configuration configuration);
+    explicit ParticleSystem(const Configuration& configuration);
     ~ParticleSystem() = default;
     void Update(const sf::Time& deltaTime);
     void Render(sf::RenderTexture& renderTexture) const;
