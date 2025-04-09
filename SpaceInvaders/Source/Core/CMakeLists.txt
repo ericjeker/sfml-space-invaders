@@ -6,16 +6,17 @@ set(LIBRARIES
         Private/Systems/ParticleSystem.cpp)
 
 set(HEADERS
-        Public/Containers/GUI/ButtonCollection.h
-        Public/Containers/GUI/TextCollection.h
-        Public/Containers/ParticleCollection.h)
+        # Collections are SoA, data-only structures, for holding states
+        Public/Collections/ParticleCollection.h
+        Public/Collections/GUI/ButtonCollection.h
+        Public/Collections/GUI/TextCollection.h)
 
 add_library(Core ${LIBRARIES} ${HEADERS})
 
 target_include_directories(Core PUBLIC
         Public
-        Public/Containers
-        Public/Containers/GUI
+        Public/Collections
+        Public/Collections/GUI
         Public/Managers
         Public/Systems)
 

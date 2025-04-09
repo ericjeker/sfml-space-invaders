@@ -6,10 +6,7 @@
 #include <ResourceManager.h>
 #include <TimeTicker.h>
 
-GUIManager::GUIManager(const ResourceManager& resourceManager)
-    : _resourceManager(resourceManager) {
-
-      };
+GUIManager::GUIManager(const ResourceManager& resourceManager) : _resourceManager(resourceManager) {};
 
 
 void GUIManager::AddText(std::string label, sf::Vector2f position, int size, sf::Color color, sf::Text::Style style)
@@ -98,5 +95,4 @@ void GUIManager::RenderTexts(sf::RenderTexture& renderTexture)
 
         renderTexture.draw(*text);
     }
-
 }

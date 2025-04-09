@@ -16,15 +16,16 @@ class TitleScreen final : public Screen
 public:
     explicit TitleScreen(SpaceInvaders& game);
 
+    void HandleEvents(const std::optional<sf::Event>& event) override;
     void Activate() override;
     void Update(const sf::Time& deltaTime) override;
     void Render() override;
     void Shutdown() override;
-    void HandleEvents(const std::optional<sf::Event>& event) override;
 
 private:
     const Logger _logger;
 
+    // Systems and Managers
     GUIManager _guiManager;
     ParticleSystem _particleSystem;
 
@@ -33,6 +34,7 @@ private:
     std::unique_ptr<sf::RenderTexture> _uiLayer;
 
     // Generate a Sprite from a RenderTexture
+    // TODO: This could be reused by multiple screens
     sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
 
     // Accepted events
