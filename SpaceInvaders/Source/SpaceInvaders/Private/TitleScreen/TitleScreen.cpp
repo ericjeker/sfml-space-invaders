@@ -10,7 +10,7 @@
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
     : Screen(game), _logger("TitleScreen", game.GetConfiguration().LogLevel), _commandRegistry(game.GetConfiguration()),
-      _guiManager(GetGame().GetResourceManager(), _commandRegistry), _particleSystem(game.GetConfiguration())
+      _guiManager(GetGame().GetResourceManager(), _commandRegistry), _particleConstellation(game.GetConfiguration())
 {
 }
 
@@ -41,12 +41,12 @@ void TitleScreen::Activate()
     _guiManager.AddButton("Exit", {centerX, centerY + 100.f}, 30, 2);
 
     // Initialize the particle system with 1000 particles
-    _particleSystem.Initialize(1000);
+    _particleConstellation.Initialize(1000);
 }
 
 void TitleScreen::Update(const sf::Time& deltaTime)
 {
-    _particleSystem.Update(deltaTime);
+    _particleConstellation.Update(deltaTime);
     _guiManager.Update(deltaTime);
 }
 
@@ -57,7 +57,7 @@ void TitleScreen::Render()
     _backgroundLayer->clear(sf::Color(0, 0, 0, 0));
     _uiLayer->clear(sf::Color(0, 0, 0, 0));
 
-    _particleSystem.Render(*_backgroundLayer);
+    _particleConstellation.Render(*_backgroundLayer);
     _guiManager.Render(*_uiLayer);
 
     window.draw(CreateRenderSprite(*_backgroundLayer));

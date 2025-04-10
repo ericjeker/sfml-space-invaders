@@ -10,46 +10,33 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 
-GameScreen::GameScreen(SpaceInvaders& game) : Screen(game), _logger("GameScreen", game.GetConfiguration().LogLevel) {}
+GameScreen::GameScreen(SpaceInvaders& game) : Screen(game), _logger("GameScreen", game.GetConfiguration().LogLevel), _playerController(game.GetWindow(), game.GetConfiguration()) {}
 
 void GameScreen::Activate()
 {
     _logger.Debug("Activating GameScreen");
 
-    Configuration configuration = GetGame().GetConfiguration();
+    auto& game = GetGame();
+    // Create a window instance from the game to fetch size
+    const auto& window = game.GetWindow();
 
-    /** Load resources when the Screen is activated */
-    std::shared_ptr<sf::CircleShape> circle = std::make_shared<sf::CircleShape>(3.f);
-    circle->setFillColor(sf::Color::White);
-    circle->setOrigin({circle->getRadius(), circle->getRadius()});
-    circle->setPosition({-1.f, -1.f});
-    GetGame().GetResourceManager().SetResource<sf::CircleShape>("GameScreen::ClickDot",
-                                                                std::shared_ptr<sf::CircleShape>(circle));
+    const float centerX = window.getSize().x / 2.f;
+    const float centerY = window.getSize().y / 2.f;
 
-    if (!sf::Shader::isAvailable())
-    {
-        _logger.Error("Shader is not available");
-        return;
-    }
+    // Create the render layers, everything will be rendered on these layers
+    _backgroundLayer = std::make_unique<sf::RenderTexture>(window.getSize());
+    _gameLayer = std::make_unique<sf::RenderTexture>(window.getSize());
+    _uiLayer = std::make_unique<sf::RenderTexture>(window.getSize());
 
-    std::shared_ptr<sf::Shader> shader = std::make_shared<sf::Shader>();
-    if (!shader->loadFromFile("Assets/Shaders/shader.frag", sf::Shader::Type::Fragment))
-    {
-        _logger.Error("Failed to load 'Assets/Shaders/shader'");
-        return;
-    }
+    // Load resources when the Screen is activated
 
-    shader->setUniform("u_resolution", sf::Glsl::Vec2{configuration.WindowSize});
-    shader->setUniform("u_time", 5.f);
-
-    GetGame().GetResourceManager().SetResource<sf::Shader>("GameScreen::Shader", std::shared_ptr<sf::Shader>(shader));
+    // Initialize the player controller
+    _playerController.Initialize(_game.GetState().player);
 }
 
 void GameScreen::Shutdown()
 {
     _logger.Debug("Shutting down GameScreen");
-    GetGame().GetResourceManager().UnloadResource("GameScreen::ClickDot");
-    GetGame().GetResourceManager().UnloadResource("GameScreen::Shader");
 }
 
 void GameScreen::Update(const sf::Time& deltaTime)
@@ -59,15 +46,7 @@ void GameScreen::Update(const sf::Time& deltaTime)
         return;
     }
 
-    auto& resourceManager = GetGame().GetResourceManager();
-
-    std::shared_ptr<sf::CircleShape> circle = resourceManager.GetResource<sf::CircleShape>("GameScreen::ClickDot");
-    auto color = circle->getFillColor();
-    color.a = color.a * 0.98f;
-    circle->setFillColor(color);
-
-    std::shared_ptr<sf::Shader> shader = resourceManager.GetResource<sf::Shader>("GameScreen::Shader");
-    shader->setUniform("u_time", deltaTime.asSeconds());
+    _playerController.Update(deltaTime, _game.GetState().player);
 }
 
 void GameScreen::Render()
@@ -75,22 +54,28 @@ void GameScreen::Render()
     auto& resourceManager = GetGame().GetResourceManager();
     auto& window = GetGame().GetWindow();
 
-    std::shared_ptr<sf::Shader> shader = resourceManager.GetResource<sf::Shader>("GameScreen::Shader");
-    shader->setUniform("u_texture", sf::Shader::CurrentTexture);
+    _backgroundLayer->clear(sf::Color(0, 0, 0, 0));
+    _gameLayer->clear(sf::Color(0, 0, 0, 0));
+    _uiLayer->clear(sf::Color(0, 0, 0, 0));
 
-    // Create a rectangle that covers the entire window
-    sf::RectangleShape texture;
-    texture.setSize(sf::Vector2f(window.getSize()));
-    texture.setPosition({0, 0});
+    _playerController.Render(*_gameLayer, _game.GetState().player);
 
-    // Draw the rectangle with the shader applied
-    sf::RenderStates states;
-    states.shader = shader.get();
-    window.draw(texture, states);
+    window.draw(CreateRenderSprite(*_backgroundLayer));
+    window.draw(CreateRenderSprite(*_gameLayer));
+    window.draw(CreateRenderSprite(*_uiLayer));
+}
 
-    // Draw the click dot
-    std::shared_ptr<sf::CircleShape> circle = resourceManager.GetResource<sf::CircleShape>("GameScreen::ClickDot");
-    window.draw(*circle);
+// TODO: This is duplicated in TitleScreen.cpp
+sf::Sprite GameScreen::CreateRenderSprite(const sf::RenderTexture& renderTexture)
+{
+    const sf::Vector2f flippedScale(1.f, -1.f);
+    const float textureHeight = static_cast<float>(renderTexture.getSize().y);
+
+    sf::Sprite sprite(renderTexture.getTexture());
+    sprite.setScale(flippedScale);
+    sprite.setPosition({0.f, textureHeight});
+
+    return sprite;
 }
 
 void GameScreen::HandleEvents(const std::optional<sf::Event>& event)

@@ -26,7 +26,8 @@ public:
 
     // TODO: This is in Core but not reusable. Replace this with a generic Game class
     [[nodiscard]] SpaceInvaders& GetGame() const;
-private:
+
+protected:
     SpaceInvaders& _game;
 };
 

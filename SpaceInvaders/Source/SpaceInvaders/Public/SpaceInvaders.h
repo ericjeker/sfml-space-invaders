@@ -31,6 +31,8 @@ public:
     // Getters for the managers and state services
     ResourceManager& GetResourceManager();
     ScreenManager& GetScreenManager();
+
+    // Getters  for the game state
     GameState& GetState();
 
 private:

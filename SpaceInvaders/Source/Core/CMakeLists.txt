@@ -3,7 +3,7 @@ set(LIBRARIES
         Private/Screen.cpp
         Private/ScreenManager.cpp
         Private/Managers/GUIManager.cpp
-        Private/Systems/ParticleSystem.cpp
+        Private/Managers/ParticleConstellationManager.cpp
         Private/CommandRegistry.cpp
         Public/CommandRegistry.h)
 

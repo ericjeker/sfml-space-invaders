@@ -1,14 +1,20 @@
-set(PRIVATE_SOURCES
+set(LIBRARIES
         Private/SpaceInvaders.cpp
         Private/GameScreen/GameScreen.cpp
         Private/TitleScreen/TitleScreen.cpp
         Private/Commands/PlayCommand.cpp
-        Public/Commands/PlayCommand.h
         Private/Commands/ExitCommand.cpp
-        Public/Commands/ExitCommand.h)
+        Private/GameScreen/Systems/PlayerController.cpp)
+
+set(HEADERS
+        Public/GameScreen/Entities/Player.h
+        Public/GameScreen/Collections/BulletCollection.h
+        Public/GameScreen/Collections/EnemyCollection.h
+        Public/GameScreen/Systems/PlayerController.h)
 
 add_library(SpaceInvaders
-        ${PRIVATE_SOURCES})
+        ${LIBRARIES}
+        ${HEADERS})
 
 target_include_directories(SpaceInvaders PUBLIC
         Public

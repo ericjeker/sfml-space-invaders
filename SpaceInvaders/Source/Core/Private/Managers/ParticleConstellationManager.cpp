@@ -1,15 +1,15 @@
 // Copyright (c) 2025 Eric Jeker. All rights reserved.
 
-#include "ParticleSystem.h"
+#include "ParticleConstellationManager.h"
 
 #include <random>
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Clock.hpp>
 
-ParticleSystem::ParticleSystem(const Configuration& configuration) : _configuration(configuration), _logger("ParticleSystem", LogLevel::Info) {}
+ParticleConstellationManager::ParticleConstellationManager(const Configuration& configuration) : _configuration(configuration), _logger("ParticleConstellationManager", LogLevel::Info) {}
 
-void ParticleSystem::Initialize(const size_t n)
+void ParticleConstellationManager::Initialize(const size_t n)
 {
     // Initialize the RNG
     std::random_device device;
@@ -36,7 +36,7 @@ void ParticleSystem::Initialize(const size_t n)
     }
 }
 
-void ParticleSystem::Update(const sf::Time& deltaTime)
+void ParticleConstellationManager::Update(const sf::Time& deltaTime)
 {
     _logger.Debug("Delta: " + std::to_string(deltaTime.asMilliseconds()));
 
@@ -55,7 +55,7 @@ void ParticleSystem::Update(const sf::Time& deltaTime)
     _logger.Debug("Updating: " + std::to_string(duration.getElapsedTime().asMicroseconds()) + "us");
 }
 
-void ParticleSystem::Render(sf::RenderTexture& renderTexture) const
+void ParticleConstellationManager::Render(sf::RenderTexture& renderTexture) const
 {
     sf::Clock duration;
     duration.start();
@@ -73,7 +73,7 @@ void ParticleSystem::Render(sf::RenderTexture& renderTexture) const
     _logger.Debug("Rendering: " + std::to_string(duration.getElapsedTime().asMicroseconds()) + "us");
 }
 
-void ParticleSystem::ScreenWarp(sf::Vector2f& position)
+void ParticleConstellationManager::ScreenWarp(sf::Vector2f& position)
 {
     if (position.x < 0)
     {

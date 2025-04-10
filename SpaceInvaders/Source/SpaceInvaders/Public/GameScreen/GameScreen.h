@@ -4,8 +4,12 @@
 #ifndef GAME_SCREEN_H
 #define GAME_SCREEN_H
 
+#include "Systems/PlayerController.h"
+
+
 #include <Logger.h>
 #include <Screen.h>
+#include <SFML/Graphics/Sprite.hpp>
 
 class GameScreen final : public Screen
 {
@@ -22,6 +26,17 @@ public:
 
 private:
     Logger _logger;
+
+    // Rendering layers
+    std::unique_ptr<sf::RenderTexture> _backgroundLayer;
+    std::unique_ptr<sf::RenderTexture> _gameLayer;
+    std::unique_ptr<sf::RenderTexture> _uiLayer;
+
+    // Systems
+    PlayerController _playerController;
+
+    // Utilities
+    sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
 };
 
 #endif

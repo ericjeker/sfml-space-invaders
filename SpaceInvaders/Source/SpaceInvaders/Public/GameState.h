@@ -4,6 +4,12 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+#include "ButtonCollection.h"
+#include "Collections/BulletCollection.h"
+#include "Collections/EnemyCollection.h"
+#include "Entities/Player.h"
+
+
 #include <SFML/System/Vector2.hpp>
 
 /**
@@ -11,8 +17,20 @@
  */
 struct GameState
 {
+    // Mouse State
     sf::Vector2f mousePos = sf::Vector2f(-1.f, -1.f);
+
+    // Game
+    int score = 0;
+    bool isGameOver = false;
     bool isPaused = false;
+
+    // Player state
+    Player player;
+
+    // Entity Collections, Enemy and Bullet
+    BulletCollection bullets;
+    EnemyCollection enemies;
 };
 
 #endif

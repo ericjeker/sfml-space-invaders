@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Eric Jeker. All rights reserved.
 
 #pragma once
-#ifndef PARTICLESYSTEM_H
-#define PARTICLESYSTEM_H
+#ifndef PARTICLECONSTELLATIONMANAGER_H
+#define PARTICLECONSTELLATIONMANAGER_H
 
 #include "ParticleCollection.h"
 
@@ -12,10 +12,10 @@
 
 #include <SFML/Graphics/RenderTexture.hpp>
 
-class ParticleSystem {
+class ParticleConstellationManager {
 public:
-    explicit ParticleSystem(const Configuration& configuration);
-    ~ParticleSystem() = default;
+    explicit ParticleConstellationManager(const Configuration& configuration);
+    ~ParticleConstellationManager() = default;
     void Update(const sf::Time& deltaTime);
     void Render(sf::RenderTexture& renderTexture) const;
     void ScreenWarp(sf::Vector2f& position);

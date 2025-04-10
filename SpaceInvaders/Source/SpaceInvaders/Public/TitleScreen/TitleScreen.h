@@ -9,7 +9,7 @@
 
 #include <GUIManager.h>
 #include <Logger.h>
-#include <ParticleSystem.h>
+#include <ParticleConstellationManager.h>
 #include <Screen.h>
 
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -31,7 +31,7 @@ private:
     // Systems and Managers
     CommandRegistry _commandRegistry;
     GUIManager _guiManager;
-    ParticleSystem _particleSystem;
+    ParticleConstellationManager _particleConstellation;
 
     // Rendering layers
     std::unique_ptr<sf::RenderTexture> _backgroundLayer;

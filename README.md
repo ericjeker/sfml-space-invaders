@@ -10,11 +10,10 @@ Learning C++ with SFML and a SpaceInvaders clone.
 ## Dependencies
 
 * SFML
-* EnTT
 * Box2D
 * Dear ImGui
 
-## C++ Practices
+## C++ Learning
 
 * Use smart pointers (std::unique_ptr, std::shared_ptr) instead of raw pointers to prevent memory leaks
 * Leverage RAII (Resource Acquisition Is Initialization) for resource management
@@ -23,60 +22,99 @@ Learning C++ with SFML and a SpaceInvaders clone.
 
 ## Design Patterns
 
-* Entity-Component-System (ECS) - EnTT implements this pattern, which separates data (components) from behavior (systems)
-* Struct as Archetypes
+* Data-Oriented Design: As much as possible, use Structure of Array instead of Array of Structure (OOP)
+* Struct as Data-Object
 * Finite State Machine - For managing game states (loading, playing, paused)
-* Data-driven approach for loading resources using ResourceLoader and ResourceManager  
+* Use a CommandRegistry for storing commands and executing commands
 
 ## To Do
 
-- [ ] Set up EnTT and replace the current GameState with a registry
-- [ ] Set up Dear ImGui
-- [ ] Create a manifest system for loading resources
-  - [ ] Create factories for initializing resources by type
-- [ ] Audio and Music managers
-- [ ] How to create a distribution package?
-  - [ ] Include game executable
-  - [ ] Include required DLLs, including dependencies
-  - [ ] Include game assets
-  - [ ] Include configuration files
+### Gameplay
 
-### Screens & GUI
-
+- [ ] Controlling the player spaceship with the keyboard (AWSD, Space)
+  - [ ] Ensure control is smooth and responsive
+  - [ ] Use spring movement with slight rotation for appeal
+- [ ] Firing bullets, add them to the bullet collection, create a BulletSystem
+  - [ ] Bullet movement, destruction when out of screen
+  - [ ] Bullet collision with enemies
+  - [ ] Bullet collision with player spaceship
+  - [ ] Player lives and health, game over
+- [ ] Spawn enemies, enemy movements, enemy system (EnemyMovement)
+  - [ ] The enemies should move horizontally, they should not go out of the screen
+  - [ ] Enemies should shoot bullets randomly
+  - [ ] If the enemies reach the bottom of the screen, game over-
+  - [ ] Different enemy types with varying behaviors and health points
+- [ ] Add a score system
+- [ ] Add a high score system, save to disk
+- [ ] Replace enemies and player with sprites
+- [ ] Power-ups (shields, weapon upgrades, extra lives)
+  - [ ] Increase spread of main weapon
+  - [ ] Rockets, with recharge time
+  - [ ] Shields
+  - [ ] Extra lives, extra health
+- [ ] Settings screen, save settings on disk
+  - [ ] Music and SFX volumes
+  - [ ] Game difficulty settings
+  - [ ] Screen resolution and window management
+  - [ ] Configurable controls
+  - [ ] Colorblind options
+- [ ] Level progression system (increasing difficulty, new enemy patterns)
+  - [ ] Level is cleared one the enemies are dead 
+  - [ ] Initialize enemy position, health, behavior, shooting patterns, at each level (Waves)
+  - [ ] EnemyFormation management (rows, V-shape, random spawn, etc.)
+  - [ ] Difficulty progression (speed, health, fire rate, etc.)
+  - [ ] Boss battles at the end of levels/stages
+- [ ] Controlling the player spaceship with the gamepad
+- [ ] Controlling the player spaceship with the mouse
 - [ ] PauseScreen when pressing ESC in the GameScreen
 - [ ] GameOverScreen when the game is lost
+
+### Technical
+
+- [ ] Frame rate management and performance optimization
+- [ ] Memory profiling and optimization
+- [ ] Game state serialization (save/load game)
+- [ ] Collision optimization (spatial partitioning, grid or quadtree, if needed)
+
+### Polish
+
+- [ ] Loading screen with progress indicator
+- [ ] Tutorial or help screen
+- [ ] Credits screen
+- [ ] Juices and other visual effects (explosions, power-ups, etc.)
+  - [ ] Particle system for explosions and bullets fire & smoke
+  - [ ] Visual feedback for hits/damage
+  - [ ] Screen shake and other juicy effects
+- [ ] Localization support for multiple languages
+
+### Testing & Deployment
+
+- [ ] Unit tests for core game systems
+- [ ] Automated build process using Github Actions
+- [ ] Version tracking, and release process
+- [ ] Installer creation, distribution
+- [ ] Update mechanism
+
+### UI
+
+- [ ] Sound and effects
+- [ ] Text rendering and layout system
 - [ ] Button animation and Sound
+
+### Engine
+
+- [x] Set up a basic DoD architecture
+- [x] ScreenManager for screen transition
+  - [ ] LoadingScreen while loading assets
+  - [ ] Overlay, transition animation
+- [ ] Component communication system (events/messaging)
+- [ ] CommandRegistry for storing commands
+- [ ] CommandBuffer for buffering commands
+- [ ] InputSystem & InputBuffer, input -> command system
 - [ ] Integrate Dear ImGUI for debugging, console, and other debugging actions
-
-### Entity, Components, Archetypes, Systems
-
-- [ ] InputSystem & InputRegistryComponent
-- [ ] CommandRegistryComponent for storing commands
-- [ ] GameStateComponent for managing game states
-- [ ] PaddleEntity and PaddleArchetype
-  - [ ] TransformComponent
-  - [ ] VelocityComponent
-  - [ ] HealthComponent
-- [ ] BulletEntity and BulletArchetype
-  - [ ] TransformComponent
-  - [ ] VelocityComponent
-  - [ ] DamageComponent
-- [ ] EnemyEntity and EnemyArchetype
-  - [ ] TransformComponent
-  - [ ] VelocityComponent
-  - [ ] HealthComponent
-  - [ ] EnemyTypeComponent & EnemyAISystem
-- [ ] SpriteAnimationArchetype and AnimationSystem for animating entities
-  - [ ] TransformComponent
-  - [ ] SpriteAnimationComponent and SpriteAnimationSystem
-  - [ ] SpriteComponent and SpriteRenderingSystem
-- [ ] SoundComponent for playing sound effects
-- [ ] SoundEffectComponent for playing sound effects
-
-### Managers
-
-- [x] ScreenManager
-- [x] ResourceManager
-- [ ] ResourceLoader
-- [ ] InputManager
-- [ ] CommandRegistry
+- [ ] Create a manifest system for loading resources (ResourceLoader)
+  - [ ] Create factories for initializing resources by type
+- [ ] Audio and Music managers
+- [ ] Engine reusability across games
+- [ ] Basic analytics for understanding player behavior
+- [ ] Crash reporting mechanism
