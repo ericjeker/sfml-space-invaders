@@ -17,7 +17,7 @@ struct Player
 
     // Cooldown between two bullet shot
     float shootCooldown = 0.f;
-    float _shootCooldownTime = 0.5f;
+    float shootCooldownTime = 0.5f;
 };
 
 

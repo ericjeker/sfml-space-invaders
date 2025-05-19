@@ -6,6 +6,7 @@
 
 #include "GameScreen/Collections/BulletCollection.h"
 #include "GameScreen/Collections/EnemyCollection.h"
+#include "GameScreen/Entities/Player.h"
 
 #include <SFML/System/Vector2.hpp>
 
@@ -23,7 +24,7 @@ struct SpaceInvadersState
     bool isPaused = false;
 
     // Player state
-    // Player player;
+    Player player;
 
     // Entity Collections, Enemy and Bullet
     BulletCollection bullets;

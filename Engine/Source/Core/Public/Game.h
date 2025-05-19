@@ -13,7 +13,7 @@
 class Game
 {
 public:
-    Game(const sf::RenderWindow& window, const Configuration& configuration);
+    Game(sf::RenderWindow& window, const Configuration& configuration);
     virtual ~Game() = default;
 
     // Called for starting the game after it's configured and initialized
@@ -22,18 +22,18 @@ public:
     virtual void Exit() = 0;
 
     // Getters for the basic objects
-    [[nodiscard]] const sf::RenderWindow& GetWindow() const;
+    [[nodiscard]] sf::RenderWindow& GetWindow();
     [[nodiscard]] const Configuration& GetConfiguration() const;
 
     // Getters for the managers and state services
-    const ResourceManager& GetResourceManager() const;
-    const ScreenManager& GetScreenManager() const;
+    ResourceManager& GetResourceManager();
+    ScreenManager& GetScreenManager();
 
 protected:
     const Configuration _configuration;
-    const sf::RenderWindow& _window;
-    const ResourceManager _resourceManager;
-    const ScreenManager _screenManager;
+    sf::RenderWindow& _window;
+    ResourceManager _resourceManager;
+    ScreenManager _screenManager;
 };
 
 #endif

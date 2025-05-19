@@ -2,14 +2,14 @@
 
 #include "Game.h"
 
-Game::Game(const sf::RenderWindow& window, const Configuration& configuration)
-    : _window(window)
-    , _configuration(configuration)
+Game::Game(sf::RenderWindow& window, const Configuration& configuration)
+    : _configuration(configuration)
+    , _window(window)
     , _screenManager(configuration)
 {
 }
 
-[[nodiscard]] const sf::RenderWindow& Game::GetWindow() const
+[[nodiscard]] sf::RenderWindow& Game::GetWindow()
 {
     return _window;
 };
@@ -19,12 +19,12 @@ Game::Game(const sf::RenderWindow& window, const Configuration& configuration)
     return _configuration;
 };
 
-const ResourceManager& Game::GetResourceManager() const
+ResourceManager& Game::GetResourceManager()
 {
     return _resourceManager;
 };
 
-const ScreenManager& Game::GetScreenManager() const
+ScreenManager& Game::GetScreenManager()
 {
     return _screenManager;
 };

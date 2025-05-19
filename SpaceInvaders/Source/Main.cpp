@@ -11,10 +11,10 @@
 int main()
 {
     // Getting the global configuration of the program, a simple struct
-    Configuration configuration;
+    constexpr Configuration configuration;
 
     // Initialize the window, make it beautiful
-    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "Space Invaders", sf::Style::Close);
+    auto window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "Space Invaders", sf::Style::Close);
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 

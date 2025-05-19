@@ -14,7 +14,7 @@
  * - initialize the managers (sounds, particles, physics, network, settings, storage, inputs, resources)
  * - catch some global events (resize, focus, exit)
  */
-SpaceInvaders::SpaceInvaders(const sf::RenderWindow& window, const Configuration& configuration)
+SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration)
     : Game(window, configuration)
     , _logger("SpaceInvaders", configuration.LogLevel)
 {
@@ -25,14 +25,14 @@ SpaceInvaders::SpaceInvaders(const sf::RenderWindow& window, const Configuration
     // TODO: Load saved state
 
     // Initialize global resources
-    auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
+    const auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
     GetResourceManager().SetResource<sf::Font>("DefaultFont", font);
-    auto clickDot = std::make_shared<sf::CircleShape>(2.f);
+    const auto clickDot = std::make_shared<sf::CircleShape>(2.f);
     GetResourceManager().SetResource<sf::CircleShape>("Global::ClickDot", clickDot);
 
     // TODO: Initialize physics world and add to game
 
-    // Initialize Game Screens, all screen receive the game itself in parameter
+    // Initialize Game Screens, all screens receive the game itself in parameter
     _screenManager.AddScreen<TitleScreen>(*this);
     _screenManager.AddScreen<GameScreen>(*this);
 
@@ -72,6 +72,11 @@ void SpaceInvaders::Exit()
     _window.close();
 }
 
+SpaceInvadersState& SpaceInvaders::GetState()
+{
+    return _state;
+}
+
 void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
 {
     // We first let the current screen handle the event
@@ -94,13 +99,13 @@ void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
 void SpaceInvaders::OnFocusLost()
 {
     _logger.Debug("Focus lost");
-    _gameState.isPaused = true;
+    _state.isPaused = true;
 }
 
 void SpaceInvaders::OnFocusGained()
 {
     _logger.Debug("Focus gained");
-    _gameState.isPaused = false;
+    _state.isPaused = false;
 }
 void SpaceInvaders::OnResize()
 {
@@ -121,7 +126,7 @@ void SpaceInvaders::Update(const sf::Time& deltaTime) const
 
 void SpaceInvaders::Render() const
 {
-    // Clean-up the window and delegate the rendering to the current screen
+    // Clean up the window and delegate the rendering to the current screen
     _window.clear();
     _screenManager.Render();
     _window.display();

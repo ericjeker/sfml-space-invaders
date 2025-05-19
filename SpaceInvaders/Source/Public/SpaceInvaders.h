@@ -15,14 +15,14 @@
 class SpaceInvaders final : public Game
 {
 public:
-    SpaceInvaders(const sf::RenderWindow& window, const Configuration& configuration);
+    SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
 
     // Called for starting the game after it's configured and initialized
-    void Run();
-    // Exit the game and clean-up the resources
-    void Exit();
+    void Run() override;
+    // Exit the game and clean up the resources
+    void Exit() override;
 
-    SpaceInvadersState& GetState() const;
+    SpaceInvadersState& GetState();
 
 private:
     const Logger _logger;
