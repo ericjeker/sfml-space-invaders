@@ -30,7 +30,7 @@ BraceWrapping:
   SplitEmptyNamespace: true
 BreakBeforeBraces: Custom
 BreakConstructorInitializers: BeforeColon
-BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializersBeforeComma: true
 ColumnLimit: 120
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
