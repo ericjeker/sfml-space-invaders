@@ -6,7 +6,8 @@
 #include <SFML/Graphics.hpp>
 
 /**
- * Scope is everything. The main function scope everything. We configure a container for our game, the Window.
+ * Scope is everything. The main function scopes everything. We configure a container for our game, the Window. The
+ * game itself will take care of the game loop.
  */
 int main()
 {
@@ -15,7 +16,7 @@ int main()
 
     // Initialize the window, make it beautiful
     auto window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "Space Invaders", sf::Style::Close);
-    window.setFramerateLimit(144);
+    window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
 
     // Initialize the game client and running it, which basically start the program. That's why we are all here today.

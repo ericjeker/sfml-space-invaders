@@ -8,6 +8,8 @@
 #include "ResourceManager.h"
 #include "ScreenManager.h"
 
+#include <queue>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class Game
@@ -29,11 +31,16 @@ public:
     ResourceManager& GetResourceManager();
     ScreenManager& GetScreenManager();
 
+    void ScheduleCommand(const std::function<void()>& command);
+    void ExecuteDeferredCommands();
+
 protected:
     const Configuration _configuration;
     sf::RenderWindow& _window;
     ResourceManager _resourceManager;
     ScreenManager _screenManager;
+
+    std::queue<std::function<void()>> _deferredCommands;
 };
 
 #endif

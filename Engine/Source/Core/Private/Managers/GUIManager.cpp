@@ -105,14 +105,14 @@ void GUIManager::RenderTexts(sf::RenderTexture& renderTexture)
     }
 }
 
-void GUIManager::OnMousePressed(const sf::Event::MouseButtonPressed& event)
+void GUIManager::OnMousePressed(const sf::Event::MouseButtonPressed& event) const
 {
     const sf::Vector2i mousePosition = event.position;
 
-    // For each interactable elements we'll check if the mouse is inside the bounds of the element
+    // For each interactable element we'll check if the mouse is inside the bounds of the element
     for (int i = 0; i < _buttons.Size(); ++i)
     {
-        auto& button = _buttonDrawables[i];
+        const auto& button = _buttonDrawables[i];
         if (!button->getGlobalBounds().contains(sf::Vector2<float>(mousePosition)))
         {
             continue;
@@ -120,5 +120,8 @@ void GUIManager::OnMousePressed(const sf::Event::MouseButtonPressed& event)
 
         // Call the button's assigned action
         _commandRegistry.Execute(_buttons.commandIds[i]);
+
+        // We don't cascade the event to other buttons
+        return;
     }
 }

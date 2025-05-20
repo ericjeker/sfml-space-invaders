@@ -5,5 +5,8 @@
 void ExitCommand::Execute()
 {
     _logger.Debug("Executing ExitCommand");
-    _game.Exit();
+    _game.ScheduleCommand([&]()
+    {
+        _game.Exit();
+    });
 }

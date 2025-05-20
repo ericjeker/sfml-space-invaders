@@ -88,7 +88,7 @@ void GameScreen::HandleEvents(const std::optional<sf::Event>& event)
     {
         if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
         {
-            GetGame().GetScreenManager().SetCurrentScreen<TitleScreen>();
+            GetGame().GetScreenManager().SetCurrentScreen(typeid(TitleScreen));
         }
     }
 }

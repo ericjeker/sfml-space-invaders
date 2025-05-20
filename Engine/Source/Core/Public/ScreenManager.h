@@ -4,9 +4,10 @@
 #ifndef SCREENMANAGER_H
 #define SCREENMANAGER_H
 
-#include "Screen.h"
 #include "Logger.h"
+#include "Screen.h"
 
+#include <functional>
 #include <typeindex>
 #include <unordered_map>
 
@@ -14,51 +15,20 @@
 
 struct Configuration;
 
-class ScreenManager {
+using ScreenFactory = std::function<std::unique_ptr<Screen>()>;
+
+class ScreenManager
+{
 public:
     explicit ScreenManager(const Configuration& configuration);
     ~ScreenManager() = default;
 
-    template <typename T, typename... Args>
-    void AddScreen(Args&&... args)
-    {
-        _logger.Debug("Adding screen: " + std::string(typeid(T).name()));
-
-        static_assert(std::is_base_of_v<Screen, T>, "T must be a subclass of Screen");
-
-        std::type_index typeIndex(typeid(T));
-        if (_screens.contains(typeIndex))
-        {
-            throw std::runtime_error("Screen already exists");
-        }
-
-        _screens.emplace(typeIndex, std::make_unique<T>(std::forward<Args>(args)...));
-    }
-
-    template <typename T>
-    void SetCurrentScreen()
-    {
-        _logger.Debug("Setting current screen: " + std::string(typeid(T).name()));
-
-        std::type_index typeIndex(typeid(T));
-        if (!_screens.contains(typeIndex))
-        {
-            throw std::runtime_error("Screen does not exist");
-        }
-
-        // Shutting down the current screen if it exists
-        if (_currentScreen != nullptr)
-        {
-            _currentScreen->Shutdown();
-        }
-
-        // Activating the new screen
-        _currentScreen = _screens[typeIndex].get();
-        _currentScreen->Activate();
-    }
+    void RegisterScreen(const std::type_index& type, ScreenFactory factory);
+    void SetCurrentScreen(const std::type_index& type);
 
     void CleanUp();
 
+    // Methods below are delegated to the currently displayed screen
     void Activate() const;
     void Shutdown() const;
     void Update(const sf::Time& deltaTime) const;
@@ -68,8 +38,8 @@ public:
 private:
     const Logger _logger;
     const Configuration& _configuration;
-    std::pmr::unordered_map<std::type_index, std::unique_ptr<Screen>> _screens;
-    Screen* _currentScreen;
+    std::unordered_map<std::type_index, ScreenFactory> _screens;
+    std::unique_ptr<Screen> _currentScreen = nullptr;
 };
 
 #endif

@@ -41,7 +41,7 @@ public:
     void RenderButtons(sf::RenderTexture& renderTexture);
 
     // Potential future events I will handle
-    void OnMousePressed(const sf::Event::MouseButtonPressed& event);
+    void OnMousePressed(const sf::Event::MouseButtonPressed& event) const;
     void OnMouseReleased() {};
     void OnKeyPressed() {};
     void OnMouseMove() {};

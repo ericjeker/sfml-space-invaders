@@ -18,13 +18,13 @@ Learning C++ with SFML and a SpaceInvaders clone.
 * Use smart pointers (std::unique_ptr, std::shared_ptr) instead of raw pointers to prevent memory leaks
 * Leverage RAII (Resource Acquisition Is Initialization) for resource management
 * Use auto for type inference when appropriate
-* Prefer references over pointers when you don't need ownership transfer
+* Prefer references to pointers when you don't need ownership transfer
+* Try being const-correct
 
 ## Design Patterns
 
-* Data-Oriented Design: As much as possible, use Structure of Array instead of Array of Structure (OOP)
-* Struct as Data-Object
-* Finite State Machine - For managing game states (loading, playing, paused)
+* Data-Oriented Design: when necessary, use Structure of Array instead of Array of Structure (OOP)
+* Finite State Machine: For managing game states (loading, playing, paused)
 * Use a CommandRegistry for storing commands and executing commands
 
 ## To Do
@@ -78,7 +78,7 @@ Learning C++ with SFML and a SpaceInvaders clone.
 
 ### Polish
 
-- [ ] Loading screen with progress indicator
+- [ ] Loading screen with a progress indicator
 - [ ] Tutorial or help screen
 - [ ] Credits screen
 - [ ] Juices and other visual effects (explosions, power-ups, etc.)

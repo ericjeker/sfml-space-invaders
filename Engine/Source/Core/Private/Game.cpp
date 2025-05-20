@@ -5,9 +5,7 @@
 Game::Game(sf::RenderWindow& window, const Configuration& configuration)
     : _configuration(configuration)
     , _window(window)
-    , _screenManager(configuration)
-{
-}
+    , _screenManager(configuration) {};
 
 [[nodiscard]] sf::RenderWindow& Game::GetWindow()
 {
@@ -27,4 +25,18 @@ ResourceManager& Game::GetResourceManager()
 ScreenManager& Game::GetScreenManager()
 {
     return _screenManager;
+};
+
+void Game::ScheduleCommand(const std::function<void()>& command)
+{
+    _deferredCommands.push(command);
+};
+
+void Game::ExecuteDeferredCommands()
+{
+    while (!_deferredCommands.empty())
+    {
+        _deferredCommands.front()();
+        _deferredCommands.pop();
+    }
 };
