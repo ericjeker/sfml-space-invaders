@@ -28,7 +28,7 @@ AlignOperands: Align
 AlignTrailingComments: true
 
 # Line Breaking
-ColumnLimit: 0
+ColumnLimit: 120
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Never

@@ -15,31 +15,31 @@
 class SpaceInvaders final : public Game
 {
 public:
-    SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
+	SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
 
-    // Called for starting the game after it's configured and initialized
-    void Run() override;
-    // Exit the game and clean up the resources
-    void Exit() override;
+	// Called for starting the game after it's configured and initialized
+	void Run() override;
+	// Exit the game and clean up the resources
+	void Exit() override;
 
-    SpaceInvadersState& GetState();
+	SpaceInvadersState& GetState();
 
 private:
-    const Logger _logger;
-    SpaceInvadersState _state;
+	const Logger _logger;
+	SpaceInvadersState _state;
 
-    // Events handling first
-    void HandleEvents(const std::optional<sf::Event>& event);
+	// Events handling first
+	void HandleEvents(const std::optional<sf::Event>& event);
 
-    // Game Loop
-    void Update(const sf::Time& deltaTime) const;
-    void Render() const;
+	// Game Loop
+	void Update(const sf::Time& deltaTime) const;
+	void Render() const;
 
-    // Game Events related to the Window
-    void OnClose();
-    void OnFocusLost();
-    void OnFocusGained();
-    void OnResize();
+	// Game Events related to the Window
+	void OnClose();
+	void OnFocusLost();
+	void OnFocusGained();
+	void OnResize();
 };
 
 #endif
