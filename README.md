@@ -2,24 +2,39 @@
 
 Learning C++ with SFML and a SpaceInvaders clone.
 
-## Requirements
+## Installation
 
-* CMake
-* vcpkg
+```shell
+git clone --recurse-submodules git@github.com:ericjeker/sfml-space-invaders.git
+```
+
+If you have already cloned the repository, you can update the submodules with:
+
+```shell
+git submodule update --init --recursive
+```
 
 ## Dependencies
 
 * SFML
-* Box2D
-* Dear ImGui
+* Box2D (not implemented yet)
+* Dear ImGui (not implemented yet)
 
-## C++ Learning
+## Learning
+
+### C++
 
 * Use smart pointers (std::unique_ptr, std::shared_ptr) instead of raw pointers to prevent memory leaks
 * Leverage RAII (Resource Acquisition Is Initialization) for resource management
 * Use auto for type inference when appropriate
 * Prefer references to pointers when you don't need ownership transfer
 * Try being const-correct
+
+### Architecture
+
+* Clean, modular folder structure
+* Use Cmake for generating build files
+* Use Clang Format as a Linter
 
 ## Design Patterns
 
@@ -31,9 +46,11 @@ Learning C++ with SFML and a SpaceInvaders clone.
 
 ### Gameplay
 
-- [ ] Controlling the player spaceship with the keyboard (AWSD, Space)
+- [ ] Controlling the player spaceship
+  - [ ] Keyboard support with WASD, and Space
   - [ ] Ensure control is smooth and responsive
   - [ ] Use spring movement with slight rotation for appeal
+  - [ ] Gamepad support
 - [ ] Firing bullets, add them to the bullet collection, create a BulletSystem
   - [ ] Bullet movement, destruction when out of screen
   - [ ] Bullet collision with enemies

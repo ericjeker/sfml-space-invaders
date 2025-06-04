@@ -49,6 +49,7 @@ void GUIManager::InitializeButtonDrawables()
         _buttonDrawables.push_back(button);
     }
 }
+
 void GUIManager::InitializeTextDrawables()
 {
     _textDrawables.clear();

@@ -5,7 +5,7 @@
 #define EXITCOMMAND_H
 
 #include "Command.h"
-#include "SpaceInvaders.h"
+#include "../SpaceInvaders.h"
 
 class ExitCommand final : public Command {
 public:

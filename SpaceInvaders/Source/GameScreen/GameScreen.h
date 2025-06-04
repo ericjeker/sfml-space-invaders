@@ -4,11 +4,11 @@
 #ifndef GAME_SCREEN_H
 #define GAME_SCREEN_H
 
-#include "SpaceInvaders.h"
-#include "Systems/BulletSystem.h"
-#include "Systems/PlayerController.h"
 #include "Logger.h"
 #include "Screen.h"
+#include "SpaceInvaders.h"
+#include "GameScreen/Systems/PlayerController.h"
+#include "Systems/BulletSystem.h"
 
 #include <SFML/Graphics/Sprite.hpp>
 

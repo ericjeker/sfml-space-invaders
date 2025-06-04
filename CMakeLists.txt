@@ -1,37 +1,20 @@
 cmake_minimum_required(VERSION 3.30)
 
-if (NOT DEFINED VCPKG_TARGET_TRIPLET)
-    # Using dynamically linked libraries means they have to be in the system PATH
-    set(VCPKG_TARGET_TRIPLET "x64-mingw-dynamic" CACHE STRING "Default triplet")
-endif ()
-
 project(SpaceInvaders)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Add SFML as a package
-find_package(SFML COMPONENTS Graphics Window CONFIG REQUIRED)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Add the Engine and Game source code
-add_subdirectory(Engine/Source)
-add_subdirectory(SpaceInvaders/Source)
-
-# Executable
-add_executable(Main SpaceInvaders/Source/Main.cpp)
-target_link_libraries(Main
-        PRIVATE
-        Core
-        Utilities
-        SpaceInvaders
-        SFML::Graphics
-        SFML::Window
-)
+add_subdirectory(Engine)
+add_subdirectory(Vendor)
+add_subdirectory(SpaceInvaders)
 
 # Copy the Assets folder
 file(
         COPY
-        ${CMAKE_SOURCE_DIR}/SpaceInvaders/Assets
+        ${CMAKE_SOURCE_DIR}/Assets
         DESTINATION
-        ${CMAKE_BINARY_DIR}
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
