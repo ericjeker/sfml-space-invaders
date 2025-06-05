@@ -7,7 +7,8 @@
 #include "CommandRegistry.h"
 #include "Logger.h"
 #include "Screen.h"
-#include "Managers/GUIManager.h"
+
+#include "../../../Engine/Source/Core/Public/UI/UIManager.h"
 #include "Managers/ParticleConstellationManager.h"
 
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -28,7 +29,7 @@ private:
 
     // Systems and Managers
     CommandRegistry _commandRegistry;
-    GUIManager _guiManager;
+    UIManager _uiManager;
     ParticleConstellationManager _particleConstellation;
 
     // Rendering layers
@@ -42,7 +43,7 @@ private:
     // Accepted events
     void OnKeyPressed(const sf::Event::KeyPressed& event) const;
     void OnMouseMove(const sf::Event::MouseMoved& event) const;
-    void OnMousePressed(const sf::Event::MouseButtonPressed& event);
+    void OnMousePressed(const sf::Event::MouseButtonPressed& event) const;
 };
 
 #endif

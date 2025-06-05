@@ -1,17 +1,20 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
 #include "TitleScreen/TitleScreen.h"
+
 #include "SpaceInvaders.h"
-#include "GameScreen/GameScreen.h"
 
 #include "Commands/ExitCommand.h"
 #include "Commands/PlayCommand.h"
+#include "GameScreen/GameScreen.h"
+#include "UI/Button.h"
+#include "UI/Text.h"
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
     : Screen(game)
     , _logger("TitleScreen", game.GetConfiguration().LogLevel)
     , _commandRegistry(game.GetConfiguration())
-    , _guiManager(GetGame().GetResourceManager(), _commandRegistry)
+    , _uiManager(_commandRegistry)
     , _particleConstellation(game.GetConfiguration())
 {
 }
@@ -36,11 +39,20 @@ void TitleScreen::Activate()
     _commandRegistry.Register(2, std::make_shared<ExitCommand>(game));
 
     // Create title text
-    _guiManager.AddText("Space Invaders", {centerX, centerY - 250.f}, 50, sf::Color::White, sf::Text::Bold);
+	std::shared_ptr<sf::Font> font = game.GetResourceManager().GetResource<sf::Font>("DefaultFont");
+	std::unique_ptr<UIComponent> text = std::make_unique<Text>(font, "Space Invaders", 50, sf::Color::White);
+	text->SetPosition({centerX, centerY - 200});
+    _uiManager.AddComponent(std::move(text));
 
     // Create Buttons
-    _guiManager.AddButton("Play", {centerX, centerY}, 40, 1);
-    _guiManager.AddButton("Exit", {centerX, centerY + 100.f}, 30, 2);
+	auto playButton = std::make_unique<Button>(font, "Play", 40, 1);
+	playButton->SetSize({200, 50});
+	playButton->SetPosition({centerX - 100, centerY - 25});
+	_uiManager.AddComponent(std::move(playButton));
+	auto exitButton = std::make_unique<Button>(font, "Exit", 30, 2);
+	exitButton->SetSize({200, 50});
+	exitButton->SetPosition({centerX - 100, centerY + 75});
+	_uiManager.AddComponent(std::move(exitButton));
 
     // Initialize the particle system with 1000 particles
     _particleConstellation.Initialize(1000);
@@ -49,7 +61,7 @@ void TitleScreen::Activate()
 void TitleScreen::Update(const sf::Time& deltaTime)
 {
     _particleConstellation.Update(deltaTime);
-    _guiManager.Update(deltaTime);
+    _uiManager.Update(deltaTime);
 }
 
 void TitleScreen::Render()
@@ -60,7 +72,7 @@ void TitleScreen::Render()
     _uiLayer->clear(sf::Color(0, 0, 0, 0));
 
     _particleConstellation.Render(*_backgroundLayer);
-    _guiManager.Render(*_uiLayer);
+    _uiManager.Render(*_uiLayer);
 
     window.draw(CreateRenderSprite(*_backgroundLayer));
     window.draw(CreateRenderSprite(*_uiLayer));
@@ -99,6 +111,8 @@ void TitleScreen::HandleEvents(const std::optional<sf::Event>& event)
     {
         OnMousePressed(*mousePressed);
     }
+
+    _uiManager.HandleEvents(event);
 }
 
 void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed) const
@@ -113,6 +127,7 @@ void TitleScreen::OnMouseMove(const sf::Event::MouseMoved& event) const
 {
     if (event.position.x && event.position.y)
     {
+    	// TODO: not really sure anymore why this is needed on the title screen?
         auto& state = GetGame().GetState();
         // TODO: replace by MouseComponent
         state.mousePos.x = event.position.x;
@@ -120,8 +135,7 @@ void TitleScreen::OnMouseMove(const sf::Event::MouseMoved& event) const
     }
 }
 
-void TitleScreen::OnMousePressed(const sf::Event::MouseButtonPressed& event)
+void TitleScreen::OnMousePressed(const sf::Event::MouseButtonPressed& event) const
 {
     _logger.Debug(std::format("OnMousePressed at ({}, {})", event.position.x, event.position.y));
-    _guiManager.OnMousePressed(event);
 }
