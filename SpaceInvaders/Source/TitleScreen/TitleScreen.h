@@ -24,6 +24,16 @@ public:
     void Render() override;
     void Shutdown() override;
 
+
+private:
+	// Generate a Sprite from a RenderTexture
+	// TODO: This could be reused by multiple screens
+	sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
+
+	// Accepted events
+	void OnKeyPressed(const sf::Event::KeyPressed& event);
+
+
 private:
     const Logger _logger;
 
@@ -36,14 +46,6 @@ private:
     std::unique_ptr<sf::RenderTexture> _backgroundLayer;
     std::unique_ptr<sf::RenderTexture> _uiLayer;
 
-    // Generate a Sprite from a RenderTexture
-    // TODO: This could be reused by multiple screens
-    sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
-
-    // Accepted events
-    void OnKeyPressed(const sf::Event::KeyPressed& event) const;
-    void OnMouseMove(const sf::Event::MouseMoved& event) const;
-    void OnMousePressed(const sf::Event::MouseButtonPressed& event) const;
 };
 
 #endif
