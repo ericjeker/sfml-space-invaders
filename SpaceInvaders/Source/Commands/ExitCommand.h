@@ -5,12 +5,16 @@
 #define EXITCOMMAND_H
 
 #include "Command.h"
-#include "../SpaceInvaders.h"
+#include "SpaceInvaders.h"
 
-class ExitCommand final : public Command {
+class ExitCommand final : public Command
+{
 public:
-    explicit ExitCommand(SpaceInvaders& game) : Command(game) {}
-    void Execute() override;
+	explicit ExitCommand(SpaceInvaders& game)
+		: Command(game)
+	{
+	}
+	void Execute() override;
 };
 
 

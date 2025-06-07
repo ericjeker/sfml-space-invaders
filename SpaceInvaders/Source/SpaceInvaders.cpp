@@ -2,6 +2,8 @@
 
 #include "SpaceInvaders.h"
 
+#include "PauseScreen/PauseScreen.h"
+
 #include <SFML/Graphics.hpp>
 
 #include <GameScreen/GameScreen.h>
@@ -35,8 +37,10 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 								  { return std::make_unique<TitleScreen>(*this); });
 	_screenManager.RegisterScreen(typeid(GameScreen), [this]()
 								  { return std::make_unique<GameScreen>(*this); });
+	_screenManager.RegisterScreen(typeid(PauseScreen), [this]()
+								  { return std::make_unique<PauseScreen>(*this); });
 
-	// Set and Activate the initial screen
+	// Set and Activate threene initial screen
 	_screenManager.SetCurrentScreen(typeid(TitleScreen));
 }
 

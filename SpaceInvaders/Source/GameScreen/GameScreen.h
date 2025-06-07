@@ -4,9 +4,11 @@
 #ifndef GAME_SCREEN_H
 #define GAME_SCREEN_H
 
+#include "CommandRegistry.h"
 #include "Logger.h"
 #include "Screen.h"
 #include "SpaceInvaders.h"
+
 #include "GameScreen/Systems/PlayerController.h"
 #include "Systems/BulletSystem.h"
 
@@ -39,8 +41,9 @@ private:
     // Systems
     PlayerController _playerController;
     BulletSystem _bulletSystem;
+    CommandRegistry _commandRegistry;
 
-    // Utilities
+	// Utilities
     sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
 };
 

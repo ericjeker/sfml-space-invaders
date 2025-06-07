@@ -28,7 +28,7 @@ void TitleScreen::Activate()
 
 	// Initialize the Command Registry
 	_commandRegistry.Register(static_cast<int>(CommandId::StartGame), std::make_shared<PlayCommand>(game));
-	_commandRegistry.Register(static_cast<int>(CommandId::Quit), std::make_shared<ExitCommand>(game));
+	_commandRegistry.Register(static_cast<int>(CommandId::Exit), std::make_shared<ExitCommand>(game));
 
 	CreateUI();
 
@@ -77,7 +77,7 @@ void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed)
 {
 	if (keyPressed.scancode == sf::Keyboard::Scancode::Escape)
 	{
-		_commandRegistry.Execute(static_cast<int>(CommandId::Quit));
+		_commandRegistry.Execute(static_cast<int>(CommandId::Exit));
 	}
 }
 
@@ -121,10 +121,9 @@ void TitleScreen::CreateUI()
 	_uiManager.AddComponent(std::move(playButton));
 
 	// Exit button
-	auto exitButton = std::make_unique<Button>(font, "Exit", 30, sf::Color::White, static_cast<int>(CommandId::Quit));
+	auto exitButton = std::make_unique<Button>(font, "Exit", 30, sf::Color::White, static_cast<int>(CommandId::Exit));
 	exitButton->SetSize({200, 50});
 	exitButton->SetPosition({centerX - 100, centerY + 75});
 	exitButton->SetOutlineColor(sf::Color::Transparent);
-
 	_uiManager.AddComponent(std::move(exitButton));
 }

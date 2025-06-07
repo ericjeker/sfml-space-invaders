@@ -8,8 +8,8 @@
 #include "Logger.h"
 #include "Screen.h"
 
-#include "../../../Engine/Source/Core/Public/UI/UIManager.h"
 #include "Managers/ParticleConstellationManager.h"
+#include "UI/UIManager.h"
 
 #include <SFML/Graphics/RenderTexture.hpp>
 

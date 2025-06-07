@@ -7,7 +7,10 @@
 enum class CommandId
 {
 	StartGame,
-	Quit
+	ResumeGame,
+	PauseGame,
+	QuitGame,
+	Exit,
 };
 
 
