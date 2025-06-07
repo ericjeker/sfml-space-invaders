@@ -17,8 +17,9 @@ class TitleScreen final : public Screen
 {
 public:
     explicit TitleScreen(SpaceInvaders& game);
+	void CreateUI();
 
-    void HandleEvents(const std::optional<sf::Event>& event) override;
+	void HandleEvents(const std::optional<sf::Event>& event) override;
     void Activate() override;
     void Update(const sf::Time& deltaTime) override;
     void Render() override;

@@ -22,7 +22,7 @@ public:
 	void SetBounds(const sf::FloatRect& bounds);
 
 	sf::Vector2f GetPosition() const;
-	void SetPosition(const sf::Vector2f& position);
+	virtual void SetPosition(const sf::Vector2f& position);
 
 	void SetDisabled(const bool& isDisabled);
 	bool IsDisabled() const;

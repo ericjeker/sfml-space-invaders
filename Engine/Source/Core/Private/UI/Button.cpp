@@ -2,28 +2,24 @@
 
 #include "UI/Button.h"
 
+#include <cmath>
 #include <string>
 
 Button::Button(const std::shared_ptr<sf::Font>& font, const std::string& label, const unsigned int& fontSize,
-			   const int& commandId)
-	: _label(label)
-	, _fontSize(fontSize)
-	, _text(*font, label, fontSize)
+			   const sf::Color& textColor, const int& commandId)
+	: _text(*font, label, fontSize)
+	, _vertices(sf::PrimitiveType::TriangleFan)
 {
 	SetCommand(commandId);
 
-	_drawable.setFillColor(sf::Color::Transparent);
-	// _drawable.setOutlineColor(sf::Color::White);
-	// _drawable.setOutlineThickness(6.f);
+	_vertices.resize(_resolution);
+	_text.setFillColor(textColor);
 
-	_text.setFillColor(sf::Color::White);
-	_text.setOrigin({_text.getGlobalBounds().size.x / 2, _text.getGlobalBounds().size.y / 2});
+	ResetLabelOrigin();
 }
 
 void Button::Update(const sf::Time& deltaTime)
 {
-	_drawable.setPosition(_position);
-	_text.setPosition({_position.x + _drawable.getGlobalBounds().size.x / 2, _position.y + _drawable.getGlobalBounds().size.y / 2});
 }
 
 void Button::Render(sf::RenderTexture& renderTexture) const
@@ -33,37 +29,139 @@ void Button::Render(sf::RenderTexture& renderTexture) const
 		return;
 	}
 
-	renderTexture.draw(_drawable);
+	renderTexture.draw(_vertices);
 	renderTexture.draw(_text);
 
 	// Draw a debuggings rectangle if the button is hovered
-	if (_debug && _isHovered)
+	if (_debug && IsHovered())
 	{
 		sf::RectangleShape rect;
-		rect.setSize({_drawable.getGlobalBounds().size.x, _drawable.getGlobalBounds().size.y});
-		rect.setPosition({_drawable.getPosition().x, _drawable.getPosition().y});
+		rect.setSize(_size);
+		rect.setPosition(_position);
 		rect.setFillColor(sf::Color::Transparent);
 		rect.setOutlineColor(sf::Color::Red);
 		rect.setOutlineThickness(1.f);
 
+		sf::RectangleShape rectText;
+		rectText.setSize(_text.getGlobalBounds().size);
+		rectText.setPosition(_text.getPosition());
+		rectText.setFillColor(sf::Color::Transparent);
+		rectText.setOutlineColor(sf::Color::Blue);
+		rectText.setOutlineThickness(1.f);
+		rectText.setOrigin(_text.getGlobalBounds().size / 2.f);
+
 		renderTexture.draw(rect);
+		renderTexture.draw(rectText);
+	}
+}
+
+void Button::CreateOutline()
+{
+	constexpr float pi = std::numbers::pi_v<float>;
+
+	// Insert a circle in the VertexArray
+	for (size_t i = 0; i < _resolution; ++i)
+	{
+		const float angle = 2 * pi / _resolution * i;
+		const auto x = std::cos(angle);
+		const auto y = std::sin(angle);
+		sf::Vector2f position = _position;
+
+		// Calculate in which quadrant we are, SFML use a Y-down coordinate system
+		if (x >= 0 && y < 0) // NE
+		{
+			position.x += _size.x - _radius;
+			position.y += _radius;
+		}
+		else if (x < 0 && y <= 0) // NW
+		{
+			position.x += _radius;
+			position.y += _radius;
+		}
+		else if (x <= 0 && y > 0) // SW
+		{
+			position.x += _radius;
+			position.y += _size.y - _radius;
+		}
+		else if (x > 0 && y >= 0) // SE
+		{
+			position.x += _size.x - _radius;
+			position.y += _size.y - _radius;
+		}
+
+		_vertices[i] = sf::Vertex({x * _radius + position.x, y * _radius + position.y}, _color);
 	}
 }
 
 void Button::SetLabel(const std::string& label)
 {
-	_label = label;
+	_text.setString(label);
+	ResetLabelOrigin();
 }
 
-void Button::SetSize(sf::Vector2f size)
+void Button::ResetLabelOrigin()
+{
+	const auto bounds = _text.getLocalBounds();
+	_text.setOrigin({bounds.position.x + bounds.size.x / 2.f, bounds.position.y + bounds.size.y / 2.f});
+}
+
+void Button::SetSize(const sf::Vector2f& size)
 {
 	_size = size;
-	_drawable.setSize(size);
+	CreateOutline();
+}
+
+void Button::SetPosition(const sf::Vector2f& position)
+{
+	UIComponent::SetPosition(position);
+
+	_text.setPosition({position.x + _size.x / 2.f, position.y + _size.y / 2.f});
+
+	CreateOutline();
+}
+
+void Button::SetOutlineColor(const sf::Color& color)
+{
+	_color = color;
+	CreateOutline();
+}
+
+void Button::SetOutlineThickness(const float& thickness)
+{
+	_thickness = thickness;
+	CreateOutline();
+}
+
+void Button::SetOutlineRadius(const float& radius)
+{
+	_radius = radius;
+	CreateOutline();
+}
+
+bool Button::Contains(const sf::Vector2f& position) const
+{
+	if (_isDisabled)
+	{
+		return false;
+	}
+
+	if (_isHidden)
+	{
+		return false;
+	}
+
+	if (position.x < _position.x || position.x > _position.x + _size.x || position.y < _position.y ||
+		position.y > _position.y + _size.y)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void Button::TestHit(const sf::Vector2f& position)
 {
-	if (_drawable.getGlobalBounds().contains(position))
+	if (Contains(position))
 	{
 		SetHovered(true);
 	}

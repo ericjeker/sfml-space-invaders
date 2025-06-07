@@ -12,25 +12,42 @@
 class Button final : public UIComponent
 {
 public:
-	Button(const std::shared_ptr<sf::Font>& font, const std::string& label, const unsigned int& fontSize, const int& commandId);
+	Button(const std::shared_ptr<sf::Font>& font, const std::string& label, const unsigned int& fontSize,
+		   const sf::Color& textColor, const int& commandId);
 
 	void Update(const sf::Time& deltaTime) override;
 	void Render(sf::RenderTexture& renderTexture) const override;
 
+	// Text parameters
 	void SetLabel(const std::string& label);
-	void SetSize(sf::Vector2f size);
+	void ResetLabelOrigin();
 
+	// Button parameters
+	void SetPosition(const sf::Vector2f& position) override;
+	void SetSize(const sf::Vector2f& size);
+
+	// Outline parameters
+	void CreateOutline();
+	void SetOutlineColor(const sf::Color& color);
+	void SetOutlineThickness(const float& thickness);
+	void SetOutlineRadius(const float& radius);
+
+	bool Contains(const sf::Vector2f& position) const;
 	void TestHit(const sf::Vector2f& position) override;
 
 private:
-	sf::Font _font;
-	std::string _label;
-	unsigned int _fontSize;
-	sf::Color _color;
-	sf::Vector2f _size;
-
 	sf::Text _text;
-	sf::RectangleShape _drawable;
+	sf::VertexArray _vertices;
+
+	// Parameters
+	unsigned int _resolution = 64;
+	sf::Vector2f _size{100, 100};
+	sf::Color _color = sf::Color::White;
+	float _radius = 10.f;
+	float _thickness = 10.f;
+	bool _isFilled = true;
+
+	// Debug
 	bool _debug = true;
 };
 
