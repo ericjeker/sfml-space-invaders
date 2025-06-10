@@ -3,10 +3,10 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "RoundedRectangleShape.h"
 #include "UIComponent.h"
 
 #include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Text.hpp"
 
 class Button final : public UIComponent
@@ -24,10 +24,10 @@ public:
 
 	// Button parameters
 	void SetPosition(const sf::Vector2f& position) override;
+	void SetOutlineFillColor(const sf::Color& color);
 	void SetSize(const sf::Vector2f& size);
 
 	// Outline parameters
-	void CreateOutline();
 	void SetOutlineColor(const sf::Color& color);
 	void SetOutlineThickness(const float& thickness);
 	void SetOutlineRadius(const float& radius);
@@ -36,19 +36,13 @@ public:
 	void TestHit(const sf::Vector2f& position) override;
 
 private:
+	// Drawable objects
 	sf::Text _text;
-	sf::VertexArray _vertices;
+	RoundedRectangleShape _outline;
 
-	// Parameters
-	unsigned int _resolution = 64;
-	sf::Vector2f _size{100, 100};
-	sf::Color _color = sf::Color::White;
-	float _radius = 10.f;
-	float _thickness = 10.f;
-	bool _isFilled = true;
-
-	// Debug
+	// Display the bounding boxes when hovered
 	bool _debug = true;
+	std::shared_ptr<sf::Font> _font;
 };
 
 #endif // BUTTON_H

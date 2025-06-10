@@ -27,10 +27,6 @@ public:
 
 
 private:
-	// Generate a Sprite from a RenderTexture
-	// TODO: This could be reused by multiple screens
-	sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
-
 	// Accepted events
 	void OnKeyPressed(const sf::Event::KeyPressed& event);
 
@@ -44,8 +40,9 @@ private:
     ParticleConstellationManager _particleConstellation;
 
     // Rendering layers
-    std::unique_ptr<sf::RenderTexture> _backgroundLayer;
-    std::unique_ptr<sf::RenderTexture> _uiLayer;
+	sf::ContextSettings _uiSettings;
+    sf::RenderTexture _backgroundLayer;
+    sf::RenderTexture _uiLayer;
 
 };
 

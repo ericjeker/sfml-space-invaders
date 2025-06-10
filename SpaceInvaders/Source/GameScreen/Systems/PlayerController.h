@@ -5,6 +5,7 @@
 #define PLAYERCONTROLLER_H
 
 #include "Configuration.h"
+
 #include "GameScreen/Entities/Player.h"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -26,20 +27,20 @@
 class PlayerController
 {
 public:
-    PlayerController(const sf::RenderWindow& window, const Configuration& configuration);
-    ~PlayerController() = default;
+	PlayerController(const sf::RenderWindow& window, const Configuration& configuration);
+	~PlayerController() = default;
 
-    void Initialize(Player& player);
-    void Update(const sf::Time& deltaTime, Player& player);
-    void Render(sf::RenderTexture& renderTexture, Player& player) const;
+	void Initialize(Player& player);
+	void Update(const sf::Time& deltaTime, Player& player);
+	void Render(sf::RenderTexture& renderTexture, Player& player) const;
 
 private:
-    Logger _logger;
+	Logger _logger;
 
-    const sf::RenderWindow& _window;
-    const Configuration& _configuration;
+	const sf::RenderWindow& _window;
+	const Configuration& _configuration;
 
-    std::unique_ptr<sf::RectangleShape> _rectangle;
+	std::unique_ptr<sf::RectangleShape> _rectangle;
 };
 
 

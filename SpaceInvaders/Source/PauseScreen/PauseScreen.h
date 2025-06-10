@@ -21,7 +21,6 @@ public:
 	void Activate() override;
 	void Update(const sf::Time& deltaTime) override;
 	void Render() override;
-	sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
 	void Shutdown() override;
 
 private:
@@ -32,6 +31,7 @@ private:
 	UIManager _uiManager;
 
 	// Rendering layers
+	sf::ContextSettings _uiSettings;
 	sf::RenderTexture _backgroundLayer;
 	sf::RenderTexture _uiLayer;
 };

@@ -3,18 +3,20 @@
 #include "UI/Button.h"
 
 #include <cmath>
+#include <iostream>
 #include <string>
+
+#include "SFML/Graphics/RectangleShape.hpp"
 
 Button::Button(const std::shared_ptr<sf::Font>& font, const std::string& label, const unsigned int& fontSize,
 			   const sf::Color& textColor, const int& commandId)
 	: _text(*font, label, fontSize)
-	, _vertices(sf::PrimitiveType::TriangleFan)
+	, _outline(_text.getLocalBounds().size, 20, 132)
+	, _font(font)
 {
 	SetCommand(commandId);
 
-	_vertices.resize(_resolution);
 	_text.setFillColor(textColor);
-
 	ResetLabelOrigin();
 }
 
@@ -29,68 +31,8 @@ void Button::Render(sf::RenderTexture& renderTexture) const
 		return;
 	}
 
-	renderTexture.draw(_vertices);
+	renderTexture.draw(_outline);
 	renderTexture.draw(_text);
-
-	// Draw a debuggings rectangle if the button is hovered
-	if (_debug && IsHovered())
-	{
-		sf::RectangleShape rect;
-		rect.setSize(_size);
-		rect.setPosition(_position);
-		rect.setFillColor(sf::Color::Transparent);
-		rect.setOutlineColor(sf::Color::Red);
-		rect.setOutlineThickness(1.f);
-
-		sf::RectangleShape rectText;
-		rectText.setSize(_text.getGlobalBounds().size);
-		rectText.setPosition(_text.getPosition());
-		rectText.setFillColor(sf::Color::Transparent);
-		rectText.setOutlineColor(sf::Color::Blue);
-		rectText.setOutlineThickness(1.f);
-		rectText.setOrigin(_text.getGlobalBounds().size / 2.f);
-
-		renderTexture.draw(rect);
-		renderTexture.draw(rectText);
-	}
-}
-
-void Button::CreateOutline()
-{
-	constexpr float pi = std::numbers::pi_v<float>;
-
-	// Insert a circle in the VertexArray
-	for (size_t i = 0; i < _resolution; ++i)
-	{
-		const float angle = 2 * pi / _resolution * i;
-		const auto x = std::cos(angle);
-		const auto y = std::sin(angle);
-		sf::Vector2f position = _position;
-
-		// Calculate in which quadrant we are, SFML use a Y-down coordinate system
-		if (x >= 0 && y < 0) // NE
-		{
-			position.x += _size.x - _radius;
-			position.y += _radius;
-		}
-		else if (x < 0 && y <= 0) // NW
-		{
-			position.x += _radius;
-			position.y += _radius;
-		}
-		else if (x <= 0 && y > 0) // SW
-		{
-			position.x += _radius;
-			position.y += _size.y - _radius;
-		}
-		else if (x > 0 && y >= 0) // SE
-		{
-			position.x += _size.x - _radius;
-			position.y += _size.y - _radius;
-		}
-
-		_vertices[i] = sf::Vertex({x * _radius + position.x, y * _radius + position.y}, _color);
-	}
 }
 
 void Button::SetLabel(const std::string& label)
@@ -107,35 +49,34 @@ void Button::ResetLabelOrigin()
 
 void Button::SetSize(const sf::Vector2f& size)
 {
-	_size = size;
-	CreateOutline();
+	_outline.setSize(size);
 }
 
 void Button::SetPosition(const sf::Vector2f& position)
 {
 	UIComponent::SetPosition(position);
+	_outline.setPosition(position);
+	_text.setPosition({position.x + _outline.getSize().x / 2.f, position.y + _outline.getSize().y / 2.f});
+}
 
-	_text.setPosition({position.x + _size.x / 2.f, position.y + _size.y / 2.f});
-
-	CreateOutline();
+void Button::SetOutlineFillColor(const sf::Color& color)
+{
+	_outline.setFillColor(color);
 }
 
 void Button::SetOutlineColor(const sf::Color& color)
 {
-	_color = color;
-	CreateOutline();
+	_outline.setOutlineColor(color);
 }
 
 void Button::SetOutlineThickness(const float& thickness)
 {
-	_thickness = thickness;
-	CreateOutline();
+	_outline.setOutlineThickness(thickness);
 }
 
 void Button::SetOutlineRadius(const float& radius)
 {
-	_radius = radius;
-	CreateOutline();
+	_outline.setRadius(radius);
 }
 
 bool Button::Contains(const sf::Vector2f& position) const
@@ -150,8 +91,8 @@ bool Button::Contains(const sf::Vector2f& position) const
 		return false;
 	}
 
-	if (position.x < _position.x || position.x > _position.x + _size.x || position.y < _position.y ||
-		position.y > _position.y + _size.y)
+	if (position.x < _position.x || position.x > _position.x + _outline.getSize().x || position.y < _position.y ||
+		position.y > _position.y + _outline.getSize().y)
 	{
 		return false;
 	}

@@ -3,10 +3,11 @@ set(CORE_SOURCES
         Private/EventBus.cpp
         Private/Game.cpp
         Private/Screen.cpp
+        Private/UI/Button.cpp
+        Private/UI/RoundedRectangleShape.cpp
+        Private/UI/Text.cpp
         Private/UI/UIManager.cpp
         Private/UI/UIComponent.cpp
-        Private/UI/Button.cpp
-        Private/UI/Text.cpp
         Private/Managers/ParticleConstellationManager.cpp
         Private/Managers/ResourceManager.cpp
         Private/Managers/ScreenManager.cpp

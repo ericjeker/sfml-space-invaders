@@ -14,10 +14,17 @@ int main()
     // Getting the global configuration of the program, a simple struct
     constexpr Configuration configuration;
 
-    // Initialize the window, make it beautiful
-    auto window = sf::RenderWindow(sf::VideoMode(configuration.WindowSize), "Space Invaders", sf::Style::Close);
-    window.setFramerateLimit(60);
-    window.setVerticalSyncEnabled(true);
+	// Create the window mode
+	const sf::VideoMode mode(configuration.WindowSize);
+
+	// Enable anti-aliasing
+	sf::ContextSettings settings;
+	settings.antiAliasingLevel = configuration.AntiAliasingLevel;
+
+	// Initialize the window, make it beautiful
+    auto window = sf::RenderWindow(mode, "Space Invaders", sf::Style::Default, sf::State::Windowed, settings);
+    window.setFramerateLimit(configuration.FramesPerSecond);
+    window.setVerticalSyncEnabled(configuration.IsVSync);
 
     // Initialize the game client and running it, which basically start the program. That's why we are all here today.
     SpaceInvaders spaceInvaders(window, configuration);

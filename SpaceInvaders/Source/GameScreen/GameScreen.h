@@ -12,39 +12,35 @@
 #include "GameScreen/Systems/PlayerController.h"
 #include "Systems/BulletSystem.h"
 
-#include <SFML/Graphics/Sprite.hpp>
-
 class GameScreen final : public Screen
 {
 public:
-    explicit GameScreen(SpaceInvaders& game);
-    ~GameScreen() override = default;
+	explicit GameScreen(SpaceInvaders& game);
+	~GameScreen() override = default;
 
-    void Activate() override;
-    void Shutdown() override;
-    void HandleEvents(const std::optional<sf::Event>& event) override;
+	void Activate() override;
+	void Shutdown() override;
+	void HandleEvents(const std::optional<sf::Event>& event) override;
 
-    void Update(const sf::Time& deltaTime) override;
-    void Render() override;
+	void Update(const sf::Time& deltaTime) override;
+	void Render() override;
 
 private:
-    Logger _logger;
+	Logger _logger;
 
-    // Rendering layers
-    std::unique_ptr<sf::RenderTexture> _backgroundLayer;
-    std::unique_ptr<sf::RenderTexture> _gameLayer;
-    std::unique_ptr<sf::RenderTexture> _uiLayer;
+	// Rendering layers
+	sf::ContextSettings _uiSettings;
+	sf::RenderTexture _backgroundLayer;
+	sf::RenderTexture _gameLayer;
+	sf::RenderTexture _uiLayer;
 
-    // Resources
+	// Resources
 
 
-    // Systems
-    PlayerController _playerController;
-    BulletSystem _bulletSystem;
-    CommandRegistry _commandRegistry;
-
-	// Utilities
-    sf::Sprite CreateRenderSprite(const sf::RenderTexture& renderTexture);
+	// Systems
+	PlayerController _playerController;
+	BulletSystem _bulletSystem;
+	CommandRegistry _commandRegistry;
 };
 
 #endif

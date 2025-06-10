@@ -40,7 +40,7 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 	_screenManager.RegisterScreen(typeid(PauseScreen), [this]()
 								  { return std::make_unique<PauseScreen>(*this); });
 
-	// Set and Activate threene initial screen
+	// Set and Activate the initial screen
 	_screenManager.SetCurrentScreen(typeid(TitleScreen));
 }
 
@@ -66,7 +66,8 @@ void SpaceInvaders::Run()
 		// Execute all the scheduled commands we didn't immediately execute during HandleEvents
 		ExecuteDeferredCommands();
 
-		// TODO: https://medium.com/@tglaiel/how-to-make-your-game-run-at-60fps-24c61210fe75
+		// TODO: Explore this article as a way to improve the time management system:
+		//   https://medium.com/@tglaiel/how-to-make-your-game-run-at-60fps-24c61210fe75
 		sf::Time deltaTime = clock.restart();
 		Update(deltaTime);
 
@@ -93,14 +94,6 @@ SpaceInvadersState& SpaceInvaders::GetState()
 	return _state;
 }
 
-/**
- * Handles incoming events and performs appropriate actions based on the event type.
- * Delegates the event handling to the current screen and manages global events such as
- * window close, focus lost, and focus gained.
- *
- * @param event The optional event to be processed. If the event exists, its type is checked
- *              and corresponding actions are executed.
- */
 void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
 {
 	// We first let the current screen handle the event
@@ -132,7 +125,7 @@ void SpaceInvaders::OnFocusGained()
 	_state.isPaused = false;
 }
 
-void SpaceInvaders::OnResize()
+void SpaceInvaders::OnResize() const
 {
 	_logger.Debug("Window resized");
 }
@@ -143,25 +136,12 @@ void SpaceInvaders::OnClose()
 	Exit();
 }
 
-/**
- * Updates the state of the game by delegating the update logic
- * to the current screen being managed by the screen manager.
- *
- * @param deltaTime The amount of time elapsed since the last update call.
- */
 void SpaceInvaders::Update(const sf::Time& deltaTime) const
 {
 	// Delegate the update to the current screen
 	_screenManager.Update(deltaTime);
 }
 
-/**
- * Renders the current screen of the game. This method is responsible for:
- *
- * - Clearing the render window to prepare for a fresh frame.
- * - Delegating the rendering process to the screen manager, which manages the active screen.
- * - Displaying the rendered frame in the render window.
- */
 void SpaceInvaders::Render() const
 {
 	_window.clear();

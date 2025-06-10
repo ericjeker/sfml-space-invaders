@@ -59,13 +59,13 @@ git submodule update --init --recursive
 - [ ] Spawn enemies, enemy movements, enemy system (EnemyMovement)
   - [ ] The enemies should move horizontally, they should not go out of the screen
   - [ ] Enemies should shoot bullets randomly
-  - [ ] If the enemies reach the bottom of the screen, game over-
+  - [ ] If the enemies reach the bottom of the screen, the game is over
   - [ ] Different enemy types with varying behaviors and health points
 - [ ] Add a score system
-- [ ] Add a high score system, save to disk
-- [ ] Replace enemies and player with sprites
+- [ ] Add a high-score system, save to disk
+- [ ] Replace enemies and the player with sprites
 - [ ] Power-ups (shields, weapon upgrades, extra lives)
-  - [ ] Increase spread of main weapon
+  - [ ] Increase spread of the main weapon
   - [ ] Rockets, with recharge time
   - [ ] Shields
   - [ ] Extra lives, extra health
@@ -83,8 +83,8 @@ git submodule update --init --recursive
   - [ ] Boss battles at the end of levels/stages
 - [ ] Controlling the player spaceship with the gamepad
 - [ ] Controlling the player spaceship with the mouse
-- [ ] PauseScreen when pressing ESC in the GameScreen
 - [ ] GameOverScreen when the game is lost
+- [x] ~~PauseScreen when pressing ESC in the GameScreen~~
 
 ### Technical
 
@@ -99,7 +99,7 @@ git submodule update --init --recursive
 - [ ] Tutorial or help screen
 - [ ] Credits screen
 - [ ] Juices and other visual effects (explosions, power-ups, etc.)
-  - [ ] Particle system for explosions and bullets fire & smoke
+  - [ ] Particle system for explosions and bullets fire and smoke
   - [ ] Visual feedback for hits/damage
   - [ ] Screen shake and other juicy effects
 - [ ] Localization support for multiple languages
@@ -107,7 +107,7 @@ git submodule update --init --recursive
 ### Testing & Deployment
 
 - [ ] Unit tests for core game systems
-- [ ] Automated build process using Github Actions
+- [ ] Automated build process using GitHub Actions
 - [ ] Version tracking, and release process
 - [ ] Installer creation, distribution
 - [ ] Update mechanism
@@ -120,18 +120,18 @@ git submodule update --init --recursive
 
 ### Engine
 
-- [x] Set up a basic DoD architecture
-- [x] ScreenManager for screen transition
+- [x] ~~Set up a basic DoD architecture~~
+- [x] ~~ScreenManager for screen transition~~
   - [ ] LoadingScreen while loading assets
   - [ ] Overlay, transition animation
 - [ ] Component communication system (events/messaging)
-- [ ] CommandRegistry for storing commands
+- [ ] ~~CommandRegistry for storing commands~~
 - [ ] CommandBuffer for buffering commands
 - [ ] InputSystem & InputBuffer, input -> command system
 - [ ] Integrate Dear ImGUI for debugging, console, and other debugging actions
 - [ ] Create a manifest system for loading resources (ResourceLoader)
   - [ ] Create factories for initializing resources by type
 - [ ] Audio and Music managers
-- [ ] Engine reusability across games
+- [ ] ~~Engine reusability across games~~
 - [ ] Basic analytics for understanding player behavior
 - [ ] Crash reporting mechanism

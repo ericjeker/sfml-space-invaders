@@ -24,8 +24,8 @@ ResourceManager& Game::GetResourceManager()
 
 ScreenManager& Game::GetScreenManager()
 {
-    return _screenManager;
-};
+	return _screenManager;
+}
 
 void Game::ScheduleCommand(const std::function<void()>& command)
 {

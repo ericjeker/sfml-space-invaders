@@ -4,12 +4,15 @@
 
 #include "SpaceInvaders.h"
 
+#include "Commands/CommandId.h"
 #include "Commands/ExitCommand.h"
 #include "Commands/PlayCommand.h"
-#include "Commands/CommandId.h"
 #include "GameScreen/GameScreen.h"
 #include "UI/Button.h"
+#include "UI/RoundedRectangleShape.h"
 #include "UI/Text.h"
+
+#include <cmath>
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
 	: Screen(game)
@@ -30,10 +33,11 @@ void TitleScreen::Activate()
 	_commandRegistry.Register(static_cast<int>(CommandId::StartGame), std::make_shared<PlayCommand>(game));
 	_commandRegistry.Register(static_cast<int>(CommandId::Exit), std::make_shared<ExitCommand>(game));
 
+	// Create the UI Components
 	CreateUI();
 
 	// Initialize the particle system with 1000 particles
-	_particleConstellation.Initialize(1000);
+	_particleConstellation.Initialize(500);
 }
 
 void TitleScreen::Update(const sf::Time& deltaTime)
@@ -46,14 +50,17 @@ void TitleScreen::Render()
 {
 	sf::RenderWindow& window = GetGame().GetWindow();
 
-	_backgroundLayer->clear(sf::Color(0, 0, 0, 0));
-	_uiLayer->clear(sf::Color(0, 0, 0, 0));
+	_backgroundLayer.clear(sf::Color(0, 0, 0, 0));
+	_uiLayer.clear(sf::Color(0, 0, 0, 0));
 
-	_particleConstellation.Render(*_backgroundLayer);
-	_uiManager.Render(*_uiLayer);
+	_particleConstellation.Render(_backgroundLayer);
+	_uiManager.Render(_uiLayer);
 
-	window.draw(CreateRenderSprite(*_backgroundLayer));
-	window.draw(CreateRenderSprite(*_uiLayer));
+	_backgroundLayer.display();
+	_uiLayer.display();
+
+	window.draw(sf::Sprite(_backgroundLayer.getTexture()));
+	window.draw(sf::Sprite(_uiLayer.getTexture()));
 }
 
 void TitleScreen::Shutdown()
@@ -81,18 +88,6 @@ void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed)
 	}
 }
 
-sf::Sprite TitleScreen::CreateRenderSprite(const sf::RenderTexture& renderTexture)
-{
-	const sf::Vector2f flippedScale(1.f, -1.f);
-	const float textureHeight = static_cast<float>(renderTexture.getSize().y);
-
-	sf::Sprite sprite(renderTexture.getTexture());
-	sprite.setScale(flippedScale);
-	sprite.setPosition({0.f, textureHeight});
-
-	return sprite;
-}
-
 void TitleScreen::CreateUI()
 {
 	auto& game = GetGame();
@@ -104,8 +99,10 @@ void TitleScreen::CreateUI()
 	const float centerY = window.getSize().y / 2.f;
 
 	// Create the render layers, everything will be rendered on these layers
-	_backgroundLayer = std::make_unique<sf::RenderTexture>(window.getSize());
-	_uiLayer = std::make_unique<sf::RenderTexture>(window.getSize());
+	_uiSettings.antiAliasingLevel = 4;
+
+	_backgroundLayer = sf::RenderTexture(window.getSize(), _uiSettings);
+	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 
 	// Create title text
 	std::shared_ptr<sf::Font> font = game.GetResourceManager().GetResource<sf::Font>("DefaultFont");
@@ -117,7 +114,10 @@ void TitleScreen::CreateUI()
 	auto playButton = std::make_unique<Button>(font, "Play", 40, sf::Color::Black, static_cast<int>(CommandId::StartGame));
 	playButton->SetSize({300, 80});
 	playButton->SetPosition({centerX - 150, centerY - 40});
+	playButton->SetOutlineFillColor(sf::Color::White);
 	playButton->SetOutlineColor(sf::Color::White);
+	playButton->SetOutlineThickness(4.f);
+	playButton->SetOutlineRadius(10.f);
 	_uiManager.AddComponent(std::move(playButton));
 
 	// Exit button
@@ -125,5 +125,9 @@ void TitleScreen::CreateUI()
 	exitButton->SetSize({200, 50});
 	exitButton->SetPosition({centerX - 100, centerY + 75});
 	exitButton->SetOutlineColor(sf::Color::Transparent);
+	exitButton->SetOutlineFillColor(sf::Color::Black);
+	exitButton->SetOutlineColor(sf::Color::White);
+	exitButton->SetOutlineThickness(4.f);
+	exitButton->SetOutlineRadius(8.f);
 	_uiManager.AddComponent(std::move(exitButton));
 }

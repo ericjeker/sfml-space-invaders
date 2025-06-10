@@ -45,20 +45,11 @@ void PauseScreen::Render()
 
 	_uiManager.Render(_uiLayer);
 
-	window.draw(CreateRenderSprite(_backgroundLayer));
-	window.draw(CreateRenderSprite(_uiLayer));
-}
+	_backgroundLayer.display();
+	_uiLayer.display();
 
-sf::Sprite PauseScreen::CreateRenderSprite(const sf::RenderTexture& renderTexture)
-{
-	const sf::Vector2f flippedScale(1.f, -1.f);
-	const float textureHeight = static_cast<float>(renderTexture.getSize().y);
-
-	sf::Sprite sprite(renderTexture.getTexture());
-	sprite.setScale(flippedScale);
-	sprite.setPosition({0.f, textureHeight});
-
-	return sprite;
+	window.draw(sf::Sprite(_backgroundLayer.getTexture()));
+	window.draw(sf::Sprite(_uiLayer.getTexture()));
 }
 
 void PauseScreen::Shutdown()
@@ -95,8 +86,10 @@ void PauseScreen::CreateUI()
 	const float centerY = window.getSize().y / 2.f;
 
 	// Create the render layers, everything will be rendered on these layers
-	_backgroundLayer = sf::RenderTexture(window.getSize());
-	_uiLayer = sf::RenderTexture(window.getSize());
+	_uiSettings.antiAliasingLevel = 4;
+
+	_backgroundLayer = sf::RenderTexture(window.getSize(), _uiSettings);
+	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 
 	// Create Pause text
 	std::shared_ptr<sf::Font> font = game.GetResourceManager().GetResource<sf::Font>("DefaultFont");
@@ -105,16 +98,24 @@ void PauseScreen::CreateUI()
 	_uiManager.AddComponent(std::move(text));
 
 	// Play button
-	auto resumeButton = std::make_unique<Button>(font, "Resume", 40, sf::Color::Black, static_cast<int>(CommandId::ResumeGame));
+	auto resumeButton =
+		std::make_unique<Button>(font, "Resume", 40, sf::Color::Black, static_cast<int>(CommandId::ResumeGame));
 	resumeButton->SetSize({300, 80});
 	resumeButton->SetPosition({centerX - 150, centerY - 40});
+	resumeButton->SetOutlineFillColor(sf::Color::White);
 	resumeButton->SetOutlineColor(sf::Color::White);
+	resumeButton->SetOutlineThickness(4.f);
+	resumeButton->SetOutlineRadius(10.f);
 	_uiManager.AddComponent(std::move(resumeButton));
 
 	// Exit button
-	auto quitButton = std::make_unique<Button>(font, "Quit", 30, sf::Color::White, static_cast<int>(CommandId::QuitGame));
+	auto quitButton =
+		std::make_unique<Button>(font, "Quit", 30, sf::Color::White, static_cast<int>(CommandId::QuitGame));
 	quitButton->SetSize({200, 50});
 	quitButton->SetPosition({centerX - 100, centerY + 75});
-	quitButton->SetOutlineColor(sf::Color::Transparent);
+	quitButton->SetOutlineFillColor(sf::Color::Black);
+	quitButton->SetOutlineColor(sf::Color::White);
+	quitButton->SetOutlineThickness(4.f);
+	quitButton->SetOutlineRadius(10.f);
 	_uiManager.AddComponent(std::move(quitButton));
 }

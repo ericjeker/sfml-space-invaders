@@ -29,17 +29,16 @@ private:
 	SpaceInvadersState _state;
 
 	// Events handling first
-	void HandleEvents(const std::optional<sf::Event>& event);
+	void HandleEvents(const std::optional<sf::Event>& event) override;
 
-	// Game Loop
-	void Update(const sf::Time& deltaTime) const;
-	void Render() const;
+	void Update(const sf::Time& deltaTime) const override;
+	void Render() const override;
 
 	// Game Events related to the Window
 	void OnClose();
 	void OnFocusLost();
 	void OnFocusGained();
-	void OnResize();
+	void OnResize() const;
 };
 
 #endif
