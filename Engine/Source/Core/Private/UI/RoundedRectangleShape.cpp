@@ -56,13 +56,14 @@ sf::Vector2f RoundedRectangleShape::getPoint(std::size_t index) const
 		// Pure rectangle ‑ four hard corners
 		switch (index % 4)
 		{
+			default:
 			case 0:
 				return {0.f, 0.f};
 			case 1:
 				return {m_size.x, 0.f};
 			case 2:
 				return {m_size.x, m_size.y};
-			default:
+			case 3:
 				return {0.f, m_size.y};
 		}
 	}

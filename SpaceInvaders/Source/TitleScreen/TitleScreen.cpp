@@ -13,6 +13,7 @@
 #include "UI/Text.h"
 
 #include <cmath>
+#include <iostream>
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
 	: Screen(game)
@@ -111,23 +112,38 @@ void TitleScreen::CreateUI()
 	_uiManager.AddComponent(std::move(text));
 
 	// Play button
-	auto playButton = std::make_unique<Button>(font, "Play", 40, sf::Color::Black, static_cast<int>(CommandId::StartGame));
+	auto playButton =
+		std::make_unique<Button>(font, "Play", 40, sf::Color::Black, static_cast<int>(CommandId::StartGame));
 	playButton->SetSize({300, 80});
-	playButton->SetPosition({centerX - 150, centerY - 40});
+	playButton->SetOrigin({playButton->GetSize().x / 2.f, playButton->GetSize().y / 2.f});
+	playButton->SetPosition({centerX, centerY});
 	playButton->SetOutlineFillColor(sf::Color::White);
 	playButton->SetOutlineColor(sf::Color::White);
 	playButton->SetOutlineThickness(4.f);
 	playButton->SetOutlineRadius(10.f);
+	playButton->SetOnHover(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.0f, 1.1f, 0.25f, false); });
+	playButton->SetOnHoverExit(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.1f, 1.0f, 0.25f, false); });
 	_uiManager.AddComponent(std::move(playButton));
 
 	// Exit button
 	auto exitButton = std::make_unique<Button>(font, "Exit", 30, sf::Color::White, static_cast<int>(CommandId::Exit));
 	exitButton->SetSize({200, 50});
-	exitButton->SetPosition({centerX - 100, centerY + 75});
+	exitButton->SetOrigin({exitButton->GetSize().x / 2.f, exitButton->GetSize().y / 2.f});
+	exitButton->SetPosition({centerX, centerY + 100});
 	exitButton->SetOutlineColor(sf::Color::Transparent);
 	exitButton->SetOutlineFillColor(sf::Color::Black);
 	exitButton->SetOutlineColor(sf::Color::White);
 	exitButton->SetOutlineThickness(4.f);
 	exitButton->SetOutlineRadius(8.f);
+	exitButton->SetOnHover(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.0f, 1.1f, 0.25f, false); });
+	exitButton->SetOnHoverExit(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.1f, 1.0f, 0.25f, false); });
 	_uiManager.AddComponent(std::move(exitButton));
 }

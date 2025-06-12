@@ -22,6 +22,10 @@ Button::Button(const std::shared_ptr<sf::Font>& font, const std::string& label, 
 
 void Button::Update(const sf::Time& deltaTime)
 {
+	if (!_animator.IsEmpty())
+	{
+		_animator.Update(deltaTime);
+	}
 }
 
 void Button::Render(sf::RenderTexture& renderTexture) const
@@ -47,16 +51,32 @@ void Button::ResetLabelOrigin()
 	_text.setOrigin({bounds.position.x + bounds.size.x / 2.f, bounds.position.y + bounds.size.y / 2.f});
 }
 
+sf::Vector2f Button::GetSize() const
+{
+	return _outline.getSize();
+}
+
 void Button::SetSize(const sf::Vector2f& size)
 {
 	_outline.setSize(size);
+}
+
+void Button::SetScale(const sf::Vector2f& scale)
+{
+	_outline.setScale(scale);
+	_text.setScale(scale);
+}
+
+void Button::SetOrigin(const sf::Vector2f& origin)
+{
+	_outline.setOrigin(origin);
 }
 
 void Button::SetPosition(const sf::Vector2f& position)
 {
 	UIComponent::SetPosition(position);
 	_outline.setPosition(position);
-	_text.setPosition({position.x + _outline.getSize().x / 2.f, position.y + _outline.getSize().y / 2.f});
+	_text.setPosition(position);
 }
 
 void Button::SetOutlineFillColor(const sf::Color& color)
@@ -74,7 +94,7 @@ void Button::SetOutlineThickness(const float& thickness)
 	_outline.setOutlineThickness(thickness);
 }
 
-void Button::SetOutlineRadius(const float& radius)
+void Button::SetOutlineRadius(const float radius)
 {
 	_outline.setRadius(radius);
 }
@@ -91,23 +111,43 @@ bool Button::Contains(const sf::Vector2f& position) const
 		return false;
 	}
 
-	if (position.x < _position.x || position.x > _position.x + _outline.getSize().x || position.y < _position.y ||
-		position.y > _position.y + _outline.getSize().y)
+	if (_outline.getGlobalBounds().contains(position))
 	{
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 void Button::TestHit(const sf::Vector2f& position)
 {
-	if (Contains(position))
+	if (!Contains(position))
+	{
+		if (_isHovered)
+		{
+			SetHovered(false);
+			if (_onHoverExit)
+			{
+				_onHoverExit(*this);
+			}
+		}
+	}
+	else if (!_isHovered)
 	{
 		SetHovered(true);
+		if (_onHover)
+		{
+			_onHover(*this);
+		}
 	}
-	else
-	{
-		SetHovered(false);
-	}
+}
+
+void Button::SetOnHover(const Callback& callback)
+{
+	_onHover = callback;
+}
+
+void Button::SetOnHoverExit(const Callback& callback)
+{
+	_onHoverExit = callback;
 }
