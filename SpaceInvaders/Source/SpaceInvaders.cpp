@@ -16,9 +16,9 @@
  * - initialize the managers (sounds, particles, physics, network, settings, storage, inputs, resources)
  * - catch some global events (resize, focus, exit)
  */
-SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration)
-	: Game(window, configuration)
-	, _logger("SpaceInvaders", configuration.LogLevel)
+SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
+	: GameInstance(std::move(engineContext))
+	, _logger("SpaceInvaders", GetEngineContext().GetConfiguration().LogLevel)
 {
 	_logger.Debug("Game initialized");
 
@@ -28,20 +28,22 @@ SpaceInvaders::SpaceInvaders(sf::RenderWindow& window, const Configuration& conf
 
 	// Initialize global resources
 	const auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
-	GetResourceManager().SetResource<sf::Font>("DefaultFont", font);
+	auto& resourceManager = GetEngineContext().GetResourceManager();
+	resourceManager.SetResource<sf::Font>("DefaultFont", font);
 
 	// TODO: Initialize physics world and add to game state
 
+	auto& screenManager = GetEngineContext().GetScreenManager();
 	// Initialize Game Screens (or scenes), all screens receive the game itself in parameter
-	_screenManager.RegisterScreen(typeid(TitleScreen), [this]()
+	screenManager.RegisterScreen(typeid(TitleScreen), [this]()
 								  { return std::make_unique<TitleScreen>(*this); });
-	_screenManager.RegisterScreen(typeid(GameScreen), [this]()
+	screenManager.RegisterScreen(typeid(GameScreen), [this]()
 								  { return std::make_unique<GameScreen>(*this); });
-	_screenManager.RegisterScreen(typeid(PauseScreen), [this]()
+	screenManager.RegisterScreen(typeid(PauseScreen), [this]()
 								  { return std::make_unique<PauseScreen>(*this); });
 
 	// Set and Activate the initial screen
-	_screenManager.SetCurrentScreen(typeid(TitleScreen));
+	screenManager.SetCurrentScreen(typeid(TitleScreen));
 }
 
 /**
@@ -54,11 +56,13 @@ void SpaceInvaders::Run()
 
 	sf::Clock clock;
 
+	auto& window = _engineContext->GetWindow();
+
 	// Starting the game loop
-	while (_window.isOpen())
+	while (window.isOpen())
 	{
 		// Global events, but local events are managed by screen
-		while (const std::optional<sf::Event> event = _window.pollEvent())
+		while (const std::optional<sf::Event> event = window.pollEvent())
 		{
 			HandleEvents(event);
 		}
@@ -82,11 +86,11 @@ void SpaceInvaders::Exit()
 
 	// We shut down the screen to unload the resources
 	_logger.Debug("Cleaning up ScreenManager");
-	_screenManager.CleanUp();
+	GetEngineContext().GetScreenManager().CleanUp();
 	_logger.Debug("Cleaning up ResourceManager");
-	_resourceManager.CleanUp();
+	GetEngineContext().GetResourceManager().CleanUp();
 	_logger.Debug("Closing the window");
-	_window.close();
+	GetEngineContext().GetWindow().close();
 }
 
 SpaceInvadersState& SpaceInvaders::GetState()
@@ -97,7 +101,7 @@ SpaceInvadersState& SpaceInvaders::GetState()
 void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
 {
 	// We first let the current screen handle the event
-	_screenManager.HandleEvents(event);
+	GetEngineContext().GetScreenManager().HandleEvents(event);
 
 	if (event->is<sf::Event::Closed>())
 	{
@@ -139,12 +143,12 @@ void SpaceInvaders::OnClose()
 void SpaceInvaders::Update(const sf::Time& deltaTime) const
 {
 	// Delegate the update to the current screen
-	_screenManager.Update(deltaTime);
+	GetEngineContext().GetScreenManager().Update(deltaTime);
 }
 
 void SpaceInvaders::Render() const
 {
-	_window.clear();
-	_screenManager.Render();
-	_window.display();
+	GetEngineContext().GetWindow().clear();
+	GetEngineContext().GetScreenManager().Render();
+	GetEngineContext().GetWindow().display();
 }

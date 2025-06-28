@@ -5,13 +5,14 @@
 #define SCREENMANAGER_H
 
 #include "Logger.h"
-#include "Screen.h"
+
+#include "../Screen.h"
+
+#include <SFML/Window/Event.hpp>
 
 #include <functional>
 #include <typeindex>
 #include <unordered_map>
-
-#include <SFML/Window/Event.hpp>
 
 struct Configuration;
 

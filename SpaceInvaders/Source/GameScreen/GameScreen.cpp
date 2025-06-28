@@ -15,10 +15,10 @@
 
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("GameScreen", game.GetConfiguration().LogLevel)
-	, _playerController(game.GetWindow(), game.GetConfiguration())
-	, _bulletSystem(game.GetConfiguration())
-	, _commandRegistry(game.GetConfiguration())
+	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _playerController(game.GetEngineContext().GetWindow(), game.GetEngineContext().GetConfiguration())
+	, _bulletSystem(game.GetEngineContext().GetConfiguration())
+	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 {
 }
 
@@ -29,7 +29,7 @@ void GameScreen::Activate()
 	auto& game = GetGame();
 
 	// Create a window instance from the game to fetch size
-	const auto& window = game.GetWindow();
+	const auto& window = game.GetEngineContext().GetWindow();
 
 	// Initialize the Command Registry
 	_commandRegistry.Register(static_cast<int>(CommandId::PauseGame), std::make_shared<PauseCommand>(game));
@@ -78,7 +78,7 @@ void GameScreen::Update(const sf::Time& deltaTime)
 
 void GameScreen::Render()
 {
-	auto& window = GetGame().GetWindow();
+	auto& window = GetGame().GetEngineContext().GetWindow();
 
 	_backgroundLayer.clear(sf::Color(0, 0, 0, 0));
 	_gameLayer.clear(sf::Color(0, 0, 0, 0));

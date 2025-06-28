@@ -5,9 +5,9 @@
 #define UIMANAGER_H
 
 #include "CommandRegistry.h"
-#include "ResourceManager.h"
 #include "UIComponent.h"
 
+#include "../Managers/ResourceManager.h"
 #include "Collections/GUI/ButtonCollection.h"
 #include "Collections/GUI/TextCollection.h"
 

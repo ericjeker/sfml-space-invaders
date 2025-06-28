@@ -12,8 +12,8 @@
 
 PauseScreen::PauseScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("PauseScreen", game.GetConfiguration().LogLevel)
-	, _commandRegistry(game.GetConfiguration())
+	, _logger("PauseScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 	, _uiManager(_commandRegistry)
 {
 }
@@ -38,7 +38,7 @@ void PauseScreen::Update(const sf::Time& deltaTime)
 
 void PauseScreen::Render()
 {
-	sf::RenderWindow& window = GetGame().GetWindow();
+	sf::RenderWindow& window = GetGame().GetEngineContext().GetWindow();
 
 	_backgroundLayer.clear(sf::Color(0, 0, 0, 0));
 	_uiLayer.clear(sf::Color(0, 0, 0, 0));
@@ -80,7 +80,7 @@ void PauseScreen::CreateUI()
 	auto& game = GetGame();
 
 	// Create a window instance from the game to fetch size
-	const auto& window = game.GetWindow();
+	const auto& window = game.GetEngineContext().GetWindow();
 
 	const float centerX = window.getSize().x / 2.f;
 	const float centerY = window.getSize().y / 2.f;
@@ -92,7 +92,7 @@ void PauseScreen::CreateUI()
 	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 
 	// Create Pause text
-	std::shared_ptr<sf::Font> font = game.GetResourceManager().GetResource<sf::Font>("DefaultFont");
+	std::shared_ptr<sf::Font> font = game.GetEngineContext().GetResourceManager().GetResource<sf::Font>("DefaultFont");
 	std::unique_ptr<UIComponent> text = std::make_unique<Text>(font, "Pause", 50, sf::Color::White);
 	text->SetPosition({centerX, centerY - 200});
 	_uiManager.AddComponent(std::move(text));

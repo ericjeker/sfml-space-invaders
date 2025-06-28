@@ -9,6 +9,6 @@ void PauseCommand::Execute()
 	_logger.Debug("Executing PauseCommand");
 	_game.ScheduleCommand([&]()
 	{
-		_game.GetScreenManager().SetCurrentScreen(typeid(PauseScreen));
+		_game.GetEngineContext().GetScreenManager().SetCurrentScreen(typeid(PauseScreen));
 	});
 }

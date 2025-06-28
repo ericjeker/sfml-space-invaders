@@ -1,7 +1,8 @@
 set(CORE_SOURCES
         Private/CommandRegistry.cpp
+        Private/EngineContext.cpp
         Private/EventBus.cpp
-        Private/Game.cpp
+        Private/GameInstance.cpp
         Private/Screen.cpp
         Private/UI/Button.cpp
         Private/UI/RoundedRectangleShape.cpp

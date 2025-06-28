@@ -1,6 +1,6 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
-#include "ResourceManager.h"
+#include "../../Public/Managers/ResourceManager.h"
 
 void ResourceManager::UnloadResource(const std::string& name)
 {

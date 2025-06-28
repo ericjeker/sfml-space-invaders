@@ -2,6 +2,11 @@
 
 #include "Configuration.h"
 #include "SpaceInvaders.h"
+// #include "FileManager.h"
+// #include "ResourceManager.h"
+// #include "SoundManager.h"
+// #include "EventSystem.h"
+#include "EngineContext.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -11,8 +16,8 @@
  */
 int main()
 {
-    // Getting the global configuration of the program, a simple struct
-    constexpr Configuration configuration;
+	// Create the engine context
+	Configuration configuration;
 
 	// Create the window mode
 	const sf::VideoMode mode(configuration.WindowSize);
@@ -22,12 +27,18 @@ int main()
 	settings.antiAliasingLevel = configuration.AntiAliasingLevel;
 
 	// Initialize the window, make it beautiful
-    auto window = sf::RenderWindow(mode, "Space Invaders", sf::Style::Close, sf::State::Windowed, settings);
-    window.setFramerateLimit(configuration.FramesPerSecond);
-    window.setVerticalSyncEnabled(configuration.IsVSync);
+	auto window = std::make_unique<sf::RenderWindow>(sf::RenderWindow(mode, "Space Invaders", sf::Style::Close, sf::State::Windowed, settings));
+    window->setFramerateLimit(configuration.FramesPerSecond);
+    window->setVerticalSyncEnabled(configuration.IsVSync);
+
+	// Create the engine context
+	auto engineContext = std::make_unique<EngineContext>(configuration);
+	engineContext->SetWindow(std::move(window));
+	engineContext->SetResourceManager(std::make_unique<ResourceManager>());
+	engineContext->SetScreenManager(std::make_unique<ScreenManager>(engineContext->GetConfiguration()));
 
     // Initialize the game client and running it, which basically start the program. That's why we are all here today.
-    SpaceInvaders spaceInvaders(window, configuration);
+    SpaceInvaders spaceInvaders(std::move(engineContext));
     spaceInvaders.Run();
 
     return 0;

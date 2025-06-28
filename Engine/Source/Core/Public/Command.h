@@ -4,14 +4,14 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include "Game.h"
+#include "GameInstance.h"
 #include "Logger.h"
 
 class Command
 {
 public:
-    explicit Command(Game& game)
-        : _logger("Command", game.GetConfiguration().LogLevel)
+    explicit Command(GameInstance& game)
+        : _logger("Command", game.GetEngineContext().GetConfiguration().LogLevel)
         , _game(game)
     {
     }
@@ -20,7 +20,7 @@ public:
 
 protected:
     Logger _logger;
-    Game& _game;
+    GameInstance& _game;
 };
 
 

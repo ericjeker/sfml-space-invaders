@@ -1,6 +1,7 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
-#include "ScreenManager.h"
+#include "../../Public/Managers/ScreenManager.h"
+
 #include "TimeTicker.h"
 
 

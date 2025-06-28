@@ -4,18 +4,20 @@
 #ifndef SPACEINVADERS_H
 #define SPACEINVADERS_H
 
-#include "Game.h"
-#include "ResourceManager.h"
-#include "ScreenManager.h"
+#include "EngineContext.h"
+#include "GameInstance.h"
 #include "SpaceInvadersState.h"
+
+#include "Managers/ResourceManager.h"
+#include "Managers/ScreenManager.h"
 
 #include <SFML/Graphics.hpp>
 
 
-class SpaceInvaders final : public Game
+class SpaceInvaders final : public GameInstance
 {
 public:
-	SpaceInvaders(sf::RenderWindow& window, const Configuration& configuration);
+	explicit SpaceInvaders(std::unique_ptr<EngineContext> engineContext);
 
 	// Called for starting the game after it's configured and initialized
 	void Run() override;

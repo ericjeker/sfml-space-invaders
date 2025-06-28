@@ -9,6 +9,6 @@ void ResumeCommand::Execute()
 	_logger.Debug("Executing PlayCommand");
 	_game.ScheduleCommand([&]()
 	{
-		_game.GetScreenManager().SetCurrentScreen(typeid(GameScreen));
+		_game.GetEngineContext().GetScreenManager().SetCurrentScreen(typeid(GameScreen));
 	});
 }

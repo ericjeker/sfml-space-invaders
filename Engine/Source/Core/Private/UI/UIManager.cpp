@@ -1,13 +1,13 @@
 // Copyright (c) 2025 Eric Jeker. All rights reserved.
 
 
-#include "../../Public/UI/UIManager.h"
+#include "UI/UIManager.h"
 
 #include "Command.h"
 #include "CommandRegistry.h"
 
+#include <Managers/ResourceManager.h>
 #include <iostream>
-#include <ResourceManager.h>
 #include <TimeTicker.h>
 
 UIManager::UIManager(CommandRegistry& commandRegistry)

@@ -5,31 +5,27 @@
 #define GAME_H
 
 #include "Configuration.h"
-#include "ResourceManager.h"
-#include "ScreenManager.h"
+#include "EngineContext.h"
 
-#include <queue>
+#include "Managers/ResourceManager.h"
+#include "Managers/ScreenManager.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Game
+#include <queue>
+
+class GameInstance
 {
 public:
-    Game(sf::RenderWindow& window, const Configuration& configuration);
-    virtual ~Game() = default;
+    explicit GameInstance(std::unique_ptr<EngineContext> engineContext);
+    virtual ~GameInstance() = default;
 
     // Called for starting the game after it's configured and initialized
     virtual void Run() = 0;
     // Exit the game and clean up the resources
     virtual void Exit() = 0;
 
-    // Getters for the basic objects
-    [[nodiscard]] sf::RenderWindow& GetWindow();
-    [[nodiscard]] const Configuration& GetConfiguration() const;
-
-    // Getters for the managers and state services
-    ResourceManager& GetResourceManager();
-    ScreenManager& GetScreenManager();
+	[[nodiscard]] EngineContext& GetEngineContext() const;
 
 	/**
 	 * Updates the state of the game by delegating the update logic
@@ -66,6 +62,8 @@ public:
 	 * changes until the main game loop processes them, ensuring that
 	 * commands are executed in a sequential and managed manner.
 	 *
+	 * TODO: Command Management should be in a CommandManager or EventManager
+	 *
 	 * @param command A `std::function<void()>` representing the task or
 	 * action to be scheduled for deferred execution.
 	 */
@@ -73,10 +71,7 @@ public:
     void ExecuteDeferredCommands();
 
 protected:
-    const Configuration _configuration;
-    sf::RenderWindow& _window;
-    ResourceManager _resourceManager;
-    ScreenManager _screenManager;
+	std::unique_ptr<EngineContext> _engineContext;
 
 	// The deferred commands queue
     std::queue<std::function<void()>> _deferredCommands;

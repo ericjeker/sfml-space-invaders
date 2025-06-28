@@ -17,10 +17,10 @@
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("TitleScreen", game.GetConfiguration().LogLevel)
-	, _commandRegistry(game.GetConfiguration())
+	, _logger("TitleScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 	, _uiManager(_commandRegistry)
-	, _particleConstellation(game.GetConfiguration(), sf::Texture("Assets/Textures/Particle.png"))
+	, _particleConstellation(game.GetEngineContext().GetConfiguration(), sf::Texture("Assets/Textures/Particle.png"))
 {
 }
 
@@ -49,7 +49,7 @@ void TitleScreen::Update(const sf::Time& deltaTime)
 
 void TitleScreen::Render()
 {
-	sf::RenderWindow& window = GetGame().GetWindow();
+	sf::RenderWindow& window = GetGame().GetEngineContext().GetWindow();
 
 	_backgroundLayer.clear(sf::Color(0, 0, 0, 0));
 	_uiLayer.clear(sf::Color(0, 0, 0, 0));
@@ -94,7 +94,7 @@ void TitleScreen::CreateUI()
 	auto& game = GetGame();
 
 	// Create a window instance from the game to fetch size
-	const auto& window = game.GetWindow();
+	const auto& window = game.GetEngineContext().GetWindow();
 
 	const float centerX = window.getSize().x / 2.f;
 	const float centerY = window.getSize().y / 2.f;
@@ -106,7 +106,7 @@ void TitleScreen::CreateUI()
 	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 
 	// Create title text
-	std::shared_ptr<sf::Font> font = game.GetResourceManager().GetResource<sf::Font>("DefaultFont");
+	std::shared_ptr<sf::Font> font = game.GetEngineContext().GetResourceManager().GetResource<sf::Font>("DefaultFont");
 	std::unique_ptr<UIComponent> text = std::make_unique<Text>(font, "Space Invaders", 50, sf::Color::White);
 	text->SetPosition({centerX, centerY - 200});
 	_uiManager.AddComponent(std::move(text));
