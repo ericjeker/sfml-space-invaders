@@ -17,7 +17,7 @@ struct ParticleCollection
 {
     std::vector<sf::Vector2f> positions;
     std::vector<sf::Color> colors;
-    std::vector<float> sizes;
+    std::vector<float> scales;
     std::vector<sf::Vector2f> velocities;
     std::vector<float> lifetimes;
 
@@ -25,17 +25,17 @@ struct ParticleCollection
     {
         positions.reserve(count);
         colors.reserve(count);
-        sizes.reserve(count);
+        scales.reserve(count);
         velocities.reserve(count);
         lifetimes.reserve(count);
     }
 
-    void Add(const sf::Vector2f& position, const sf::Color& color, const float size, const sf::Vector2f velocity,
+    void Add(const sf::Vector2f& position, const sf::Color& color, const float scale, const sf::Vector2f velocity,
              const float lifetime)
     {
         positions.push_back(position);
         colors.push_back(color);
-        sizes.push_back(size);
+        scales.push_back(scale);
         velocities.push_back(velocity);
         lifetimes.push_back(lifetime);
     }
@@ -53,7 +53,7 @@ struct ParticleCollection
         if (index < GetSize() - 1) {
             positions[index] = positions.back();
             colors[index] = colors.back();
-            sizes[index] = sizes.back();
+            scales[index] = scales.back();
             velocities[index] = velocities.back();
             lifetimes[index] = lifetimes.back();
         }
@@ -61,7 +61,7 @@ struct ParticleCollection
         // Remove the last elements from all vectors
         positions.pop_back();
         colors.pop_back();
-        sizes.pop_back();
+        scales.pop_back();
         velocities.pop_back();
         lifetimes.pop_back();
     }
@@ -70,7 +70,7 @@ struct ParticleCollection
     {
         positions.clear();
         colors.clear();
-        sizes.clear();
+        scales.clear();
         velocities.clear();
         lifetimes.clear();
     }

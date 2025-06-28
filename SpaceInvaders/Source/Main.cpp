@@ -22,7 +22,7 @@ int main()
 	settings.antiAliasingLevel = configuration.AntiAliasingLevel;
 
 	// Initialize the window, make it beautiful
-    auto window = sf::RenderWindow(mode, "Space Invaders", sf::Style::Default, sf::State::Windowed, settings);
+    auto window = sf::RenderWindow(mode, "Space Invaders", sf::Style::Close, sf::State::Windowed, settings);
     window.setFramerateLimit(configuration.FramesPerSecond);
     window.setVerticalSyncEnabled(configuration.IsVSync);
 

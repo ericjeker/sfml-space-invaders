@@ -101,21 +101,35 @@ void PauseScreen::CreateUI()
 	auto resumeButton =
 		std::make_unique<Button>(font, "Resume", 40, sf::Color::Black, static_cast<int>(CommandId::ResumeGame));
 	resumeButton->SetSize({300, 80});
-	resumeButton->SetPosition({centerX - 150, centerY - 40});
+	resumeButton->SetOrigin({resumeButton->GetSize().x / 2.f, resumeButton->GetSize().y / 2.f});
+	resumeButton->SetPosition({centerX, centerY});
 	resumeButton->SetOutlineFillColor(sf::Color::White);
 	resumeButton->SetOutlineColor(sf::Color::White);
 	resumeButton->SetOutlineThickness(4.f);
 	resumeButton->SetOutlineRadius(10.f);
+	resumeButton->SetOnHover(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.0f, 1.1f, 0.25f, false); });
+	resumeButton->SetOnHoverExit(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.1f, 1.0f, 0.25f, false); });
 	_uiManager.AddComponent(std::move(resumeButton));
 
 	// Exit button
 	auto quitButton =
 		std::make_unique<Button>(font, "Quit", 30, sf::Color::White, static_cast<int>(CommandId::QuitGame));
 	quitButton->SetSize({200, 50});
-	quitButton->SetPosition({centerX - 100, centerY + 75});
+	quitButton->SetOrigin({quitButton->GetSize().x / 2.f, quitButton->GetSize().y / 2.f});
+	quitButton->SetPosition({centerX, centerY + 100});
 	quitButton->SetOutlineFillColor(sf::Color::Black);
 	quitButton->SetOutlineColor(sf::Color::White);
 	quitButton->SetOutlineThickness(4.f);
 	quitButton->SetOutlineRadius(10.f);
+	quitButton->SetOnHover(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.0f, 1.1f, 0.25f, false); });
+	quitButton->SetOnHoverExit(
+		[](Button& btn)
+		{ btn.GetAnimator().AddTracker([&](float r) { btn.SetScale({r, r}); }, 1.1f, 1.0f, 0.25f, false); });
 	_uiManager.AddComponent(std::move(quitButton));
 }

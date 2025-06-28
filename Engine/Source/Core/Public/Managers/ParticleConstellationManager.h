@@ -6,21 +6,27 @@
 
 #include "Configuration.h"
 #include "Logger.h"
+
 #include "Collections/ParticleCollection.h"
 
-#include <TimeTicker.h>
 #include <SFML/Graphics/CircleShape.hpp>
-
 #include <SFML/Graphics/RenderTexture.hpp>
+
+#include <TimeTicker.h>
+
+#include "SFML/Graphics/Sprite.hpp"
 
 class ParticleConstellationManager {
 public:
-    explicit ParticleConstellationManager(const Configuration& configuration);
+	ParticleConstellationManager(Configuration configuration, sf::Texture texture);
     ~ParticleConstellationManager() = default;
-    void Update(const sf::Time& deltaTime);
+
+	void Initialize(size_t n);
+	void Update(const sf::Time& deltaTime);
     void Render(sf::RenderTexture& renderTexture) const;
-    void ScreenWarp(sf::Vector2f& position);
-    void Initialize(size_t n);
+    void ScreenWarp(sf::Vector2f& OutPosition, sf::Vector2f InSize);
+
+	void SetParticleTexture(sf::Texture texture);
 
 private:
     int _accumulator = 0;
@@ -29,7 +35,8 @@ private:
     Configuration _configuration;
     Logger _logger;
     ParticleCollection _particles;
-    std::vector<std::shared_ptr<sf::CircleShape>> _particlePool;
+    std::vector<std::unique_ptr<sf::Sprite>> _particlePool;
+	sf::Texture _particleTexture;
 };
 
 #endif
