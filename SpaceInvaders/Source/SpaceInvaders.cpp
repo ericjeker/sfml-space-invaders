@@ -27,9 +27,8 @@ SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
 	// TODO: Load saved state
 
 	// Initialize global resources
-	const auto font = std::make_shared<sf::Font>("Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf");
 	auto& resourceManager = GetEngineContext().GetResourceManager();
-	resourceManager.SetResource<sf::Font>("DefaultFont", font);
+	resourceManager.LoadResourcesFromManifest("Assets/manifest.json");
 
 	// TODO: Initialize physics world and add to game state
 

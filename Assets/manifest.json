@@ -1,27 +1,30 @@
 {
   "version": "1.0",
-  "bundles": {
-    "ui": [
-      {
-        "type": "font",
-        "name": "Orbitron",
-        "path": "Fonts/Orbitron/static/Orbitron.ttf"
-      },
-      {
-        "type": "texture",
-        "name": "ClickDot",
-        "path": "Textures/ClickDot.png"
-      },
-      {
-        "type": "audio",
-        "name": "ClickSound",
-        "path": "Sounds/Click.wav"
-      },
-      {
-        "type": "audio",
-        "name": "ElevatorMusic",
-        "path": "Music/ElevatorMusic.ogg"
-      }
-    ]
-  }
+  "bundles": [
+    {
+      "name": "ui",
+      "assets": [
+        {
+          "name": "Orbitron",
+          "type": "font",
+          "path": "Assets/Fonts/Orbitron/static/Orbitron-Regular.ttf"
+        },
+        {
+          "name": "ClickDot",
+          "type": "texture",
+          "path": "Assets/Textures/ClickDot.png"
+        },
+        {
+          "name": "ClickSound",
+          "type": "audio",
+          "path": "Assets/Sounds/Click.wav"
+        },
+        {
+          "name": "ElevatorMusic",
+          "type": "audio",
+          "path": "Assets/Music/ElevatorMusic.ogg"
+        }
+      ]
+    }
+  ]
 }

@@ -12,6 +12,11 @@ Configuration& EngineContext::GetConfiguration() const
 	return *_configuration;
 }
 
+FileManager& EngineContext::GetFileManager() const
+{
+	return *_fileManager;
+}
+
 sf::RenderWindow& EngineContext::GetWindow() const
 {
 	return *_window;
@@ -29,6 +34,11 @@ ScreenManager& EngineContext::GetScreenManager() const
 void EngineContext::SetConfiguration(std::unique_ptr<Configuration> configuration)
 {
 	_configuration = std::move(configuration);
+}
+
+void EngineContext::SetFileManager(std::unique_ptr<FileManager> fileManager)
+{
+	_fileManager = std::move(fileManager);
 }
 
 void EngineContext::SetResourceManager(std::unique_ptr<ResourceManager> resourceManager)

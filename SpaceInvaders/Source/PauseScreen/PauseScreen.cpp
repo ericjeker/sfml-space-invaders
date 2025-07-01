@@ -92,7 +92,7 @@ void PauseScreen::CreateUI()
 	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 
 	// Create Pause text
-	std::shared_ptr<sf::Font> font = game.GetEngineContext().GetResourceManager().GetResource<sf::Font>("DefaultFont");
+	std::shared_ptr<sf::Font> font = game.GetEngineContext().GetResourceManager().GetResource<sf::Font>("Orbitron");
 	std::unique_ptr<UIComponent> text = std::make_unique<Text>(font, "Pause", 50, sf::Color::White);
 	text->SetPosition({centerX, centerY - 200});
 	_uiManager.AddComponent(std::move(text));
