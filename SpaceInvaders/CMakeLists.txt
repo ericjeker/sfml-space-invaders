@@ -5,7 +5,7 @@ set(SPACEINVADERS_HEADERS
         Source/Commands/PlayCommand.h
         Source/Commands/QuitCommand.h
         Source/Commands/ResumeCommand.h
-        Source/GameScreen/Entities/Player.h
+        Source/GameScreen/Entities/PlayerState.h
         Source/GameScreen/Collections/BulletCollection.h
         Source/GameScreen/Collections/EnemyCollection.h
         Source/GameScreen/Systems/BulletSystem.h
@@ -29,7 +29,11 @@ set(SPACEINVADERS_SOURCES
 )
 
 # Executable
-add_executable(SpaceInvaders Source/Main.cpp)
+add_executable(SpaceInvaders Source/Main.cpp
+        Source/GameScreen/Systems/BulletSpawnerSystem.cpp
+        Source/GameScreen/Systems/BulletSpawnerSystem.h
+        Source/GameScreen/Renderers/BulletCollectionRenderer.cpp
+        Source/GameScreen/Renderers/BulletCollectionRenderer.h)
 target_sources(SpaceInvaders PRIVATE
         ${SPACEINVADERS_HEADERS}
         ${SPACEINVADERS_SOURCES}

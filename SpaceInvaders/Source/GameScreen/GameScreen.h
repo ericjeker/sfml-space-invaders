@@ -42,7 +42,7 @@ private:
 	// Systems
 	PlayerController _playerController;
 	BulletSystem _bulletSystem;
-	CommandRegistry _commandRegistry;
+	std::unique_ptr<CommandRegistry> _commandRegistry;
 };
 
 #endif

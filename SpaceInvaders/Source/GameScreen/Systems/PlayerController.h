@@ -6,7 +6,7 @@
 
 #include "Configuration.h"
 
-#include "GameScreen/Entities/Player.h"
+#include "GameScreen/Entities/PlayerState.h"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -30,9 +30,9 @@ public:
 	PlayerController(const sf::RenderWindow& window, const Configuration& configuration);
 	~PlayerController() = default;
 
-	void Initialize(Player& player);
-	void Update(const sf::Time& deltaTime, Player& player);
-	void Render(sf::RenderTexture& renderTexture, Player& player) const;
+	void Initialize(PlayerState& player);
+	void Update(const sf::Time& deltaTime, PlayerState& player);
+	void Render(sf::RenderTexture& renderTexture, PlayerState& player) const;
 
 private:
 	Logger _logger;

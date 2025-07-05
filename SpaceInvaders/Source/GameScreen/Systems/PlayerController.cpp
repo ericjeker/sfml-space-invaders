@@ -9,7 +9,7 @@ PlayerController::PlayerController(const sf::RenderWindow& window, const Configu
 {
 }
 
-void PlayerController::Initialize(Player& player)
+void PlayerController::Initialize(PlayerState& player)
 {
 	// Initialize the player's position and velocity
 	player.position = sf::Vector2f(_window.getSize().x / 2.f, _window.getSize().y - 200.f);
@@ -21,7 +21,7 @@ void PlayerController::Initialize(Player& player)
 	_rectangle->setFillColor(sf::Color::White);
 }
 
-void PlayerController::Update(const sf::Time& deltaTime, Player& player)
+void PlayerController::Update(const sf::Time& deltaTime, PlayerState& player)
 {
 	/**
 	 * The reason we don't do that in an HandleEvents() function is because HandleEvents is a polling system which
@@ -51,7 +51,7 @@ void PlayerController::Update(const sf::Time& deltaTime, Player& player)
 	}
 }
 
-void PlayerController::Render(sf::RenderTexture& renderTexture, Player& player) const
+void PlayerController::Render(sf::RenderTexture& renderTexture, PlayerState& player) const
 {
 	_rectangle->setPosition(player.position);
 	_rectangle->setOrigin(_rectangle->getSize() / 2.f);

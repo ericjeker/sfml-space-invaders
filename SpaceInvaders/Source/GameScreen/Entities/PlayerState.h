@@ -7,7 +7,7 @@
 #include <SFML/System/Vector2.hpp>
 
 
-struct Player
+struct PlayerState
 {
     sf::Vector2f position{0.f, 0.f};
     sf::Vector2f velocity{0.f, 0.f};

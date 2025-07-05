@@ -11,14 +11,13 @@
 #include "TitleScreen/TitleScreen.h"
 
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/System/Vector2.hpp>
 
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
 	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _playerController(game.GetEngineContext().GetWindow(), game.GetEngineContext().GetConfiguration())
 	, _bulletSystem(game.GetEngineContext().GetConfiguration())
-	, _commandRegistry(game.GetEngineContext().GetConfiguration())
+	, _commandRegistry(std::make_unique<CommandRegistry>(game.GetEngineContext().GetConfiguration()))
 {
 }
 
@@ -32,8 +31,8 @@ void GameScreen::Activate()
 	const auto& window = game.GetEngineContext().GetWindow();
 
 	// Initialize the Command Registry
-	_commandRegistry.Register(static_cast<int>(CommandId::PauseGame), std::make_shared<PauseCommand>(game));
-	_commandRegistry.Register(static_cast<int>(CommandId::QuitGame), std::make_shared<QuitCommand>(game));
+	_commandRegistry->Register(static_cast<int>(CommandId::PauseGame), std::make_shared<PauseCommand>(game));
+	_commandRegistry->Register(static_cast<int>(CommandId::QuitGame), std::make_shared<QuitCommand>(game));
 
 	// Create the render layers, everything will be rendered on these layers
 	_uiSettings.antiAliasingLevel = 4;
@@ -63,7 +62,7 @@ void GameScreen::HandleEvents(const std::optional<sf::Event>& event)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 	{
-		_commandRegistry.Execute(static_cast<int>(CommandId::PauseGame));
+		_commandRegistry->Execute(static_cast<int>(CommandId::PauseGame));
 	}
 }
 
