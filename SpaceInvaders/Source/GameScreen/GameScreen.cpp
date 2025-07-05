@@ -44,6 +44,11 @@ void GameScreen::Activate()
 
 	// Load resources when the Screen is activated
 
+	// Initialize the UI
+	CreateUI();
+
+	// Initialize the first level
+
 	// Initialize the player controller
 	_playerController.Initialize(_game.GetState().player);
 	_bulletSystem.Initialize();
@@ -56,12 +61,9 @@ void GameScreen::Shutdown()
 
 void GameScreen::HandleEvents(const std::optional<sf::Event>& event)
 {
-	if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 	{
-		if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
-		{
-			_commandRegistry.Execute(static_cast<int>(CommandId::PauseGame));
-		}
+		_commandRegistry.Execute(static_cast<int>(CommandId::PauseGame));
 	}
 }
 
@@ -96,3 +98,9 @@ void GameScreen::Render()
 	window.draw(sf::Sprite(_uiLayer.getTexture()));
 }
 
+void GameScreen::CreateUI()
+{
+	// TODO: Add the current score
+	// TODO: Add the high score
+	// TODO: Add the number of lives
+}

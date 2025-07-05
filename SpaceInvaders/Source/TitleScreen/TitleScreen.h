@@ -17,7 +17,6 @@ class TitleScreen final : public Screen
 {
 public:
     explicit TitleScreen(SpaceInvaders& game);
-	void CreateUI();
 
 	void HandleEvents(const std::optional<sf::Event>& event) override;
     void Activate() override;
@@ -25,23 +24,28 @@ public:
     void Render() override;
     void Shutdown() override;
 
+	void CreateUI();
 
 private:
 	// Accepted events
 	void OnKeyPressed(const sf::Event::KeyPressed& event);
 
+	/** -----------------------------------------------------------------------
+	 * Members
+	 */
 
-private:
-    const Logger _logger;
+	const Logger _logger;
 
     // Systems and Managers
     CommandRegistry _commandRegistry;
     UIManager _uiManager;
     ParticleConstellationManager _particleConstellation;
 
-    // Rendering layers
-	sf::ContextSettings _uiSettings;
+    // Background layer
     sf::RenderTexture _backgroundLayer;
+
+	// UI layer
+	sf::ContextSettings _uiSettings;
     sf::RenderTexture _uiLayer;
 
 };

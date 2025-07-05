@@ -55,12 +55,12 @@ void SpaceInvaders::Run()
 
 	sf::Clock clock;
 
-	auto& window = _engineContext->GetWindow();
+	auto& window = GetEngineContext().GetWindow();
 
 	// Starting the game loop
 	while (window.isOpen())
 	{
-		// Global events, but local events are managed by screen
+		// Global events (window), but local events are managed by screen
 		while (const std::optional<sf::Event> event = window.pollEvent())
 		{
 			HandleEvents(event);
@@ -141,13 +141,14 @@ void SpaceInvaders::OnClose()
 
 void SpaceInvaders::Update(const sf::Time& deltaTime) const
 {
-	// Delegate the update to the current screen
+	// Delegate the update to the screen manager
 	GetEngineContext().GetScreenManager().Update(deltaTime);
 }
 
 void SpaceInvaders::Render() const
 {
 	GetEngineContext().GetWindow().clear();
+	// Delegate the rendering to the screen manager
 	GetEngineContext().GetScreenManager().Render();
 	GetEngineContext().GetWindow().display();
 }

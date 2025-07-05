@@ -18,12 +18,14 @@ public:
 	explicit GameScreen(SpaceInvaders& game);
 	~GameScreen() override = default;
 
-	void Activate() override;
+    void Activate() override;
 	void Shutdown() override;
 	void HandleEvents(const std::optional<sf::Event>& event) override;
 
 	void Update(const sf::Time& deltaTime) override;
 	void Render() override;
+
+    void CreateUI();
 
 private:
 	Logger _logger;

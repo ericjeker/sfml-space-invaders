@@ -9,11 +9,7 @@
 #include "Commands/PlayCommand.h"
 #include "GameScreen/GameScreen.h"
 #include "UI/Button.h"
-#include "UI/RoundedRectangleShape.h"
 #include "UI/Text.h"
-
-#include <cmath>
-#include <iostream>
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
 	: Screen(game)
@@ -49,17 +45,20 @@ void TitleScreen::Update(const sf::Time& deltaTime)
 
 void TitleScreen::Render()
 {
-	sf::RenderWindow& window = GetGame().GetEngineContext().GetWindow();
-
+	// Clear the background and the UI layer
 	_backgroundLayer.clear(sf::Color(0, 0, 0, 0));
 	_uiLayer.clear(sf::Color(0, 0, 0, 0));
 
+	// Delegate the rendering to the difference system present in the screen
 	_particleConstellation.Render(_backgroundLayer);
 	_uiManager.Render(_uiLayer);
 
+	// Update the render target with what has been drawn
 	_backgroundLayer.display();
 	_uiLayer.display();
 
+	// Finally, generate the texture and draw them on the window
+	sf::RenderWindow& window = GetGame().GetEngineContext().GetWindow();
 	window.draw(sf::Sprite(_backgroundLayer.getTexture()));
 	window.draw(sf::Sprite(_uiLayer.getTexture()));
 }
@@ -78,6 +77,7 @@ void TitleScreen::HandleEvents(const std::optional<sf::Event>& event)
 		OnKeyPressed(*keyPressed);
 	}
 
+	// Delegate event handling to the UIManager
 	_uiManager.HandleEvents(event);
 }
 
@@ -85,13 +85,14 @@ void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed)
 {
 	if (keyPressed.scancode == sf::Keyboard::Scancode::Escape)
 	{
+		// Mapping the key press to the command registry
 		_commandRegistry.Execute(static_cast<int>(CommandId::Exit));
 	}
 }
 
 void TitleScreen::CreateUI()
 {
-	auto& game = GetGame();
+	const auto& game = GetGame();
 
 	// Create a window instance from the game to fetch size
 	const auto& window = game.GetEngineContext().GetWindow();
