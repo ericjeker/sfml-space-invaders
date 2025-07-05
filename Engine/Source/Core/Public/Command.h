@@ -11,7 +11,7 @@ class Command
 {
 public:
     explicit Command(GameInstance& game)
-        : _logger("Command", game.GetEngineContext().GetConfiguration().LogLevel)
+        : _logger("Command", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
         , _game(game)
     {
     }

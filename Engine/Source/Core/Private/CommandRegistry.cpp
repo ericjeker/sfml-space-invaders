@@ -3,7 +3,7 @@
 #include "CommandRegistry.h"
 
 CommandRegistry::CommandRegistry(const Configuration& configuration)
-    : _configuration(configuration), _logger("CommandRegistry", configuration.LogLevel)
+    : _configuration(configuration), _logger("CommandRegistry", configuration.CurrentLogLevel)
 {
 }
 

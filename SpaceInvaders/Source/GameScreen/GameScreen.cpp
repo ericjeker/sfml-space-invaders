@@ -15,7 +15,7 @@
 
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _playerController(game.GetEngineContext().GetWindow(), game.GetEngineContext().GetConfiguration())
 	, _bulletSystem(game.GetEngineContext().GetConfiguration())
 	, _commandRegistry(game.GetEngineContext().GetConfiguration())

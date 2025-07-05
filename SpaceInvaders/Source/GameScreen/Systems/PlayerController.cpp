@@ -3,7 +3,7 @@
 #include "GameScreen/Systems/PlayerController.h"
 
 PlayerController::PlayerController(const sf::RenderWindow& window, const Configuration& configuration)
-	: _logger("PlayerController", configuration.LogLevel)
+	: _logger("PlayerController", configuration.CurrentLogLevel)
 	, _window(window)
 	, _configuration(configuration)
 {

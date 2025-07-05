@@ -16,7 +16,7 @@
 struct Configuration
 {
 	const sf::Vector2u WindowSize = {1920, 1080};
-	const LogLevel LogLevel = LogLevel::Debug;
+	const LogLevel CurrentLogLevel = Debug;
 
 	const unsigned int FramesPerSecond = 60;
 

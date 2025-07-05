@@ -18,7 +18,7 @@
  */
 SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
 	: GameInstance(std::move(engineContext))
-	, _logger("SpaceInvaders", GetEngineContext().GetConfiguration().LogLevel)
+	, _logger("SpaceInvaders", GetEngineContext().GetConfiguration().CurrentLogLevel)
 {
 	_logger.Debug("Game initialized");
 
