@@ -3,21 +3,25 @@
 #include "CommandRegistry.h"
 
 CommandRegistry::CommandRegistry(const Configuration& configuration)
-    : _configuration(configuration), _logger("CommandRegistry", configuration.LogLevel)
+	: _configuration(configuration)
+	, _logger("CommandRegistry", configuration.LogLevel)
+	, _nextCommandId(0)
 {
 }
 
-void CommandRegistry::Register(const int commandId, std::shared_ptr<Command> command)
+int CommandRegistry::Register(std::shared_ptr<Command> command)
 {
-    _commands[commandId] = std::move(command);
+	const int commandId = _nextCommandId++;
+	_commands[commandId] = std::move(command);
+	return commandId;
 }
 
 void CommandRegistry::Execute(const int commandId)
 {
-    if (auto it = _commands.find(commandId); it != _commands.end())
-    {
-        it->second->Execute();
-    }
+	if (_commands.contains(commandId))
+	{
+		_commands.at(commandId)->Execute();
+	}
 }
 
 void CommandRegistry::Clear()

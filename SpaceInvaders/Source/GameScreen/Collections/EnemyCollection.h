@@ -11,8 +11,8 @@
 
 struct EnemyCollection
 {
-    std::vector<sf::Vector2f> position{};
-    std::vector<sf::Vector2f> velocity{};
+    std::vector<sf::Vector2f> positions{};
+    std::vector<sf::Vector2f> velocities{};
     std::vector<sf::Vector2f> accelerations{};
     std::vector<float> damages{};
     std::vector<int> healths{};

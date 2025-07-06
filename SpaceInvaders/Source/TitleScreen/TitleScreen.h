@@ -38,6 +38,7 @@ private:
 
     // Systems and Managers
     CommandRegistry _commandRegistry;
+	std::unordered_map<std::string, int> _commands;
     UIManager _uiManager;
     ParticleConstellationManager _particleConstellation;
 
@@ -47,7 +48,6 @@ private:
 	// UI layer
 	sf::ContextSettings _uiSettings;
     sf::RenderTexture _uiLayer;
-
 };
 
 #endif

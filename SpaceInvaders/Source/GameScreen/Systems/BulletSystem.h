@@ -4,35 +4,35 @@
 #ifndef BULLETSYSTEM_H
 #define BULLETSYSTEM_H
 
-#include "Logger.h"
-#include "Configuration.h"
 #include "GameScreen/Collections/BulletCollection.h"
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderTexture.hpp>
-#include <SFML/System/Time.hpp>
+#include <SFML/System/Vector2.hpp>
 
-
-class BulletSystem
+// Forward declarations
+namespace sf
 {
-public:
-    BulletSystem(const Configuration& configuration);
-    ~BulletSystem() = default;
+class Shape;
+class RectangleShape;
+class RenderTexture;
+class Time;
+} // namespace sf
 
-    void Initialize();
-    // Update the bullet collection, handle collisions, and position.
-    void Update(const sf::Time& deltaTime, BulletCollection& bullets);
-    // Render the bullet collection on the render texture.
-    void Render(sf::RenderTexture& renderTexture, const BulletCollection& bullets) const;
 
-    // Create a new bullet at the specified position.
-    void SpawnBullet(BulletCollection& bullets, const sf::Vector2f& position);
+namespace BulletSystem
+{
 
-private:
-    Logger _logger;
-    const Configuration& _configuration;
-    std::unique_ptr<sf::RectangleShape> _bulletShape;
-};
+void Initialize(BulletCollection& bullets);
+
+// Update the bullet collection, handle collisions, and position.
+void Update(const sf::Time& deltaTime, BulletCollection& bullets);
+
+// Render the bullet collection on the render texture.
+void Render(sf::RenderTexture& renderTexture, const BulletCollection& bullets, sf::Shape& shape);
+
+// Create a new bullet at the specified position.
+void SpawnBullet(BulletCollection& bullets, const sf::Vector2f& position);
+
+}; // namespace BulletSystem
 
 
 #endif

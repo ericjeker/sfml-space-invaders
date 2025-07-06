@@ -11,10 +11,7 @@
 class PauseCommand final : public Command
 {
 public:
-	explicit PauseCommand(SpaceInvaders& game)
-		: Command(game)
-	{
-	}
+	explicit PauseCommand(SpaceInvaders& game);
 	void Execute() override;
 };
 

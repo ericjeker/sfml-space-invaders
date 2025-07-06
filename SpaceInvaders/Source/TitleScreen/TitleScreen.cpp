@@ -4,7 +4,6 @@
 
 #include "SpaceInvaders.h"
 
-#include "Commands/CommandId.h"
 #include "Commands/ExitCommand.h"
 #include "Commands/PlayCommand.h"
 #include "GameScreen/GameScreen.h"
@@ -27,8 +26,8 @@ void TitleScreen::Activate()
 	auto& game = GetGame();
 
 	// Initialize the Command Registry
-	_commandRegistry.Register(static_cast<int>(CommandId::StartGame), std::make_shared<PlayCommand>(game));
-	_commandRegistry.Register(static_cast<int>(CommandId::Exit), std::make_shared<ExitCommand>(game));
+	_commands.emplace("TitleScreen::Play", _commandRegistry.Register(std::make_shared<PlayCommand>(game)));
+	_commands.emplace("TitleScreen::Exit", _commandRegistry.Register(std::make_shared<ExitCommand>(game)));
 
 	// Create the UI Components
 	CreateUI();
@@ -86,7 +85,7 @@ void TitleScreen::OnKeyPressed(const sf::Event::KeyPressed& keyPressed)
 	if (keyPressed.scancode == sf::Keyboard::Scancode::Escape)
 	{
 		// Mapping the key press to the command registry
-		_commandRegistry.Execute(static_cast<int>(CommandId::Exit));
+		_commandRegistry.Execute(_commands["TitleScreen::Exit"]);
 	}
 }
 
@@ -114,7 +113,7 @@ void TitleScreen::CreateUI()
 
 	// Play button
 	auto playButton =
-		std::make_unique<Button>(font, "Play", 40, sf::Color::Black, static_cast<int>(CommandId::StartGame));
+		std::make_unique<Button>(font, "Play", 40, sf::Color::Black, _commands["TitleScreen::Play"]);
 	playButton->SetSize({300, 80});
 	playButton->SetOrigin({playButton->GetSize().x / 2.f, playButton->GetSize().y / 2.f});
 	playButton->SetPosition({centerX, centerY});
@@ -131,7 +130,7 @@ void TitleScreen::CreateUI()
 	_uiManager.AddComponent(std::move(playButton));
 
 	// Exit button
-	auto exitButton = std::make_unique<Button>(font, "Exit", 30, sf::Color::White, static_cast<int>(CommandId::Exit));
+	auto exitButton = std::make_unique<Button>(font, "Exit", 30, sf::Color::White, _commands["TitleScreen::Exit"]);
 	exitButton->SetSize({200, 50});
 	exitButton->SetOrigin({exitButton->GetSize().x / 2.f, exitButton->GetSize().y / 2.f});
 	exitButton->SetPosition({centerX, centerY + 100});

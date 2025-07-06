@@ -1,11 +1,29 @@
 # SFML SpaceInvaders
 
-Learning C++ with SFML and a SpaceInvaders clone.
+Learning C++, Game Developer and Game Engine Development, with SFML and a SpaceInvaders clone.
+
+## Requirements
+
+This project was compiled on Jetbrains CLion. It uses:
+
+* MingGW
+* CMake Build Generator
+* Ninja Build Tool
+* g++ compiler
+
+## Dependencies
+
+The external dependencies are installed in the `Vendor/` directory.
+
+* SFML
+* nlohmann::json
+* Box2D (not implemented yet)
+* Dear ImGui (not implemented yet)
 
 ## Installation
 
 ```shell
-git clone --recurse-submodules git@github.com:ericjeker/sfml-space-invaders.git
+git clone git@github.com:ericjeker/sfml-space-invaders.git
 ```
 
 If you have already cloned the repository, you can update the submodules with:
@@ -14,40 +32,48 @@ If you have already cloned the repository, you can update the submodules with:
 git submodule update --init --recursive
 ```
 
-## Dependencies
+## Reasonable Defaults
 
-* SFML
-* Box2D (not implemented yet)
-* Dear ImGui (not implemented yet)
-
-## Learning
-
-### C++
-
-* Use smart pointers (std::unique_ptr, std::shared_ptr) instead of raw pointers to prevent memory leaks
-* Leverage RAII (Resource Acquisition Is Initialization) for resource management
-* Use auto for type inference when appropriate
-* Prefer references to pointers when you don't need ownership transfer
-* Try being const-correct
+* Data-oriented design by default (under refactoring)
+* Separation of data and processing (under refactoring)
+* Processors and Systems can be static
+* Use Structures of Array instead of Array of Structure
+* Avoid complex inheritance, polymorphism, etc.
 
 ### Architecture
 
-* Clean, modular folder structure
-* Use Cmake for generating build files
-* Use Clang Format as a Linter
-
-## Design Patterns
-
-* Data-Oriented Design: when necessary, use Structure of Array instead of Array of Structure (OOP)
+* Screens are the game Worlds (I could rename them properly)
+* Screen transition is manager by a ScreenManager
+* A ResourceManager is a centralized place to load resources
+* Use a CommandRegistry for storing and executing commands
 * Finite State Machine: For managing game states (loading, playing, paused)
-* Use a CommandRegistry for storing commands and executing commands
+
+### Gameplay
+
+* State/Data live separately from the processing so they can be optimized and serialized easily
+* Systems process data (Render, Update)
+
+### C++
+
+* Use smart pointers instead of raw pointers to prevent memory leaks
+* Member classes are pointers (under refactoring)
+* Prefer references to pointers when you don't need ownership transfer
+* Leverage RAII (Resource Acquisition Is Initialization) for resource management
+* Use auto for type inference when appropriate
+* Try being const-correct as much as possible
+
+### Coding Conventions
+
+* Clean, modular folder structure
+* Use CMake for generating build files
+* Use Clang-Format and Clang-Tidy
 
 ## To Do
 
 ### Gameplay
 
 - [ ] Controlling the player spaceship
-  - [ ] Keyboard support with WASD, and Space
+  - [x] Keyboard support with WASD, and Space
   - [ ] Ensure control is smooth and responsive
   - [ ] Use spring movement with slight rotation for appeal
   - [ ] Gamepad support
@@ -114,9 +140,11 @@ git submodule update --init --recursive
 
 ### UI
 
-- [ ] Sound and effects
-- [ ] Text rendering and layout system
-- [ ] Button animation and Sound
+- [ ] Sound when click
+- [ ] Text alignment, center point
+- [ ] Layout system with auto-align
+- [x] ~~Button animation~~
+- [ ] VFX, animated background
 
 ### Engine
 
@@ -125,13 +153,11 @@ git submodule update --init --recursive
   - [ ] LoadingScreen while loading assets
   - [ ] Overlay, transition animation
 - [ ] Component communication system (events/messaging)
-- [ ] ~~CommandRegistry for storing commands~~
-- [ ] CommandBuffer for buffering commands
-- [ ] InputSystem & InputBuffer, input -> command system
+- [x] ~~CommandBuffer for buffering commands~~
 - [ ] Integrate Dear ImGUI for debugging, console, and other debugging actions
-- [ ] Create a manifest system for loading resources (ResourceLoader)
+- [x] ~~Create a manifest system for loading resources (ResourceLoader)~~
   - [ ] Create factories for initializing resources by type
 - [ ] Audio and Music managers
-- [ ] ~~Engine reusability across games~~
+- [x] ~~Engine reusability across games~~
 - [ ] Basic analytics for understanding player behavior
 - [ ] Crash reporting mechanism

@@ -5,10 +5,11 @@
 #include "Configuration.h"
 #include "SpaceInvaders.h"
 
-#include "Commands/CommandId.h"
 #include "Commands/PauseCommand.h"
 #include "Commands/QuitCommand.h"
+#include "Systems/PlayerController.h"
 #include "TitleScreen/TitleScreen.h"
+#include "UI/Text.h"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -16,9 +17,8 @@
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
 	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().LogLevel)
-	, _playerController(game.GetEngineContext().GetWindow(), game.GetEngineContext().GetConfiguration())
-	, _bulletSystem(game.GetEngineContext().GetConfiguration())
-	, _commandRegistry(game.GetEngineContext().GetConfiguration())
+	, _commandRegistry(std::make_unique<CommandRegistry>(game.GetEngineContext().GetConfiguration()))
+	, _uiManager(std::make_unique<UIManager>(*_commandRegistry))
 {
 }
 
@@ -31,27 +31,63 @@ void GameScreen::Activate()
 	// Create a window instance from the game to fetch size
 	const auto& window = game.GetEngineContext().GetWindow();
 
-	// Initialize the Command Registry
-	_commandRegistry.Register(static_cast<int>(CommandId::PauseGame), std::make_shared<PauseCommand>(game));
-	_commandRegistry.Register(static_cast<int>(CommandId::QuitGame), std::make_shared<QuitCommand>(game));
+	// Initialization
+	InitializeCommands(game);
+	InitializeRenderLayers(window);
+	InitializeUI();
 
-	// Create the render layers, everything will be rendered on these layers
+	// Create the textures and shapes
+	_playerRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
+	_playerRectangle->setFillColor(sf::Color::White);
+
+	_enemyRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
+	_enemyRectangle->setFillColor(sf::Color::Blue);
+
+	// TODO: ObjectPool is needed
+	_bulletShape = std::make_unique<sf::CircleShape>(10.f);
+	_bulletShape->setFillColor(sf::Color::Red);
+	_bulletShape->setOrigin({5.f, 5.f});
+
+	// Initialize the enemies
+	EnemySystem
+
+	// Initialize the player controller
+	PlayerController::Initialize(_player, sf::Vector2f(window.getSize().x / 2.f, window.getSize().y - 200.f));
+	BulletSystem::Initialize(_bullets);
+}
+
+void GameScreen::InitializeRenderLayers(const sf::RenderWindow& window)
+{
 	_uiSettings.antiAliasingLevel = 4;
 
 	_backgroundLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 	_gameLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
+}
 
-	// Load resources when the Screen is activated
+void GameScreen::InitializeCommands(SpaceInvaders& game)
+{
+	_commands.emplace("GameScreen::Pause", _commandRegistry->Register(std::make_shared<PauseCommand>(game)));
+	_commands.emplace("GameScreen::Quit", _commandRegistry->Register(std::make_shared<QuitCommand>(game)));
+}
 
-	// Initialize the UI
-	CreateUI();
+void GameScreen::InitializeUI() const
+{
+	const auto& game = GetGame();
 
-	// Initialize the first level
+	// Create a window instance from the game to fetch size
+	const auto& window = game.GetEngineContext().GetWindow();
 
-	// Initialize the player controller
-	_playerController.Initialize(_game.GetState().player);
-	_bulletSystem.Initialize();
+	const float centerX = window.getSize().x / 2.f;
+
+	// TODO: Add the current score
+	std::shared_ptr<sf::Font> font = game.GetEngineContext().GetResourceManager().GetResource<sf::Font>("Orbitron");
+	std::unique_ptr<UIComponent> text = std::make_unique<Text>(font, "Score: 0", 50, sf::Color::White);
+	text->SetPosition({centerX, 50});
+	_uiManager->AddComponent(std::move(text));
+
+	// TODO: Add the high score
+	// TODO: Add the number of lives
 }
 
 void GameScreen::Shutdown()
@@ -61,9 +97,12 @@ void GameScreen::Shutdown()
 
 void GameScreen::HandleEvents(const std::optional<sf::Event>& event)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+	if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 	{
-		_commandRegistry.Execute(static_cast<int>(CommandId::PauseGame));
+		if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+		{
+			_commandRegistry->Execute(_commands["GameScreen::Pause"]);
+		}
 	}
 }
 
@@ -74,8 +113,12 @@ void GameScreen::Update(const sf::Time& deltaTime)
 		return;
 	}
 
-	_playerController.Update(deltaTime, _game.GetState().player);
-	_bulletSystem.Update(deltaTime, _game.GetState().bullets);
+	const auto windowSize = GetGame().GetEngineContext().GetWindow().getSize();
+
+	const PlayerController::UpdateContext context = {.deltaTime = deltaTime, .screenBounds = windowSize};
+
+	PlayerController::Update(context, _player, _bullets);
+	BulletSystem::Update(deltaTime, _bullets);
 }
 
 void GameScreen::Render()
@@ -86,8 +129,9 @@ void GameScreen::Render()
 	_gameLayer.clear(sf::Color(0, 0, 0, 0));
 	_uiLayer.clear(sf::Color(0, 0, 0, 0));
 
-	_playerController.Render(_gameLayer, _game.GetState().player);
-	_bulletSystem.Render(_gameLayer, _game.GetState().bullets);
+	_uiManager->Render(_uiLayer);
+	PlayerController::Render(_gameLayer, _player, *_playerRectangle);
+	BulletSystem::Render(_gameLayer, _bullets, *_bulletShape);
 
 	_backgroundLayer.display();
 	_gameLayer.display();
@@ -96,11 +140,4 @@ void GameScreen::Render()
 	window.draw(sf::Sprite(_backgroundLayer.getTexture()));
 	window.draw(sf::Sprite(_gameLayer.getTexture()));
 	window.draw(sf::Sprite(_uiLayer.getTexture()));
-}
-
-void GameScreen::CreateUI()
-{
-	// TODO: Add the current score
-	// TODO: Add the high score
-	// TODO: Add the number of lives
 }

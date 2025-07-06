@@ -4,7 +4,6 @@
 
 #include "SpaceInvaders.h"
 
-#include "Commands/CommandId.h"
 #include "Commands/QuitCommand.h"
 #include "Commands/ResumeCommand.h"
 #include "UI/Button.h"
@@ -25,9 +24,10 @@ void PauseScreen::Activate()
 	auto& game = GetGame();
 
 	// Initialize the Command Registry
-	_commandRegistry.Register(static_cast<int>(CommandId::ResumeGame), std::make_shared<ResumeCommand>(game));
-	_commandRegistry.Register(static_cast<int>(CommandId::QuitGame), std::make_shared<QuitCommand>(game));
+	_commands.emplace("PauseScreen::Resume", _commandRegistry.Register(std::make_shared<ResumeCommand>(game)));
+	_commands.emplace("PauseScreen::Quit", _commandRegistry.Register(std::make_shared<QuitCommand>(game)));
 
+	// Initialize the UI and HUD
 	CreateUI();
 }
 
@@ -71,7 +71,7 @@ void PauseScreen::OnKeyPressed(sf::Event::KeyPressed key_pressed)
 {
 	if (key_pressed.scancode == sf::Keyboard::Scancode::Escape)
 	{
-		_commandRegistry.Execute(static_cast<int>(CommandId::ResumeGame));
+		_commandRegistry.Execute(_commands["PauseScreen::Resume"]);
 	}
 }
 
@@ -99,7 +99,7 @@ void PauseScreen::CreateUI()
 
 	// Play button
 	auto resumeButton =
-		std::make_unique<Button>(font, "Resume", 40, sf::Color::Black, static_cast<int>(CommandId::ResumeGame));
+		std::make_unique<Button>(font, "Resume", 40, sf::Color::Black, _commands["PauseScreen::Resume"]);
 	resumeButton->SetSize({300, 80});
 	resumeButton->SetOrigin({resumeButton->GetSize().x / 2.f, resumeButton->GetSize().y / 2.f});
 	resumeButton->SetPosition({centerX, centerY});
@@ -117,7 +117,7 @@ void PauseScreen::CreateUI()
 
 	// Exit button
 	auto quitButton =
-		std::make_unique<Button>(font, "Quit", 30, sf::Color::White, static_cast<int>(CommandId::QuitGame));
+		std::make_unique<Button>(font, "Quit", 30, sf::Color::White, _commands["PauseScreen::Quit"]);
 	quitButton->SetSize({200, 50});
 	quitButton->SetOrigin({quitButton->GetSize().x / 2.f, quitButton->GetSize().y / 2.f});
 	quitButton->SetPosition({centerX, centerY + 100});

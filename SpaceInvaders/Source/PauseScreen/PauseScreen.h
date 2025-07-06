@@ -28,6 +28,8 @@ private:
 
 	// Systems and Managers
 	CommandRegistry _commandRegistry;
+	std::unordered_map<std::string, int> _commands;
+
 	UIManager _uiManager;
 
 	// Rendering layers

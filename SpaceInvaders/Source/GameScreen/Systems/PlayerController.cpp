@@ -2,32 +2,37 @@
 
 #include "GameScreen/Systems/PlayerController.h"
 
-PlayerController::PlayerController(const sf::RenderWindow& window, const Configuration& configuration)
-	: _logger("PlayerController", configuration.LogLevel)
-	, _window(window)
-	, _configuration(configuration)
+#include "GameScreen/Entities/PlayerState.h"
+#include "GameScreen/Systems/BulletSystem.h"
+
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/System/Time.hpp>
+#include <SFML/Window/Keyboard.hpp>
+
+/**
+ * By keeping the private functions here, in an anonymouse namespace, we encapsulate
+ * the internal processing to this translation unit.
+ *
+ * The PlayerController.h file still contains the public interface.
+ */
+namespace
 {
+
+void CheckOutOfBounds(const PlayerController::UpdateContext& context, PlayerState& player)
+{
+	if (player.position.x < 100.f / 2)
+	{
+		player.position.x = 100.f / 2;
+	}
+	else if (player.position.x > context.screenBounds.x - 100.f / 2)
+	{
+		player.position.x = context.screenBounds.x - 100.f / 2;
+	}
 }
 
-void PlayerController::Initialize(Player& player)
+void HandlePlayerMovement(PlayerState& player)
 {
-	// Initialize the player's position and velocity
-	player.position = sf::Vector2f(_window.getSize().x / 2.f, _window.getSize().y - 200.f);
-	player.velocity = sf::Vector2f(0.f, 0.f);
-	player.health = 100;
-
-	// Create the player resources
-	_rectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
-	_rectangle->setFillColor(sf::Color::White);
-}
-
-void PlayerController::Update(const sf::Time& deltaTime, Player& player)
-{
-	/**
-	 * The reason we don't do that in an HandleEvents() function is because HandleEvents is a polling system which
-	 * means the events are only triggered once per "click" when here we can actually update the position at every
-	 * frame.
-	 */
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		player.position.x += -20.f;
@@ -39,21 +44,51 @@ void PlayerController::Update(const sf::Time& deltaTime, Player& player)
 
 	// Update the player's position based on the velocity
 	// player.position += player.velocity * delta;
+}
 
-	// Check if the paddle is out of the screen
-	if (player.position.x < 100.f / 2)
+void HandleShootingAndCooldown(const PlayerController::UpdateContext& context, PlayerState& player,
+							   BulletCollection& bullets)
+{
+	if (player.cooldown < 0.f)
 	{
-		player.position.x = 100.f / 2;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+		{
+			player.cooldown = player.cooldownDuration;
+			BulletSystem::SpawnBullet(bullets, player.position);
+		}
 	}
-	else if (player.position.x > _window.getSize().x - 100.f / 2)
+	else
 	{
-		player.position.x = _window.getSize().x - 100.f / 2;
+		player.cooldown -= context.deltaTime.asSeconds();
 	}
 }
 
-void PlayerController::Render(sf::RenderTexture& renderTexture, Player& player) const
+} // namespace
+
+
+/**
+ * PlayerController
+ */
+void PlayerController::Initialize(PlayerState& player, const sf::Vector2f position)
 {
-	_rectangle->setPosition(player.position);
-	_rectangle->setOrigin(_rectangle->getSize() / 2.f);
-	renderTexture.draw(*_rectangle);
+	// Initialize the player's position and velocity
+	player.position = position;
+	player.velocity = sf::Vector2f(0.f, 0.f);
+	player.health = 100;
+	player.cooldown = 0.f;
+}
+
+void PlayerController::Update(const UpdateContext& context, PlayerState& player, BulletCollection& bullets)
+{
+	HandleShootingAndCooldown(context, player, bullets);
+	HandlePlayerMovement(player);
+	CheckOutOfBounds(context, player);
+}
+
+void PlayerController::Render(sf::RenderTexture& renderTexture, const PlayerState& playerState,
+							  sf::RectangleShape& rectangle)
+{
+	rectangle.setPosition(playerState.position);
+	rectangle.setOrigin(rectangle.getSize() / 2.f);
+	renderTexture.draw(rectangle);
 }

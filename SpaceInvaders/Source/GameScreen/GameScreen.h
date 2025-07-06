@@ -9,25 +9,30 @@
 #include "Screen.h"
 #include "SpaceInvaders.h"
 
-#include "GameScreen/Systems/PlayerController.h"
+#include "Collections/BulletCollection.h"
+#include "Collections/EnemyCollection.h"
+#include "Entities/PlayerState.h"
 #include "Systems/BulletSystem.h"
 
+class UIManager;
 class GameScreen final : public Screen
 {
 public:
 	explicit GameScreen(SpaceInvaders& game);
 	~GameScreen() override = default;
 
-    void Activate() override;
+	void Activate() override;
 	void Shutdown() override;
 	void HandleEvents(const std::optional<sf::Event>& event) override;
 
 	void Update(const sf::Time& deltaTime) override;
 	void Render() override;
 
-    void CreateUI();
-
 private:
+	void InitializeUI() const;
+	void InitializeRenderLayers(const sf::RenderWindow& window);
+	void InitializeCommands(SpaceInvaders& game);
+
 	Logger _logger;
 
 	// Rendering layers
@@ -36,13 +41,22 @@ private:
 	sf::RenderTexture _gameLayer;
 	sf::RenderTexture _uiLayer;
 
+	// Data & State
+	PlayerState _player;
+	EnemyCollection _enemies;
+	BulletCollection _bullets;
+
 	// Resources
+	std::unique_ptr<sf::RectangleShape> _playerRectangle;
+	std::unique_ptr<sf::RectangleShape> _enemyRectangle;
+	std::unique_ptr<sf::CircleShape> _bulletShape;
 
+	// Commands Registry & locally available commands
+	std::unique_ptr<CommandRegistry> _commandRegistry;
+	std::unordered_map<std::string, int> _commands;
 
-	// Systems
-	PlayerController _playerController;
-	BulletSystem _bulletSystem;
-	CommandRegistry _commandRegistry;
+	// UI Manager holding the collection of UI Components
+	std::unique_ptr<UIManager> _uiManager;
 };
 
 #endif

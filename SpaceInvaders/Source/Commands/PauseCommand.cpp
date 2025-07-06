@@ -4,11 +4,13 @@
 
 #include "PauseScreen/PauseScreen.h"
 
+PauseCommand::PauseCommand(SpaceInvaders& game)
+	: Command(game)
+{
+}
+
 void PauseCommand::Execute()
 {
 	_logger.Debug("Executing PauseCommand");
-	_game.ScheduleCommand([&]()
-	{
-		_game.GetEngineContext().GetScreenManager().SetCurrentScreen(typeid(PauseScreen));
-	});
+	_game.ScheduleCommand([&]() { _game.GetEngineContext().GetScreenManager().SetCurrentScreen(typeid(PauseScreen)); });
 }

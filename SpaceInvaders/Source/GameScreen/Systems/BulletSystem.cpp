@@ -2,38 +2,41 @@
 
 #include "GameScreen/Systems/BulletSystem.h"
 
+#include "GameScreen/Collections/BulletCollection.h"
 
-BulletSystem::BulletSystem(const Configuration& configuration) : _configuration(configuration) {}
+#include <SFML/Graphics/RenderTexture.hpp>
+#include <SFML/Graphics/Shape.hpp>
+#include <SFML/System/Time.hpp>
 
-void BulletSystem::Initialize()
+void BulletSystem::Initialize(BulletCollection& bullets)
 {
-    _bulletShape = std::make_unique<sf::RectangleShape>(sf::Vector2f(10.f, 10.f));
-    _bulletShape->setFillColor(sf::Color::Red);
-    _bulletShape->setOrigin(_bulletShape->getSize() / 2.f);
+
 }
+
 
 void BulletSystem::Update(const sf::Time& deltaTime, BulletCollection& bullets)
 {
-    for (size_t i = 0; i < bullets.position.size(); ++i)
-    {
-        float delta = deltaTime.asSeconds();
-        bullets.position[i] += bullets.velocity[i] * delta;
-    }
+	for (size_t i = 0; i < bullets.positions.size(); ++i)
+	{
+		const float delta = deltaTime.asSeconds();
+		bullets.positions[i] += bullets.velocities[i] * delta;
+	}
 }
 
-void BulletSystem::Render(sf::RenderTexture& renderTexture, const BulletCollection& bullets) const
+void BulletSystem::Render(sf::RenderTexture& renderTexture, const BulletCollection& bullets, sf::Shape& shape)
 {
-    // TODO: will have to create an object pool
-    for (size_t i = 0; i < bullets.position.size(); ++i)
-    {
-        _bulletShape->setPosition(bullets.position[i]);
-        renderTexture.draw(*_bulletShape);
-    }
+	// TODO: will have to create an object pool
+	for (size_t i = 0; i < bullets.positions.size(); ++i)
+	{
+		shape.setPosition(bullets.positions[i]);
+		renderTexture.draw(shape);
+	}
 }
 
 void BulletSystem::SpawnBullet(BulletCollection& bullets, const sf::Vector2f& position)
 {
-    bullets.position.push_back(position);
-    bullets.velocity.push_back(sf::Vector2f(0.f, 1000.f));
-    bullets.damages.push_back(10);
+	bullets.positions.push_back(position);
+	bullets.velocities.push_back(sf::Vector2f(0.f, -750.f));
+	bullets.accelerations.push_back(sf::Vector2f(0.f, 1000.f));
+	bullets.damages.push_back(10);
 }
