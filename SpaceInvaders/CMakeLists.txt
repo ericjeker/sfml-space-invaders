@@ -10,6 +10,7 @@ set(SPACEINVADERS_SOURCES
         Source/Commands/ResumeCommand.cpp
         Source/GameScreen/GameScreen.cpp
         Source/GameScreen/Systems/BulletSystem.cpp
+        Source/GameScreen/Systems/EnemySystem.cpp
         Source/GameScreen/Systems/PlayerController.cpp
         Source/PauseScreen/PauseScreen.cpp
         Source/SpaceInvaders.cpp

@@ -8,14 +8,18 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/System/Time.hpp>
 
-namespace {}
+namespace
+{
+}
 
 void Initialize(EnemyCollection& enemies)
 {
+	return;
 }
 
 void Update(sf::Time deltaTime, EnemyCollection& enemies)
 {
+	return;
 }
 
 void Render(sf::RenderTexture& renderTexture, const EnemyCollection& enemies, sf::Shape& shape)

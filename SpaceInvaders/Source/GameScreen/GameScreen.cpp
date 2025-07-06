@@ -7,6 +7,8 @@
 
 #include "Commands/PauseCommand.h"
 #include "Commands/QuitCommand.h"
+#include "Systems/BulletSystem.h"
+#include "Systems/EnemySystem.h"
 #include "Systems/PlayerController.h"
 #include "TitleScreen/TitleScreen.h"
 #include "UI/Text.h"
@@ -16,7 +18,7 @@
 
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _commandRegistry(std::make_unique<CommandRegistry>(game.GetEngineContext().GetConfiguration()))
 	, _uiManager(std::make_unique<UIManager>(*_commandRegistry))
 {
@@ -49,7 +51,7 @@ void GameScreen::Activate()
 	_bulletShape->setOrigin({5.f, 5.f});
 
 	// Initialize the enemies
-	EnemySystem
+	EnemySystem::Initialize(_enemies);
 
 	// Initialize the player controller
 	PlayerController::Initialize(_player, sf::Vector2f(window.getSize().x / 2.f, window.getSize().y - 200.f));

@@ -33,6 +33,7 @@ void CheckOutOfBounds(const PlayerController::UpdateContext& context, PlayerStat
 
 void HandlePlayerMovement(PlayerState& player)
 {
+	// TODO: This should be handled with the CommandRegistry
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
 		player.position.x += -20.f;
@@ -51,6 +52,7 @@ void HandleShootingAndCooldown(const PlayerController::UpdateContext& context, P
 {
 	if (player.cooldown < 0.f)
 	{
+		// TODO: This should be handled with the CommandRegistry
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
 		{
 			player.cooldown = player.cooldownDuration;

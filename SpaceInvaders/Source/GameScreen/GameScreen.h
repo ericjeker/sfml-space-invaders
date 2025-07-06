@@ -12,7 +12,6 @@
 #include "Collections/BulletCollection.h"
 #include "Collections/EnemyCollection.h"
 #include "Entities/PlayerState.h"
-#include "Systems/BulletSystem.h"
 
 class UIManager;
 class GameScreen final : public Screen
