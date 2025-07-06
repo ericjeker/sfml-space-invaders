@@ -12,7 +12,7 @@
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("TitleScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _logger("TitleScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 	, _uiManager(_commandRegistry)
 	, _particleConstellation(game.GetEngineContext().GetConfiguration(), sf::Texture("Assets/Textures/Particle.png"))

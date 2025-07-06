@@ -11,7 +11,7 @@
 
 PauseScreen::PauseScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("PauseScreen", game.GetEngineContext().GetConfiguration().LogLevel)
+	, _logger("PauseScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 	, _uiManager(_commandRegistry)
 {

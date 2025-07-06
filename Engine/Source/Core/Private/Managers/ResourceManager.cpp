@@ -9,7 +9,7 @@
 ResourceManager::ResourceManager(const FileManager& fileManager, const Configuration& configuration)
 	: _fileManager(fileManager)
 	, _configuration(configuration)
-	, _logger("ResourceManager", configuration.LogLevel)
+	, _logger("ResourceManager", configuration.CurrentLogLevel)
 {
 }
 
