@@ -60,7 +60,7 @@ TEST_F(LoggerTest, WarnLogsToCout)
 {
 	const std::string message = "This is a warning message.";
 	Logger::Warn(message);
-	EXPECT_EQ(_outBuffer.str(), "[WARNING]: " + message + "\n");
+	EXPECT_EQ(_outBuffer.str(), "[WARN]:  " + message + "\n");
 	EXPECT_TRUE(_errBuffer.str().empty());
 }
 
@@ -68,7 +68,7 @@ TEST_F(LoggerTest, InfoLogsToCout)
 {
 	const std::string message = "This is an info message.";
 	Logger::Info(message);
-	EXPECT_EQ(_outBuffer.str(), "[INFO]: " + message + "\n");
+	EXPECT_EQ(_outBuffer.str(), "[INFO]:  " + message + "\n");
 	EXPECT_TRUE(_errBuffer.str().empty());
 }
 

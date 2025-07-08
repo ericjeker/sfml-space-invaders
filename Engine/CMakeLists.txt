@@ -3,7 +3,7 @@ add_subdirectory(Source)
 
 # --- Testing Setup ---
 # Option to enable/disable building tests.
-option(BUILD_TESTING "Build the tests" ON)
+option(BUILD_TESTING "Build the tests" OFF)
 
 if(BUILD_TESTING)
     # Add the Tests directory.

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Platform-specific configurations
+# --- Platform-specific configurations ---
 if (UNIX AND NOT APPLE)
     # Linux-specific settings
     find_package(PkgConfig REQUIRED)
@@ -19,15 +19,22 @@ elseif (WIN32)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif ()
 
-# Add the Engine and Game source code
+# --- Add the Engine and Game source code ---
 add_subdirectory(Engine)
 add_subdirectory(Vendor)
 add_subdirectory(SpaceInvaders)
 
-# Copy the Assets folder
+# --- Copy the Assets folder ---
 file(
         COPY
         ${CMAKE_SOURCE_DIR}/Assets
         DESTINATION
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
+
+# --- Installation Rules ---
+install(TARGETS Engine SpaceInvaders
+    RUNTIME DESTINATION bin  # For .exe/.dll
+    LIBRARY DESTINATION lib  # For .lib
+    ARCHIVE DESTINATION lib  # For .a
 )
