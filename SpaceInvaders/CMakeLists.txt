@@ -1,34 +1,11 @@
-set(SPACEINVADERS_HEADERS
-        Source
-)
+# Add the Source directory. This will build our library and executable.
+add_subdirectory(Source)
 
-set(SPACEINVADERS_SOURCES
-        Source/Commands/ExitCommand.cpp
-        Source/Commands/PauseCommand.cpp
-        Source/Commands/PlayCommand.cpp
-        Source/Commands/QuitCommand.cpp
-        Source/Commands/ResumeCommand.cpp
-        Source/GameScreen/GameScreen.cpp
-        Source/GameScreen/Systems/BulletSystem.cpp
-        Source/GameScreen/Systems/EnemySystem.cpp
-        Source/GameScreen/Systems/PlayerController.cpp
-        Source/PauseScreen/PauseScreen.cpp
-        Source/SpaceInvaders.cpp
-        Source/TitleScreen/TitleScreen.cpp
-)
+# --- Testing Setup ---
+# Option to enable/disable building tests.
+option(BUILD_TESTING "Build the tests" ON)
 
-# Executable
-add_executable(SpaceInvaders Source/Main.cpp)
-target_sources(SpaceInvaders PRIVATE
-        ${SPACEINVADERS_HEADERS}
-        ${SPACEINVADERS_SOURCES}
-)
-
-target_include_directories(SpaceInvaders PRIVATE Source)
-
-target_link_libraries(SpaceInvaders
-        PRIVATE
-        Vendor
-        Engine
-)
-
+if(BUILD_TESTING)
+    # Add the Tests directory.
+    add_subdirectory(Tests)
+endif()

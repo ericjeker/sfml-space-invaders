@@ -1,6 +1,6 @@
 // Copyright (c) 2025 Eric Jeker. All rights reserved.
 
-#include "GameScreen/Systems/PlayerController.h"
+#include "PlayerController.h"
 
 #include "GameScreen/Entities/PlayerState.h"
 #include "GameScreen/Systems/BulletSystem.h"
@@ -19,50 +19,86 @@
 namespace
 {
 
-void CheckOutOfBounds(const PlayerController::UpdateContext& context, PlayerState& player)
+struct CheckOutOfBoundsIn
 {
-	if (player.position.x < 100.f / 2)
+	sf::Vector2f position;
+	sf::Vector2u screenBounds;
+};
+
+std::pair<sf::Vector2f, std::optional<std::string>> CheckOutOfBounds(const CheckOutOfBoundsIn& params)
+{
+	sf::Vector2f newPosition = params.position;
+	if (newPosition.x < 100.f / 2)
 	{
-		player.position.x = 100.f / 2;
+		newPosition.x = 100.f / 2;
 	}
-	else if (player.position.x > context.screenBounds.x - 100.f / 2)
+	else if (newPosition.x > static_cast<float>(params.screenBounds.x) - 100.f / 2)
 	{
-		player.position.x = context.screenBounds.x - 100.f / 2;
+		newPosition.x = static_cast<float>(params.screenBounds.x) - 100.f / 2;
 	}
+
+	return {newPosition, std::nullopt};
 }
 
-void HandlePlayerMovement(PlayerState& player)
+struct PlayerMovementIn
 {
+	sf::Vector2f position;
+	bool isMovingLeft{false};
+	bool isMovingRight{false};
+};
+
+std::pair<sf::Vector2f, std::optional<std::string>> HandlePlayerMovement(const PlayerMovementIn& params)
+{
+	sf::Vector2f newPosition = params.position;
 	// TODO: This should be handled with the CommandRegistry
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	if (params.isMovingLeft)
 	{
-		player.position.x += -20.f;
+		newPosition.x -= 20.f;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	else if (params.isMovingRight)
 	{
-		player.position.x += 20.f;
+		newPosition.x += 20.f;
 	}
 
 	// Update the player's position based on the velocity
 	// player.position += player.velocity * delta;
+	return {newPosition, std::nullopt};
 }
 
-void HandleShootingAndCooldown(const PlayerController::UpdateContext& context, PlayerState& player,
-							   BulletCollection& bullets)
+struct ShootingAndCooldownIn
 {
-	if (player.cooldown < 0.f)
+	float currentCooldown;
+	float cooldownDuration;
+	float deltaTime;
+	bool isShooting;
+};
+
+struct ShootingAndCooldownOut
+{
+	float newCooldown;
+	bool shouldSpawnBullet;
+};
+
+std::pair<ShootingAndCooldownOut, std::optional<std::string>>
+HandleShootingAndCooldown(const ShootingAndCooldownIn& params)
+{
+	ShootingAndCooldownOut result = {params.currentCooldown, false};
+
+	if (result.newCooldown < 0.f)
 	{
 		// TODO: This should be handled with the CommandRegistry
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+		if (params.isShooting)
 		{
-			player.cooldown = player.cooldownDuration;
-			BulletSystem::SpawnBullet(bullets, player.position);
+			result.newCooldown = params.cooldownDuration;
+			result.shouldSpawnBullet = true;
 		}
 	}
 	else
 	{
-		player.cooldown -= context.deltaTime.asSeconds();
+		result.newCooldown -= params.deltaTime;
 	}
+
+	return {result, std::nullopt};
 }
 
 } // namespace
@@ -82,9 +118,36 @@ void PlayerController::Initialize(PlayerState& player, const sf::Vector2f positi
 
 void PlayerController::Update(const UpdateContext& context, PlayerState& player, BulletCollection& bullets)
 {
-	HandleShootingAndCooldown(context, player, bullets);
-	HandlePlayerMovement(player);
-	CheckOutOfBounds(context, player);
+	// Handle Shooting
+	const ShootingAndCooldownIn shootingParams = {.currentCooldown = player.cooldown,
+												  .cooldownDuration = player.cooldownDuration,
+												  .deltaTime = context.deltaTime.asSeconds(),
+												  .isShooting = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)};
+	const auto [shootingResult, shootingError] = HandleShootingAndCooldown(shootingParams);
+	if (!shootingError)
+	{
+		player.cooldown = shootingResult.newCooldown;
+		if (shootingResult.shouldSpawnBullet)
+		{
+			BulletSystem::SpawnBullet(bullets, player.position);
+		}
+	}
+
+	// Handle Movement
+	const PlayerMovementIn movementParams = {.position = player.position,
+											 .isMovingLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A),
+											 .isMovingRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)};
+	if (const auto [newPosition, moveError] = HandlePlayerMovement(movementParams); !moveError)
+	{
+		player.position = newPosition;
+	}
+
+	// Check Boundaries
+	const CheckOutOfBoundsIn boundsParams = {.position = player.position, .screenBounds = context.screenBounds};
+	if (const auto [boundedPosition, boundsError] = CheckOutOfBounds(boundsParams); !boundsError)
+	{
+		player.position = boundedPosition;
+	}
 }
 
 void PlayerController::Render(sf::RenderTexture& renderTexture, const PlayerState& playerState,

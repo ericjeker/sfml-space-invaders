@@ -51,7 +51,7 @@ void GameScreen::Activate()
 	_bulletShape->setOrigin({5.f, 5.f});
 
 	// Initialize the enemies
-	EnemySystem::Initialize(_enemies);
+	// EnemySystem::Initialize(_enemies);
 
 	// Initialize the player controller
 	PlayerController::Initialize(_player, sf::Vector2f(window.getSize().x / 2.f, window.getSize().y - 200.f));
@@ -118,8 +118,8 @@ void GameScreen::Update(const sf::Time& deltaTime)
 	const auto windowSize = GetGame().GetEngineContext().GetWindow().getSize();
 
 	const PlayerController::UpdateContext context = {.deltaTime = deltaTime, .screenBounds = windowSize};
-
 	PlayerController::Update(context, _player, _bullets);
+
 	BulletSystem::Update(deltaTime, _bullets);
 }
 
