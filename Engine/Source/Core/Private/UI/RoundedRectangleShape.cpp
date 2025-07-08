@@ -1,9 +1,11 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
-#include "../../Public/UI/RoundedRectangleShape.h"
+#include "UI/RoundedRectangleShape.h"
+
+#include "Constants.h"
 
 #include <cmath>
-#include <cstddef>
+
 
 RoundedRectangleShape::RoundedRectangleShape(const sf::Vector2f size, const float radius, const std::size_t pointCount)
 	: m_radius(radius)
@@ -115,8 +117,7 @@ sf::Vector2f RoundedRectangleShape::getPoint(std::size_t index) const
 			break;
 	}
 
-	constexpr float PI = M_PI;
-	const float rad = angleDeg * PI / 180.f;
+	const float rad = angleDeg * Constants::PI / 180.f;
 
 	// Offset from the center of the current quarter circle
 	const sf::Vector2f offset(std::cos(rad) * m_radius, std::sin(rad) * m_radius);

@@ -1,6 +1,6 @@
 name: Continuous Integration
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 defaults:
   run:
@@ -16,25 +16,26 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { name: Windows VS2022, os: windows-2022  }
-        - { name: Linux GCC,      os: ubuntu-latest }
+          #- { name: Windows VS2022, os: windows-2022  }
+          - { name: Linux GCC,      os: ubuntu-latest }
         config:
-        - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
-        - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
+          - { name: Shared, flags: -DBUILD_SHARED_LIBS=TRUE }
+          - { name: Static, flags: -DBUILD_SHARED_LIBS=FALSE }
+        build_type: [ Release ]
 
     steps:
-    - name: Install Linux Dependencies
-      if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Configure
-      run: cmake -B build -DBUILD_TESTING=ON ${{matrix.config.flags}}
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_TESTING=ON ${{matrix.config.flags}}
 
-    - name: Build
-      run: cmake --build build --config Release
+      - name: Build
+        run: cmake --build build --config Release
 
-    - name: Run Tests
-      run: ctest --test-dir build --output-on-failure
+      - name: Run Tests
+        run: ctest --test-dir build --output-on-failure

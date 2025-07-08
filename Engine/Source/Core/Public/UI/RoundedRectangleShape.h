@@ -3,8 +3,6 @@
 #ifndef ROUNDEDRECTANGLESHAPE_H
 #define ROUNDEDRECTANGLESHAPE_H
 
-#include <cstddef>
-
 #include "SFML/Graphics/Shape.hpp"
 
 

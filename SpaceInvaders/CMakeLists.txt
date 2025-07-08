@@ -5,7 +5,10 @@ add_subdirectory(Source)
 # Option to enable/disable building tests.
 option(BUILD_TESTING "Build the tests" OFF)
 
-if(BUILD_TESTING)
+if (BUILD_TESTING)
+    # Enable testing for the project
+    enable_testing()
+
     # Add the Tests directory.
     add_subdirectory(Tests)
-endif()
+endif ()

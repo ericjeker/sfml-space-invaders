@@ -46,7 +46,7 @@ void ParticleConstellationManager::Initialize(const size_t n)
 
 void ParticleConstellationManager::Update(const sf::Time& deltaTime)
 {
-	LOG_DEBUG("Delta: " + std::to_string(deltaTime.asMilliseconds()));
+	LOG_TRACE("Delta: " + std::to_string(deltaTime.asMilliseconds()));
 
 	sf::Clock duration;
 	duration.start();
@@ -60,7 +60,7 @@ void ParticleConstellationManager::Update(const sf::Time& deltaTime)
 	}
 
 	// Updating (1000 particles): ~30us (0.2% of budget at 60 FPS)
-	LOG_DEBUG("Updating: " + std::to_string(duration.getElapsedTime().asMicroseconds()) + "us");
+	LOG_TRACE("Updating: " + std::to_string(duration.getElapsedTime().asMicroseconds()) + "us");
 }
 
 void ParticleConstellationManager::Render(sf::RenderTexture& renderTexture) const
@@ -80,7 +80,7 @@ void ParticleConstellationManager::Render(sf::RenderTexture& renderTexture) cons
 	// Rendering (1000 particles): 11592us, without ObjectPool, (YOLO, CircleShape)
 	// Rendering (1000 particles): 5414us, with basic ObjectPool (std::vector of shared_ptr, CircleShape)
 	// Explore: VertexArray, Batch rendering, disable origin calculation, fragment shaders, etc.
-	LOG_DEBUG("Rendering: " + std::to_string(duration.getElapsedTime().asMicroseconds()) + "us");
+	LOG_TRACE("Rendering: " + std::to_string(duration.getElapsedTime().asMicroseconds()) + "us");
 }
 
 void ParticleConstellationManager::ScreenWarp(sf::Vector2f& OutPosition, const sf::Vector2f InSize)

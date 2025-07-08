@@ -1,6 +1,3 @@
-# Enable testing for the project
-enable_testing()
-
 # Fetch the GoogleTest framework from GitHub
 include(FetchContent)
 FetchContent_Declare(

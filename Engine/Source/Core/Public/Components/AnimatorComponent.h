@@ -2,6 +2,7 @@
 
 #ifndef ANIMATORCOMPONENT_H
 #define ANIMATORCOMPONENT_H
+
 #include "Tween.h"
 
 #include <functional>

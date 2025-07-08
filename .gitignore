@@ -2,8 +2,8 @@
 .idea
 
 # CMake
-cmake-build-debug
-cmake-build-release
+build
+cmake-build-*
 
 CMakeLists.txt.user
 CMakeCache.txt

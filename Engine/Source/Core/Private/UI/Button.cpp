@@ -2,8 +2,6 @@
 
 #include "UI/Button.h"
 
-#include <cmath>
-#include <iostream>
 #include <string>
 
 #include "SFML/Graphics/RectangleShape.hpp"

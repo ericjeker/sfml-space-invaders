@@ -2,9 +2,11 @@
 
 #ifndef TWEEN_H
 #define TWEEN_H
+
+#include "Constants.h"
+
 #include <cmath>
 
-constexpr auto PI_FLOAT = static_cast<float>(M_PI);
 
 /**
  * Computes the ease-in-out sine interpolation for a given normalized time.
@@ -15,7 +17,8 @@ constexpr auto PI_FLOAT = static_cast<float>(M_PI);
  */
 inline float easeInOutSine(const float t)
 {
-	return 0.5f * (1.0f - std::cos(PI_FLOAT * t));
+	return 0.5f * (1.0f - std::cos(Constants::PI * t));
 }
+
 
 #endif // TWEEN_H
