@@ -27,7 +27,7 @@ int main()
 
 	// Initialize the window, make it beautiful
 	auto window = std::make_unique<sf::RenderWindow>(
-		sf::RenderWindow(mode, "Space Invaders", sf::Style::None, sf::State::Fullscreen, settings));
+		sf::RenderWindow(mode, "Space Invaders", sf::Style::None, sf::State::Windowed, settings));
 	window->setFramerateLimit(configuration.FramesPerSecond);
 	window->setVerticalSyncEnabled(configuration.IsVSync);
 

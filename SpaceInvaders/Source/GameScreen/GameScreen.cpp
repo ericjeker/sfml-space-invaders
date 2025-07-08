@@ -18,7 +18,6 @@
 
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("GameScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _commandRegistry(std::make_unique<CommandRegistry>(game.GetEngineContext().GetConfiguration()))
 	, _uiManager(std::make_unique<UIManager>(*_commandRegistry))
 {
@@ -26,7 +25,7 @@ GameScreen::GameScreen(SpaceInvaders& game)
 
 void GameScreen::Activate()
 {
-	_logger.Debug("Activating GameScreen");
+	LOG_DEBUG("Activating GameScreen");
 
 	auto& game = GetGame();
 
@@ -94,7 +93,7 @@ void GameScreen::InitializeUI() const
 
 void GameScreen::Shutdown()
 {
-	_logger.Debug("Shutting down GameScreen");
+	LOG_DEBUG("Shutting down GameScreen");
 }
 
 void GameScreen::HandleEvents(const std::optional<sf::Event>& event)

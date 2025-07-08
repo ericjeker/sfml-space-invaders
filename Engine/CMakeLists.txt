@@ -1,6 +1,11 @@
 # Process the nested sub-directories
-add_subdirectory(Source/Core)
-add_subdirectory(Source/Utilities)
+add_subdirectory(Source)
 
-add_library(Engine INTERFACE)
-target_link_libraries(Engine INTERFACE Core Utilities)
+# --- Testing Setup ---
+# Option to enable/disable building tests.
+option(BUILD_TESTING "Build the tests" ON)
+
+if(BUILD_TESTING)
+    # Add the Tests directory.
+    add_subdirectory(Tests)
+endif()

@@ -27,7 +27,6 @@ public:
 	SpaceInvadersState& GetState();
 
 private:
-	const Logger _logger;
 	SpaceInvadersState _state;
 
 	// Events handling first

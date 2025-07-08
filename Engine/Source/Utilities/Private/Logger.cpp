@@ -4,56 +4,65 @@
 
 #include <iostream>
 #include <ostream>
-#include <utility>
 
-Logger::Logger(std::string context, const int level)
-    : _Context(std::move(context)), _Level(level)
+namespace
 {
+
+void Log(const Logger::LogLevel level, const std::string& message)
+{
+	// Use std::cerr when the log level is below or equal Error
+	auto& oStream = (level <= Logger::LogLevel::Error) ? std::cerr : std::cout;
+	switch (level)
+	{
+		case Logger::LogLevel::Fatal:
+			oStream << "[FATAL]: " << message << std::endl;
+			break;
+		case Logger::LogLevel::Error:
+			oStream << "[ERROR]: " << message << std::endl;
+			break;
+		case Logger::LogLevel::Warning:
+			oStream << "[WARN]:  " << message << std::endl;
+			break;
+		case Logger::LogLevel::Info:
+			oStream << "[INFO]:  " << message << std::endl;
+			break;
+		case Logger::LogLevel::Debug:
+			oStream << "[DEBUG]: " << message << std::endl;
+			break;
+		case Logger::LogLevel::Trace:
+			oStream << "[TRACE]: " << message << std::endl;
+			break;
+	}
 }
 
-Logger::~Logger() = default;
-
-void Logger::Error(const std::string& message) const
-{
-    Log(message, LogLevel::Error);
 }
 
-void Logger::Warn(const std::string& message) const
+void Logger::Fatal(const std::string& message)
 {
-    Log(message, LogLevel::Warning);
+	Log(LogLevel::Fatal, message);
 }
 
-void Logger::Info(const std::string& message) const
+void Logger::Error(const std::string& message)
 {
-    Log(message, LogLevel::Info);
+	Log(LogLevel::Error, message);
 }
 
-void Logger::Debug(const std::string& message) const
+void Logger::Warn(const std::string& message)
 {
-    Log(message, LogLevel::Debug);
+	Log(LogLevel::Warning, message);
 }
 
-void Logger::Log(const std::string& message, LogLevel level) const
+void Logger::Info(const std::string& message)
 {
-    /** If the requested level is higher than the current level, do not log the message. */
-    if (level > _Level)
-    {
-        return;
-    }
+	Log(LogLevel::Info, message);
+}
 
-    switch (level)
-    {
-    case LogLevel::Info:
-        std::cout << "[INFO]: (" << _Context << ") " << message << std::endl;
-        break;
-    case LogLevel::Warning:
-        std::cout << "[WARNING]: (" << _Context << ") " << message << std::endl;
-        break;
-    case LogLevel::Error:
-        std::cout << "[ERROR]: (" << _Context << ") " << message << std::endl;
-        break;
-    case LogLevel::Debug:
-        std::cout << "[DEBUG]: (" << _Context << ") " << message << std::endl;
-        break;
-    }
+void Logger::Debug(const std::string& message)
+{
+	Log(LogLevel::Debug, message);
+}
+
+void Logger::Trace(const std::string& message)
+{
+	Log(LogLevel::Trace, message);
 }

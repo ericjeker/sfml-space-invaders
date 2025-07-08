@@ -6,7 +6,7 @@
 
 void QuitCommand::Execute()
 {
-	_logger.Debug("Executing QuitCommand");
+	LOG_DEBUG("Executing QuitCommand");
 	_game.ScheduleCommand([&]()
 	{
 		_game.GetEngineContext().GetScreenManager().SetCurrentScreen(typeid(TitleScreen));

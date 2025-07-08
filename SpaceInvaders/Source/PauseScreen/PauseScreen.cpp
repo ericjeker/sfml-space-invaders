@@ -11,7 +11,6 @@
 
 PauseScreen::PauseScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("PauseScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 	, _uiManager(_commandRegistry)
 {
@@ -19,7 +18,7 @@ PauseScreen::PauseScreen(SpaceInvaders& game)
 
 void PauseScreen::Activate()
 {
-	_logger.Debug("Activating PauseScreen");
+	LOG_DEBUG("Activating PauseScreen");
 
 	auto& game = GetGame();
 
@@ -54,7 +53,7 @@ void PauseScreen::Render()
 
 void PauseScreen::Shutdown()
 {
-	_logger.Debug("Shutting down");
+	LOG_DEBUG("Shutting down");
 }
 
 void PauseScreen::HandleEvents(const std::optional<sf::Event>& event)

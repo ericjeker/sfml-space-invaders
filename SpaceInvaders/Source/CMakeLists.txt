@@ -47,3 +47,8 @@ target_link_libraries(SpaceInvaders
         SpaceInvadersLibrary
 )
 
+target_compile_definitions(SpaceInvaders PRIVATE
+    # This generator expression adds the -DDEBUG flag (or equivalent)
+    # only for the Debug build configuration.
+    $<$<CONFIG:Debug>:DEBUG>
+)

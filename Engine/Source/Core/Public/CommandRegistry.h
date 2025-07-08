@@ -38,7 +38,6 @@ public:
 private:
 	// TODO: replace this with unique_ptr
     Configuration _configuration;
-    Logger _logger;
 
     // TODO: use std::type_index instead of int
 	std::unordered_map<int, std::shared_ptr<Command>> _commands;

@@ -12,7 +12,6 @@
 
 TitleScreen::TitleScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _logger("TitleScreen", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
 	, _commandRegistry(game.GetEngineContext().GetConfiguration())
 	, _uiManager(_commandRegistry)
 	, _particleConstellation(game.GetEngineContext().GetConfiguration(), sf::Texture("Assets/Textures/Particle.png"))
@@ -21,7 +20,7 @@ TitleScreen::TitleScreen(SpaceInvaders& game)
 
 void TitleScreen::Activate()
 {
-	_logger.Debug("Activating TitleScreen");
+	LOG_DEBUG("Activating TitleScreen");
 
 	auto& game = GetGame();
 
@@ -64,7 +63,7 @@ void TitleScreen::Render()
 
 void TitleScreen::Shutdown()
 {
-	_logger.Debug("Shutting down TitleScreen");
+	LOG_DEBUG("Shutting down TitleScreen");
 
 	// TODO: remove entities
 }

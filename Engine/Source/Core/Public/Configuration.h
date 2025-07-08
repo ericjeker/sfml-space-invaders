@@ -12,11 +12,12 @@
 
 /**
  * Simple configuration structure for the game.
+ *
+ * TODO: make this a namespace
  */
 struct Configuration
 {
 	const sf::Vector2u WindowSize = {1920, 1080};
-	const LogLevel CurrentLogLevel = Debug;
 
 	const unsigned int FramesPerSecond = 60;
 

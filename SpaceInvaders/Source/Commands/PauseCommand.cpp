@@ -11,6 +11,6 @@ PauseCommand::PauseCommand(SpaceInvaders& game)
 
 void PauseCommand::Execute()
 {
-	_logger.Debug("Executing PauseCommand");
+	LOG_DEBUG("Executing PauseCommand");
 	_game.ScheduleCommand([&]() { _game.GetEngineContext().GetScreenManager().SetCurrentScreen(typeid(PauseScreen)); });
 }

@@ -18,9 +18,8 @@
  */
 SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
 	: GameInstance(std::move(engineContext))
-	, _logger("SpaceInvaders", GetEngineContext().GetConfiguration().CurrentLogLevel)
 {
-	_logger.Debug("Game initialized");
+	LOG_DEBUG("Game initialized");
 
 	// TODO: Load saved settings
 
@@ -51,7 +50,7 @@ SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
  */
 void SpaceInvaders::Run()
 {
-	_logger.Debug("Game started");
+	LOG_DEBUG("Game started");
 
 	sf::Clock clock;
 
@@ -81,14 +80,14 @@ void SpaceInvaders::Run()
 
 void SpaceInvaders::Exit()
 {
-	_logger.Debug("Shutting down SpaceInvaders");
+	LOG_DEBUG("Shutting down SpaceInvaders");
 
 	// We shut down the screen to unload the resources
-	_logger.Debug("Cleaning up ScreenManager");
+	LOG_DEBUG("Cleaning up ScreenManager");
 	GetEngineContext().GetScreenManager().CleanUp();
-	_logger.Debug("Cleaning up ResourceManager");
+	LOG_DEBUG("Cleaning up ResourceManager");
 	GetEngineContext().GetResourceManager().CleanUp();
-	_logger.Debug("Closing the window");
+	LOG_DEBUG("Closing the window");
 	GetEngineContext().GetWindow().close();
 }
 
@@ -118,24 +117,24 @@ void SpaceInvaders::HandleEvents(const std::optional<sf::Event>& event)
 
 void SpaceInvaders::OnFocusLost()
 {
-	_logger.Debug("Focus lost");
+	LOG_DEBUG("Focus lost");
 	_state.isPaused = true;
 }
 
 void SpaceInvaders::OnFocusGained()
 {
-	_logger.Debug("Focus gained");
+	LOG_DEBUG("Focus gained");
 	_state.isPaused = false;
 }
 
 void SpaceInvaders::OnResize() const
 {
-	_logger.Debug("Window resized");
+	LOG_DEBUG("Window resized");
 }
 
 void SpaceInvaders::OnClose()
 {
-	_logger.Debug("Shutting down SpaceInvaders");
+	LOG_DEBUG("Shutting down SpaceInvaders");
 	Exit();
 }
 

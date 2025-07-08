@@ -32,8 +32,6 @@ private:
 	void InitializeRenderLayers(const sf::RenderWindow& window);
 	void InitializeCommands(SpaceInvaders& game);
 
-	Logger _logger;
-
 	// Rendering layers
 	sf::ContextSettings _uiSettings;
 	sf::RenderTexture _backgroundLayer;

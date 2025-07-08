@@ -24,8 +24,6 @@ public:
 	void Shutdown() override;
 
 private:
-	const Logger _logger;
-
 	// Systems and Managers
 	CommandRegistry _commandRegistry;
 	std::unordered_map<std::string, int> _commands;

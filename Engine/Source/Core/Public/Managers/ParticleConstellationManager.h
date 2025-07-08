@@ -33,7 +33,6 @@ private:
     const int _timeStep = 1000 / 60;
 
     Configuration _configuration;
-    Logger _logger;
     ParticleCollection _particles;
     std::vector<std::unique_ptr<sf::Sprite>> _particlePool;
 	sf::Texture _particleTexture;

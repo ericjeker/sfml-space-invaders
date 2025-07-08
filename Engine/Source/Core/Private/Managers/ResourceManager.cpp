@@ -9,7 +9,6 @@
 ResourceManager::ResourceManager(const FileManager& fileManager, const Configuration& configuration)
 	: _fileManager(fileManager)
 	, _configuration(configuration)
-	, _logger("ResourceManager", configuration.CurrentLogLevel)
 {
 }
 
@@ -21,7 +20,7 @@ void ResourceManager::LoadResourcesFromManifest(const std::string& manifestPath)
 
 		if (!manifest.contains("bundles"))
 		{
-			_logger.Error("Manifest does not contain any bundles");
+			LOG_ERROR("Manifest does not contain any bundles");
 			return;
 		}
 
@@ -29,21 +28,21 @@ void ResourceManager::LoadResourcesFromManifest(const std::string& manifestPath)
 		{
 			if (!bundle.contains("name") || !bundle.contains("assets"))
 			{
-				_logger.Error("Bundle does not contain a name or assets");
+				LOG_ERROR("Bundle does not contain a name or assets");
 				continue;
 			}
 
 			const std::string bundleName = bundle["name"];
 			const json& bundleAssets = bundle["assets"];
 
-			_logger.Info("Loading bundle: " + bundleName);
+			LOG_INFO("Loading bundle: " + bundleName);
 
 			// Load Resources
 			for (const auto& asset : bundleAssets)
 			{
 				if (!asset.contains("name") || !asset.contains("path") || !asset.contains("type"))
 				{
-					_logger.Error("Asset does not contain a name, path, or type");
+					LOG_ERROR("Asset does not contain a name, path, or type");
 					continue;
 				}
 
@@ -51,11 +50,11 @@ void ResourceManager::LoadResourcesFromManifest(const std::string& manifestPath)
 				const std::string assetPath = asset["path"];
 				const std::string assetType = asset["type"];
 
-				_logger.Info("Loading asset: " + assetName);
+				LOG_INFO("Loading asset: " + assetName);
 
 				if (assetType != "audio" && assetType != "texture" && assetType != "font")
 				{
-					_logger.Error("Invalid asset type: " + assetType);
+					LOG_ERROR("Invalid asset type: " + assetType);
 					continue;
 				}
 
@@ -75,11 +74,11 @@ void ResourceManager::LoadResourcesFromManifest(const std::string& manifestPath)
 	}
 	catch (const nlohmann::json::parse_error& e)
 	{
-		_logger.Error("Failed to parse manifest file: " + std::string(e.what()));
+		LOG_ERROR("Failed to parse manifest file: " + std::string(e.what()));
 	}
 	catch (const std::exception& e)
 	{
-		_logger.Error("An error occurred while loading the manifest file: " + std::string(e.what()));
+		LOG_ERROR("An error occurred while loading the manifest file: " + std::string(e.what()));
 	}
 }
 

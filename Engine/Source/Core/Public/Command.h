@@ -10,17 +10,15 @@
 class Command
 {
 public:
-    explicit Command(GameInstance& game)
-        : _logger("Command", game.GetEngineContext().GetConfiguration().CurrentLogLevel)
-        , _game(game)
-    {
-    }
-    virtual ~Command() = default;
-    virtual void Execute() = 0;
+	explicit Command(GameInstance& game)
+		: _game(game)
+	{
+	}
+	virtual ~Command() = default;
+	virtual void Execute() = 0;
 
 protected:
-    Logger _logger;
-    GameInstance& _game;
+	GameInstance& _game;
 };
 
 

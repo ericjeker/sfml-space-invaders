@@ -40,14 +40,14 @@ public:
 
 			if (value == nullptr)
 			{
-				_logger.Error("Resource " + name + " not found.");
+				LOG_ERROR("Resource " + name + " not found.");
 				return nullptr;
 			}
 
 			return *value;
 		}
 
-		_logger.Error("Resource " + name + " not found.");
+		LOG_ERROR("Resource " + name + " not found.");
 		return nullptr;
 	}
 
@@ -68,7 +68,6 @@ private:
 
 	FileManager _fileManager;
 	Configuration _configuration;
-	Logger _logger;
 };
 
 #endif

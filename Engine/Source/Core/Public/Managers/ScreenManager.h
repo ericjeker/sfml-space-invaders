@@ -4,8 +4,6 @@
 #ifndef SCREENMANAGER_H
 #define SCREENMANAGER_H
 
-#include "Logger.h"
-
 #include "../Screen.h"
 
 #include <SFML/Window/Event.hpp>
@@ -37,7 +35,6 @@ public:
     void HandleEvents(const std::optional<sf::Event>& event) const;
 
 private:
-    const Logger _logger;
     const Configuration& _configuration;
     std::unordered_map<std::type_index, ScreenFactory> _screens;
     std::unique_ptr<Screen> _currentScreen = nullptr;
