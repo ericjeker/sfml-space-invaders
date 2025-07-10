@@ -4,8 +4,9 @@
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
-#include "Configuration.h"
 #include "Logger.h"
+
+#include "Managers/FileManager.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -13,7 +14,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-#include <Managers/FileManager.h>
 #include <string>
 #include <unordered_map>
 #include <variant>
@@ -21,7 +21,7 @@
 class ResourceManager
 {
 public:
-	ResourceManager(const FileManager& fileManager, const Configuration& configuration);
+	ResourceManager() = default;
 	~ResourceManager() = default;
 
 	void LoadResourcesFromManifest(const std::string& manifestPath);
@@ -67,7 +67,6 @@ private:
 	std::unordered_map<std::string, ResourceVariant> _resources;
 
 	FileManager _fileManager;
-	Configuration _configuration;
 };
 
 #endif

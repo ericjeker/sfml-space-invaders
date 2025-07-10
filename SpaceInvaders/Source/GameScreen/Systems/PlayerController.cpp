@@ -141,6 +141,5 @@ void PlayerController::Render(sf::RenderTexture& renderTexture, const PlayerStat
 							  sf::RectangleShape& rectangle)
 {
 	rectangle.setPosition(playerState.position);
-	rectangle.setOrigin(rectangle.getSize() / 2.f);
 	renderTexture.draw(rectangle);
 }

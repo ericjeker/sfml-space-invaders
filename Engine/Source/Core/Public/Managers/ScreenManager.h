@@ -12,14 +12,12 @@
 #include <typeindex>
 #include <unordered_map>
 
-struct Configuration;
-
 using ScreenFactory = std::function<std::unique_ptr<Screen>()>;
 
 class ScreenManager
 {
 public:
-    explicit ScreenManager(const Configuration& configuration);
+    ScreenManager() = default;
     ~ScreenManager() = default;
 
     void RegisterScreen(const std::type_index& type, ScreenFactory factory);
@@ -35,7 +33,7 @@ public:
     void HandleEvents(const std::optional<sf::Event>& event) const;
 
 private:
-    const Configuration& _configuration;
+	// TODO: move the state out of the manager
     std::unordered_map<std::type_index, ScreenFactory> _screens;
     std::unique_ptr<Screen> _currentScreen = nullptr;
 };

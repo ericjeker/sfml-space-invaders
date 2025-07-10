@@ -4,16 +4,6 @@
 
 #include "Configuration.h"
 
-EngineContext::EngineContext(Configuration configuration)
-	: _configuration(std::make_unique<Configuration>(std::move(configuration)))
-{
-}
-
-Configuration& EngineContext::GetConfiguration() const
-{
-	return *_configuration;
-}
-
 FileManager& EngineContext::GetFileManager() const
 {
 	return *_fileManager;
@@ -31,11 +21,6 @@ ResourceManager& EngineContext::GetResourceManager() const
 ScreenManager& EngineContext::GetScreenManager() const
 {
 	return *_screenManager;
-}
-
-void EngineContext::SetConfiguration(std::unique_ptr<Configuration> configuration)
-{
-	_configuration = std::move(configuration);
 }
 
 void EngineContext::SetFileManager(std::unique_ptr<FileManager> fileManager)

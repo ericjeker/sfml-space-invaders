@@ -5,11 +5,6 @@
 #include "Logger.h"
 #include "TimeTicker.h"
 
-ScreenManager::ScreenManager(const Configuration& configuration)
-	: _configuration(configuration)
-{
-}
-
 void ScreenManager::RegisterScreen(const std::type_index& type, ScreenFactory factory)
 {
 	LOG_DEBUG("Registering screen: " + std::string(type.name()));

@@ -2,21 +2,15 @@
 
 #include "Managers/ResourceManager.h"
 
-#include "Configuration.h"
+#include "Logger.h"
 
 #include <nlohmann/json.hpp>
-
-ResourceManager::ResourceManager(const FileManager& fileManager, const Configuration& configuration)
-	: _fileManager(fileManager)
-	, _configuration(configuration)
-{
-}
 
 void ResourceManager::LoadResourcesFromManifest(const std::string& manifestPath)
 {
 	try
 	{
-		const json manifest = _fileManager.LoadJSON(manifestPath);
+		const json manifest = FileManager::LoadJSON(manifestPath);
 
 		if (!manifest.contains("bundles"))
 		{

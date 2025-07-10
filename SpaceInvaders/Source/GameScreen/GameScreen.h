@@ -29,7 +29,7 @@ public:
 
 private:
 	void InitializeCommands(SpaceInvaders& game);
-	void InitializeEnemies(sf::RenderWindow& window);
+	void InitializeEnemies(const sf::RenderWindow& window);
 	void InitializePlayer(const sf::RenderWindow& window);
 	void InitializeRenderLayers(const sf::RenderWindow& window);
 	void InitializeUI() const;
@@ -48,7 +48,7 @@ private:
 	// Resources
 	std::unique_ptr<sf::RectangleShape> _playerRectangle;
 	std::unique_ptr<sf::RectangleShape> _enemyRectangle;
-	std::unique_ptr<sf::CircleShape> _bulletShape;
+	std::unique_ptr<sf::RectangleShape> _bulletShape;
 
 	// Commands Registry & locally available commands
 	std::unique_ptr<CommandRegistry> _commandRegistry;

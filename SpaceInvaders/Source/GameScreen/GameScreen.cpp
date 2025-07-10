@@ -17,7 +17,7 @@
 
 GameScreen::GameScreen(SpaceInvaders& game)
 	: Screen(game)
-	, _commandRegistry(std::make_unique<CommandRegistry>(game.GetEngineContext().GetConfiguration()))
+	, _commandRegistry(std::make_unique<CommandRegistry>())
 	, _uiManager(std::make_unique<UIManager>(*_commandRegistry))
 {
 }
@@ -39,7 +39,7 @@ void GameScreen::Activate()
 	InitializeEnemies(window);
 
 	// TODO: ObjectPool is needed
-	_bulletShape = std::make_unique<sf::CircleShape>(10.f);
+	_bulletShape = std::make_unique<sf::RectangleShape>(sf::Vector2f{10.f, 10.f});
 	_bulletShape->setFillColor(sf::Color::Red);
 	_bulletShape->setOrigin({5.f, 5.f});
 }
@@ -50,13 +50,15 @@ void GameScreen::InitializeCommands(SpaceInvaders& game)
 	_commands.emplace("GameScreen::Quit", _commandRegistry->Register(std::make_shared<QuitCommand>(game)));
 }
 
-void GameScreen::InitializeEnemies(sf::RenderWindow& window)
+void GameScreen::InitializeEnemies(const sf::RenderWindow& window)
 {
+	// Create the enemy geometry
 	_enemyRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
 	_enemyRectangle->setFillColor(sf::Color::Blue);
 	_enemyRectangle->setOrigin({50.f, 20.f});
 
-	_enemies.positions.emplace_back(sf::Vector2f(window.getSize().x / 2, window.getSize().y + 20.f));
+	// Add the enemies to the arrays
+	_enemies.positions.emplace_back(window.getSize().x / 2.f, 200.f);
 }
 
 void GameScreen::InitializePlayer(const sf::RenderWindow& window)

@@ -1,8 +1,8 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
 #include "Configuration.h"
-#include "SpaceInvaders.h"
 #include "EngineContext.h"
+#include "SpaceInvaders.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -12,29 +12,24 @@
  */
 int main()
 {
-	// Create the engine context
-	Configuration configuration;
-
 	// Create the window mode
-	const sf::VideoMode mode(configuration.WindowSize);
+	const sf::VideoMode mode(Configuration::WindowSize);
 
 	// Enable anti-aliasing
 	sf::ContextSettings settings;
-	settings.antiAliasingLevel = configuration.AntiAliasingLevel;
+	settings.antiAliasingLevel = Configuration::AntiAliasingLevel;
 
 	// Initialize the window, make it beautiful
 	auto window = std::make_unique<sf::RenderWindow>(
-		sf::RenderWindow(mode, "Space Invaders", sf::Style::None, sf::State::Windowed, settings));
-	window->setFramerateLimit(configuration.FramesPerSecond);
-	window->setVerticalSyncEnabled(configuration.IsVSync);
+		sf::RenderWindow(mode, "Space Invaders", Configuration::WindowStyle, Configuration::WindowState, settings));
+	window->setFramerateLimit(Configuration::FramesPerSecond);
+	window->setVerticalSyncEnabled(Configuration::IsVSync);
 
 	// Create the engine context
-	auto engineContext = std::make_unique<EngineContext>(configuration);
-	engineContext->SetConfiguration(std::make_unique<Configuration>());
+	auto engineContext = std::make_unique<EngineContext>();
 	engineContext->SetFileManager(std::make_unique<FileManager>());
-	engineContext->SetResourceManager(
-		std::make_unique<ResourceManager>(engineContext->GetFileManager(), engineContext->GetConfiguration()));
-	engineContext->SetScreenManager(std::make_unique<ScreenManager>(engineContext->GetConfiguration()));
+	engineContext->SetResourceManager(std::make_unique<ResourceManager>());
+	engineContext->SetScreenManager(std::make_unique<ScreenManager>());
 	engineContext->SetWindow(std::move(window));
 
 	// Initialize the game client and running it, which basically start the program. That's why we are all here today.

@@ -1,6 +1,5 @@
 // Copyright (c) Eric Jeker. All Rights Reserved.
 
-#pragma once
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
@@ -15,7 +14,7 @@
 namespace Configuration
 {
 
-constexpr std::string WindowTitle = "New Game";
+constexpr std::string WindowTitle = "Space Invaders";
 constexpr sf::Vector2u WindowSize = {1920, 1080};
 constexpr auto WindowStyle = sf::Style::None;
 constexpr auto WindowState = sf::State::Windowed;

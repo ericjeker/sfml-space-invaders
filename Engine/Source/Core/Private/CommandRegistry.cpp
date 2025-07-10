@@ -2,12 +2,6 @@
 
 #include "CommandRegistry.h"
 
-CommandRegistry::CommandRegistry(const Configuration& configuration)
-    : _configuration(configuration)
-	, _nextCommandId(0)
-{
-}
-
 int CommandRegistry::Register(std::shared_ptr<Command> command)
 {
 	const int commandId = _nextCommandId++;
@@ -15,7 +9,7 @@ int CommandRegistry::Register(std::shared_ptr<Command> command)
 	return commandId;
 }
 
-void CommandRegistry::Execute(const int commandId)
+void CommandRegistry::Execute(const int commandId) const
 {
 	if (_commands.contains(commandId))
 	{

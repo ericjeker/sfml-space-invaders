@@ -28,20 +28,17 @@
 class CommandRegistry
 {
 public:
-    explicit CommandRegistry(const Configuration& configuration);
+    CommandRegistry() = default;
     ~CommandRegistry() = default;
 
 	int Register(std::shared_ptr<Command> command);
-    void Execute(int commandId);
+    void Execute(int commandId) const;
     void Clear();
 
 private:
-	// TODO: replace this with unique_ptr
-    Configuration _configuration;
-
     // TODO: use std::type_index instead of int
 	std::unordered_map<int, std::shared_ptr<Command>> _commands;
-	int _nextCommandId;
+	int _nextCommandId{0};
 };
 
 

@@ -11,13 +11,13 @@
  */
 struct SpaceInvadersState
 {
-    // Mouse State
-    sf::Vector2f mousePos = sf::Vector2f(-1.f, -1.f);
+	// Mouse State
+	sf::Vector2f mousePosition = sf::Vector2f(-1.f, -1.f);
 
-    // Game
-    int score = 0;
-    bool isGameOver = false;
-    bool isPaused = false;
+	// Game
+	int score = 0;
+	bool isGameOver = false;
+	bool isPaused = false;
 };
 
 #endif

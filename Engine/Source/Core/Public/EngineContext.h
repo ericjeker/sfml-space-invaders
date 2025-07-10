@@ -3,8 +3,6 @@
 #ifndef ENGINECONTEXT_H
 #define ENGINECONTEXT_H
 
-#include "Configuration.h"
-
 #include "Managers/FileManager.h"
 #include "Managers/ResourceManager.h"
 #include "Managers/ScreenManager.h"
@@ -42,10 +40,8 @@ class EngineContext
 {
 public:
 	EngineContext() = default;
-	explicit EngineContext(Configuration configuration);
 	~EngineContext() = default;
 
-	[[nodiscard]] Configuration& GetConfiguration() const;
 	// EventSystem& GetEventSystem() const;
 	[[nodiscard]] FileManager& GetFileManager() const;
 	[[nodiscard]] ResourceManager& GetResourceManager() const;
@@ -53,7 +49,6 @@ public:
 	// SoundManager& GetSoundManager() const;
 	[[nodiscard]] sf::RenderWindow& GetWindow() const;
 
-	void SetConfiguration(std::unique_ptr<Configuration> configuration);
 	// void SetEventSystem(std::unique_ptr<EventSystem> eventSystem);
 	void SetFileManager(std::unique_ptr<FileManager> fileManager);
 	void SetResourceManager(std::unique_ptr<ResourceManager> resourceManager);
@@ -62,7 +57,6 @@ public:
 	void SetWindow(std::unique_ptr<sf::RenderWindow> window);
 
 private:
-	std::unique_ptr<Configuration> _configuration;
 	// std::unique_ptr<EventSystem> _eventSystem;
 	std::unique_ptr<FileManager> _fileManager;
 	std::unique_ptr<ResourceManager> _resourceManager;

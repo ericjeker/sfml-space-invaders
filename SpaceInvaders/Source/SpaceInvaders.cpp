@@ -37,7 +37,7 @@ SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
 	screenManager.RegisterScreen(typeid(PauseScreen), [this]() { return std::make_unique<PauseScreen>(*this); });
 
 	// Set and Activate the initial screen
-	screenManager.SetCurrentScreen(typeid(TitleScreen));
+	screenManager.SetCurrentScreen(typeid(GameScreen));
 }
 
 /**
