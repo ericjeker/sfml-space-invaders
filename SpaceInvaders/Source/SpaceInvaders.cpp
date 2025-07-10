@@ -2,12 +2,11 @@
 
 #include "SpaceInvaders.h"
 
+#include "GameScreen/GameScreen.h"
 #include "PauseScreen/PauseScreen.h"
+#include "TitleScreen/TitleScreen.h"
 
 #include <SFML/Graphics.hpp>
-
-#include <GameScreen/GameScreen.h>
-#include <TitleScreen/TitleScreen.h>
 
 /**
  * Initialize the game. This is the place where we want to:
@@ -33,12 +32,9 @@ SpaceInvaders::SpaceInvaders(std::unique_ptr<EngineContext> engineContext)
 
 	auto& screenManager = GetEngineContext().GetScreenManager();
 	// Initialize Game Screens (or scenes), all screens receive the game itself in parameter
-	screenManager.RegisterScreen(typeid(TitleScreen), [this]()
-								  { return std::make_unique<TitleScreen>(*this); });
-	screenManager.RegisterScreen(typeid(GameScreen), [this]()
-								  { return std::make_unique<GameScreen>(*this); });
-	screenManager.RegisterScreen(typeid(PauseScreen), [this]()
-								  { return std::make_unique<PauseScreen>(*this); });
+	screenManager.RegisterScreen(typeid(TitleScreen), [this]() { return std::make_unique<TitleScreen>(*this); });
+	screenManager.RegisterScreen(typeid(GameScreen), [this]() { return std::make_unique<GameScreen>(*this); });
+	screenManager.RegisterScreen(typeid(PauseScreen), [this]() { return std::make_unique<PauseScreen>(*this); });
 
 	// Set and Activate the initial screen
 	screenManager.SetCurrentScreen(typeid(TitleScreen));

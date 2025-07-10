@@ -2,6 +2,8 @@
 
 #include "EngineContext.h"
 
+#include "Configuration.h"
+
 EngineContext::EngineContext(Configuration configuration)
 	: _configuration(std::make_unique<Configuration>(std::move(configuration)))
 {

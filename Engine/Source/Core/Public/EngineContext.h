@@ -9,9 +9,7 @@
 #include "Managers/ResourceManager.h"
 #include "Managers/ScreenManager.h"
 
-#include <memory>
-
-#include "SFML/Graphics/RenderWindow.hpp"
+#include <SFML/Graphics/RenderWindow.hpp>
 
 /**
  * @class EngineContext

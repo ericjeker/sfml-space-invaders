@@ -8,11 +8,6 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/System/Time.hpp>
 
-void BulletSystem::Initialize(BulletCollection& bullets)
-{
-
-}
-
 
 void BulletSystem::Update(const sf::Time& deltaTime, BulletCollection& bullets)
 {

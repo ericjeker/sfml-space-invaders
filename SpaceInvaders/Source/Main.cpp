@@ -2,13 +2,10 @@
 
 #include "Configuration.h"
 #include "SpaceInvaders.h"
-// #include "FileManager.h"
-// #include "ResourceManager.h"
-// #include "SoundManager.h"
-// #include "EventSystem.h"
 #include "EngineContext.h"
 
 #include <SFML/Graphics.hpp>
+
 /**
  * Scope is everything. The main function scopes everything. We configure a container for our game, the Window. The
  * game itself will take care of the game loop.

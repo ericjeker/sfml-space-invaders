@@ -21,8 +21,6 @@ class Time;
 namespace BulletSystem
 {
 
-void Initialize(BulletCollection& bullets);
-
 // Update the bullet collection, handle collisions, and position.
 void Update(const sf::Time& deltaTime, BulletCollection& bullets);
 

@@ -4,11 +4,7 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#include "Logger.h"
-
 #include <SFML/System/Vector2.hpp>
-
-#include "SFML/Window/ContextSettings.hpp"
 
 /**
  * Simple configuration structure for the game.

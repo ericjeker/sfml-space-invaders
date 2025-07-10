@@ -28,9 +28,11 @@ public:
 	void Render() override;
 
 private:
-	void InitializeUI() const;
-	void InitializeRenderLayers(const sf::RenderWindow& window);
 	void InitializeCommands(SpaceInvaders& game);
+	void InitializeEnemies(sf::RenderWindow& window);
+	void InitializePlayer(const sf::RenderWindow& window);
+	void InitializeRenderLayers(const sf::RenderWindow& window);
+	void InitializeUI() const;
 
 	// Rendering layers
 	sf::ContextSettings _uiSettings;
@@ -39,7 +41,7 @@ private:
 	sf::RenderTexture _uiLayer;
 
 	// Data & State
-	PlayerState _player;
+	PlayerState _playerState;
 	EnemyCollection _enemies;
 	BulletCollection _bullets;
 

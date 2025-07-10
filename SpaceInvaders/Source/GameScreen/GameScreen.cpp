@@ -2,7 +2,6 @@
 
 #include "GameScreen/GameScreen.h"
 
-#include "Configuration.h"
 #include "SpaceInvaders.h"
 
 #include "Commands/PauseCommand.h"
@@ -30,31 +29,47 @@ void GameScreen::Activate()
 	auto& game = GetGame();
 
 	// Create a window instance from the game to fetch size
-	const auto& window = game.GetEngineContext().GetWindow();
+	sf::RenderWindow& window = game.GetEngineContext().GetWindow();
 
 	// Initialization
 	InitializeCommands(game);
 	InitializeRenderLayers(window);
 	InitializeUI();
-
-	// Create the textures and shapes
-	_playerRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
-	_playerRectangle->setFillColor(sf::Color::White);
-
-	_enemyRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
-	_enemyRectangle->setFillColor(sf::Color::Blue);
+	InitializePlayer(window);
+	InitializeEnemies(window);
 
 	// TODO: ObjectPool is needed
 	_bulletShape = std::make_unique<sf::CircleShape>(10.f);
 	_bulletShape->setFillColor(sf::Color::Red);
 	_bulletShape->setOrigin({5.f, 5.f});
+}
 
-	// Initialize the enemies
-	// EnemySystem::Initialize(_enemies);
+void GameScreen::InitializeCommands(SpaceInvaders& game)
+{
+	_commands.emplace("GameScreen::Pause", _commandRegistry->Register(std::make_shared<PauseCommand>(game)));
+	_commands.emplace("GameScreen::Quit", _commandRegistry->Register(std::make_shared<QuitCommand>(game)));
+}
 
-	// Initialize the player controller
-	PlayerController::Initialize(_player, sf::Vector2f(window.getSize().x / 2.f, window.getSize().y - 200.f));
-	BulletSystem::Initialize(_bullets);
+void GameScreen::InitializeEnemies(sf::RenderWindow& window)
+{
+	_enemyRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
+	_enemyRectangle->setFillColor(sf::Color::Blue);
+	_enemyRectangle->setOrigin({50.f, 20.f});
+
+	_enemies.positions.emplace_back(sf::Vector2f(window.getSize().x / 2, window.getSize().y + 20.f));
+}
+
+void GameScreen::InitializePlayer(const sf::RenderWindow& window)
+{
+	// Create the textures and shapes
+	_playerRectangle = std::make_unique<sf::RectangleShape>(sf::Vector2f(100.f, 40.f));
+	_playerRectangle->setFillColor(sf::Color::White);
+	_playerRectangle->setOrigin({50.f, 20.f});
+
+	_playerState.position = sf::Vector2f(window.getSize().x / 2.f, window.getSize().y - 200.f);
+	_playerState.velocity = sf::Vector2f(0.f, 0.f);
+	_playerState.health = 100;
+	_playerState.cooldown = 0.f;
 }
 
 void GameScreen::InitializeRenderLayers(const sf::RenderWindow& window)
@@ -64,12 +79,6 @@ void GameScreen::InitializeRenderLayers(const sf::RenderWindow& window)
 	_backgroundLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 	_gameLayer = sf::RenderTexture(window.getSize(), _uiSettings);
 	_uiLayer = sf::RenderTexture(window.getSize(), _uiSettings);
-}
-
-void GameScreen::InitializeCommands(SpaceInvaders& game)
-{
-	_commands.emplace("GameScreen::Pause", _commandRegistry->Register(std::make_shared<PauseCommand>(game)));
-	_commands.emplace("GameScreen::Quit", _commandRegistry->Register(std::make_shared<QuitCommand>(game)));
 }
 
 void GameScreen::InitializeUI() const
@@ -117,9 +126,10 @@ void GameScreen::Update(const sf::Time& deltaTime)
 	const auto windowSize = GetGame().GetEngineContext().GetWindow().getSize();
 
 	const PlayerController::UpdateContext context = {.deltaTime = deltaTime, .screenBounds = windowSize};
-	PlayerController::Update(context, _player, _bullets);
+	PlayerController::Update(context, _playerState, _bullets);
 
 	BulletSystem::Update(deltaTime, _bullets);
+	EnemySystem::Update(deltaTime, _enemies);
 }
 
 void GameScreen::Render()
@@ -131,7 +141,8 @@ void GameScreen::Render()
 	_uiLayer.clear(sf::Color(0, 0, 0, 0));
 
 	_uiManager->Render(_uiLayer);
-	PlayerController::Render(_gameLayer, _player, *_playerRectangle);
+	PlayerController::Render(_gameLayer, _playerState, *_playerRectangle);
+	EnemySystem::Render(_gameLayer, _enemies, *_enemyRectangle);
 	BulletSystem::Render(_gameLayer, _bullets, *_bulletShape);
 
 	_backgroundLayer.display();

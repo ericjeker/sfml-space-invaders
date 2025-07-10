@@ -8,7 +8,6 @@
 #include "GameInstance.h"
 #include "SpaceInvadersState.h"
 
-#include "Managers/ResourceManager.h"
 #include "Managers/ScreenManager.h"
 
 #include <SFML/Graphics.hpp>

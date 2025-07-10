@@ -103,19 +103,6 @@ HandleShootingAndCooldown(const ShootingAndCooldownIn& params)
 
 } // namespace
 
-
-/**
- * PlayerController
- */
-void PlayerController::Initialize(PlayerState& player, const sf::Vector2f position)
-{
-	// Initialize the player's position and velocity
-	player.position = position;
-	player.velocity = sf::Vector2f(0.f, 0.f);
-	player.health = 100;
-	player.cooldown = 0.f;
-}
-
 void PlayerController::Update(const UpdateContext& context, PlayerState& player, BulletCollection& bullets)
 {
 	// Handle Shooting
